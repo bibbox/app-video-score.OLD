@@ -1,0 +1,48 @@
+version: '2'
+
+networks:
+    bibbox-default-network:
+      external: true
+
+services:
+
+  §§INSTANCE-limesurvey:
+    image: bibbox/limesurvey
+    container_name:  §§INSTANCE-limesurvey
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    links:
+      - §§INSTANCE-limesurvey-db:limesurvey-db
+    ports:
+      - "§§PORT:80"
+    depends_on:
+      - §§INSTANCE-limesurvey-db
+      - §§INSTANCE-limesurvey-data
+    volumes_from: 
+      - §§INSTANCE-limesurvey-data
+
+  §§INSTANCE-limesurvey-db:
+    image: mysql:8
+    container_name: §§INSTANCE-limesurvey-db
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
+    user: root
+    environment:
+      - MYSQL_ROOT_PASSWORD=thispasswordisneverusedeveninsidethecontainer
+      - MYSQL_DATABASE=limesurvey
+      - MYSQL_USER=limesurvey
+      - MYSQL_PASSWORD=limesurvey4bibbox
+    volumes_from: 
+      - §§INSTANCE-limesurvey-data
+    depends_on:
+      - §§INSTANCE-limesurvey-data
+
+  §§INSTANCE-limesurvey-data:
+    image: busybox
+    container_name: §§INSTANCE-limesurvey-data
+    volumes:
+      - ./var/lib/mysql:/var/lib/mysql
+      - ./var/www/limesurvey/uploads:/var/www/limesurvey/uploads
+

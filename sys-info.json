@@ -1,0 +1,4 @@
+{
+  runningcontainers:["§§INSTANCE-xx", "§§INSTANCE-xx-db"],
+  supportcontainers:["§§INSTANCE-xx-data"]
+}
