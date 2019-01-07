@@ -2,7 +2,7 @@
 """User Route for Demo application."""
 
 from flask import Blueprint
-from flask import Flask, request, jsonify, url_for
+from flask import Flask, request, jsonify, url_for, send_file
 from time import sleep
 import random
 from celery import Celery
@@ -11,6 +11,7 @@ from server.app.api import api
 
 from server.app.celerytasks.tasks  import callCommandSync
 from server.app.services.movie_service import MovieService
+from server.app.services.movie_utils import stripeFileName
 
 movie_service = MovieService()
 
@@ -23,6 +24,7 @@ def get_movies():
 def get_movie(id):
     movie = movie_service.get(id)
     # MAKE A REAL RESPONE OBJECT
+    print("*************************************")
     return jsonify(movie.as_dict() )
 
 @api.route("/movie/<int:id>/command", methods = ['POST', 'GET'])
@@ -33,6 +35,15 @@ def execute_command (id):
 
 #     return jsonify({}, 202, {'Location': "http://0.0.0.0:8077/api/movie/commandstatus/%s" % task.id})
      return jsonify({}, 400, {'Location': "http://0.0.0.0:8077/api/movie/commandstatus" })
+
+
+@api.route("/movie/<int:id>/stripe/<int:sid>")
+def get_stripe (id, sid):
+     movie = movie_service.get(id)
+     # TODO check if sid is in range
+     filename = stripeFileName (movie, sid)
+     print ("*************************************", filename)
+     return send_file(filename, mimetype='image/jpg')
 
 '''
 

@@ -18,6 +18,8 @@ services:
     ports:
       - "8077:80"
       - "443:443"
+    volumes_from:
+     - bibbox-movie-analyzer-data
     depends_on:
       - bibbox-movie-analyzer-flask
 
@@ -44,8 +46,6 @@ services:
       build:
         context:   ./postgresql
         dockerfile: Dockerfile
-      volumes_from:
-         - data
       ports:
          - "5432:5432"
       env_file:
@@ -60,13 +60,6 @@ services:
       - bibbox-movie-analyzer-postgres
     ports:
       - "8078:8080"
-
-  data:
-    container_name: app_data_demo_container
-    image: postgres:9.6
-    volumes:
-       - /var/lib/postgresql
-    command: "true"
 
   bibbox-movie-analyzer-celery:
     container_name: bibbox-movie-analyzer-celery

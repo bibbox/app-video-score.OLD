@@ -17,6 +17,7 @@ from flask import current_app, render_template
 from server.app import app_celerey
 
 from server.app.services.movie_service import MovieService
+from server.app.services.movie_utils import stripeBaseDirectory, stripeFileName
 
 movie_service = MovieService()
 
@@ -56,15 +57,7 @@ def generateStripes(movieID):
      fps = cap.get(cv2.CAP_PROP_FPS)
 #     print("OPENING THE VIDEO WITH ", length, width, height, fps)
 
-     os.system("ls /data")
-     dirname  = os.path.dirname("/data/movies/yt/")
-
-     if (movie.source  == "YOUTUBE"):
-        dirname  = os.path.dirname("/data/movies/yt/")
-        movieid  = movie.uri.rsplit('/', 1)[-1]
-        moviedir =  os.path.join(dirname, movieid)
-        stripeimagedir =  os.path.join(moviedir, "stripes")
-
+     stripeimagedir = stripeBaseDirectory (movie)
      print("dir to write the stripes", stripeimagedir)
      if  not os.path.exists(stripeimagedir):
         os.makedirs(stripeimagedir)
@@ -105,7 +98,7 @@ def generateStripes(movieID):
                 countbig = 0
 
             if (stripeimagecounter == maxstripesize):
-                fn = os.path.join(stripeimagedir, "s%06d.jpg" % stripenumber)
+                fn = stripeFileName (movie, stripenumber)
                 cv2.imwrite(fn,  stripeImage)
                 stripeImage = np.zeros((height, maxstripesize, 3), np.uint8)
                 stripeimagecounter = 0
@@ -113,7 +106,7 @@ def generateStripes(movieID):
                 writelaststripe = 1
 
      if (writelaststripe):
-        fn = os.path.join(stripeimagedir, "s%06d.jpg" % stripenumber)
+        fn = stripeFileName(movie, stripenumber)
         cv2.imwrite(fn, stripeImage)
 
      movie.stripeStatus = 100.0
