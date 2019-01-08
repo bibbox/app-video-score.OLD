@@ -1,3 +1,11 @@
-<div *ngFor="let stripe of stripes">
-    <img src="{{stripe.url}}" height="70" width="800" />
+<div class="outerdiv" width="800">
+
+  <canvas class="overlaycanvas" #myCanvas width="800" height="1500">
+  </canvas>
+
+
+  <div *ngFor="let stripe of stripes" class="stripeimagearray" >
+          <img src="{{stripe.url}}" height="70" width="800" />
+  </div>
+
 </div>

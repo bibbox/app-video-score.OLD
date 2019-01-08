@@ -1,10 +1,12 @@
 # Video Score BIBBOX application
 
 ## Prerequisites
-* `docker`
-* `node`
-* `npm`
-* `amgular-cli`
+* `docker` 
+    * MAC/WINDOWS => //www.docker.com/get-started
+    * Follow these instructions for [debian](https://docs.docker.com/install/linux/docker-ce/debian/) or [ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/) 
+* `node, angular-cli`
+    * download & install from https://nodejs.org/en/, dev version = 11.6.0 
+    * `npm install -g @angular/cli` - angular CLI
 
 ## Usage
 * Clone this repository
@@ -29,6 +31,8 @@
     * `ps aux | grep uwsgi`
     * `kill - SIGHUP `  add the uwsgi root process number to reload the server 
 * In the client directory (Angular frontend)
+  * `npm install` - install the modules, call the first time after download
+  * `ng --version`
   * `ng serve --port 4401`
   * `ng build --deleteOutputPath=false`
   * `ng generate component stripes`

@@ -1,0 +1,12 @@
+.outerdiv {
+  position: relative;
+}
+
+.overlaycanvas {
+  border: 1px solid black;
+  position: absolute;
+}
+
+stripeimagearray {
+  position: absolute;
+}

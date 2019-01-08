@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StripesComponent } from './stripes/stripes.component';
+import { StripesOverlayComponent } from './stripes-overlay/stripes-overlay.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { StripesComponent } from './stripes/stripes.component';
     MovieDetailComponent,
     MessagesComponent,
     DashboardComponent,
-    StripesComponent
+    StripesComponent,
+    StripesOverlayComponent
   ],
   imports: [
     BrowserModule,

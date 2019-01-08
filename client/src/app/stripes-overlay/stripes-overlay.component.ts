@@ -1,31 +1,23 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core'
 
-import { ActivatedRoute } from '@angular/router';
-import { MovieService }  from '../movie.service';
-import { Stripe } from '../stripe';
-
-
 @Component({
-  selector: 'app-stripes',
-  templateUrl: './stripes.component.html',
-  styleUrls: ['./stripes.component.css']
+  selector: 'app-stripes-overlay',
+  templateUrl: './stripes-overlay.component.html',
+  styleUrls: ['./stripes-overlay.component.css']
 })
-export class StripesComponent implements OnInit {
+export class StripesOverlayComponent implements OnInit {
 
-  stripes: Stripe[];
   @ViewChild('myCanvas') canvasRef: ElementRef;
 
-  constructor(private movieService: MovieService, private route: ActivatedRoute) { }
+  constructor() { }
 
   ngOnInit() {
-    this.getStripes();
-
     let ctx: CanvasRenderingContext2D =
       this.canvasRef.nativeElement.getContext('2d');
 
     // Clear any previous content.
-    ctx.clearRect(0, 0, 1500, 800);
+    ctx.clearRect(0, 0, 500, 500);
 
     // Draw the clip path that will mask everything else
     // that we'll draw later.
@@ -53,7 +45,7 @@ export class StripesComponent implements OnInit {
       // Draw 50,000 circles at random points
     ctx.beginPath();
     ctx.fillStyle = '#DD0031';
-    for (let i=0 ; i < 5000 ; i++) {
+    for (let i=0 ; i < 50000 ; i++) {
      let x = Math.random() * 500;
      let y = Math.random() * 500;
      ctx.moveTo(x, y);
@@ -61,12 +53,4 @@ export class StripesComponent implements OnInit {
     }
     ctx.fill();
   }
-
-
-  getStripes(): void {
-    const id = parseInt(this.route.snapshot.paramMap.get('id'));
-    this.movieService.getStripes(id)
-        .subscribe(stripes => this.stripes = stripes  );
-  }
-
 }

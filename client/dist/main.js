@@ -154,6 +154,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./dashboard/dashboard.component */ "./src/app/dashboard/dashboard.component.ts");
 /* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
 /* harmony import */ var _stripes_stripes_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./stripes/stripes.component */ "./src/app/stripes/stripes.component.ts");
+/* harmony import */ var _stripes_overlay_stripes_overlay_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./stripes-overlay/stripes-overlay.component */ "./src/app/stripes-overlay/stripes-overlay.component.ts");
+
 
 
 
@@ -179,7 +181,8 @@ var AppModule = /** @class */ (function () {
                 _movie_detail_movie_detail_component__WEBPACK_IMPORTED_MODULE_8__["MovieDetailComponent"],
                 _messages_messages_component__WEBPACK_IMPORTED_MODULE_9__["MessagesComponent"],
                 _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_11__["DashboardComponent"],
-                _stripes_stripes_component__WEBPACK_IMPORTED_MODULE_13__["StripesComponent"]
+                _stripes_stripes_component__WEBPACK_IMPORTED_MODULE_13__["StripesComponent"],
+                _stripes_overlay_stripes_overlay_component__WEBPACK_IMPORTED_MODULE_14__["StripesOverlayComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -412,7 +415,7 @@ module.exports = "label {\n    display: inline-block;\n    width: 5em;\n    marg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"movie\">\n  <h2>{{movie.name | uppercase}} </h2>\n  <div><span>id: </span>{{movie.id}}</div>\n  <div>\n    <label>Name:\n      <input [(ngModel)]=\"movie.name\" placeholder=\"movie\"/>\n    </label>\n  </div>\n  <div>\n    <label>URI:\n      <input [(ngModel)]=\"movie.uri\" placeholder=\"uri\"/>\n    </label>\n  </div>\n  <div>\n    <label>Stripe:\n      <input [(ngModel)]=\"movie.hasStripeImage\" placeholder=\"stipe\"/>\n    </label>\n  </div>\n  <div>\n    Completion: {{movie.stripeStatus}}&#37;\n  </div>\n  <div>\n    <button (click)=\"computeStripes()\">compute stripes</button>\n    <button (click)=\"computeCuts()\">compute cuts</button>\n  </div>\n  <button (click)=\"goBack()\">go back</button>\n  <app-stripes></app-stripes>\n</div>\n"
+module.exports = "<div *ngIf=\"movie\">\n  <h2>{{movie.name | uppercase}} </h2>\n  <div><span>id: </span>{{movie.id}}</div>\n  <div>\n    <label>Name:\n      <input [(ngModel)]=\"movie.name\" placeholder=\"movie\"/>\n    </label>\n  </div>\n  <div>\n    <label>URI:\n      <input [(ngModel)]=\"movie.uri\" placeholder=\"uri\"/>\n    </label>\n  </div>\n  <div>\n    <label>Stripe:\n      <input [(ngModel)]=\"movie.hasStripeImage\" placeholder=\"stipe\"/>\n    </label>\n  </div>\n  <div>\n    Completion: {{movie.stripeStatus}}&#37;\n  </div>\n  <div>\n    <button (click)=\"computeStripes()\">compute stripes</button>\n    <button (click)=\"computeCuts()\">compute cuts</button>\n  </div>\n  <button (click)=\"goBack()\">go back</button>\n  <app-stripes-overlay></app-stripes-overlay>\n  <app-stripes></app-stripes>\n</div>\n"
 
 /***/ }),
 
@@ -714,6 +717,102 @@ var MoviesComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/stripes-overlay/stripes-overlay.component.css":
+/*!***************************************************************!*\
+  !*** ./src/app/stripes-overlay/stripes-overlay.component.css ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3N0cmlwZXMtb3ZlcmxheS9zdHJpcGVzLW92ZXJsYXkuY29tcG9uZW50LmNzcyJ9 */"
+
+/***/ }),
+
+/***/ "./src/app/stripes-overlay/stripes-overlay.component.html":
+/*!****************************************************************!*\
+  !*** ./src/app/stripes-overlay/stripes-overlay.component.html ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  stripes-overlay works!\n</p>\n<canvas #myCanvas width=\"500\" height=\"500\">\n</canvas>\n"
+
+/***/ }),
+
+/***/ "./src/app/stripes-overlay/stripes-overlay.component.ts":
+/*!**************************************************************!*\
+  !*** ./src/app/stripes-overlay/stripes-overlay.component.ts ***!
+  \**************************************************************/
+/*! exports provided: StripesOverlayComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StripesOverlayComponent", function() { return StripesOverlayComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+
+var StripesOverlayComponent = /** @class */ (function () {
+    function StripesOverlayComponent() {
+    }
+    StripesOverlayComponent.prototype.ngOnInit = function () {
+        var ctx = this.canvasRef.nativeElement.getContext('2d');
+        // Clear any previous content.
+        ctx.clearRect(0, 0, 500, 500);
+        // Draw the clip path that will mask everything else
+        // that we'll draw later.
+        ctx.beginPath();
+        ctx.moveTo(250, 60);
+        ctx.lineTo(63.8, 126.4);
+        ctx.lineTo(92.2, 372.6);
+        ctx.lineTo(250, 460);
+        ctx.lineTo(407.8, 372.6);
+        ctx.lineTo(436.2, 126.4);
+        ctx.moveTo(250, 104.2);
+        ctx.lineTo(133.6, 365.2);
+        ctx.lineTo(177, 365.2);
+        ctx.lineTo(200.4, 306.8);
+        ctx.lineTo(299.2, 306.8);
+        ctx.lineTo(325.2, 365.2);
+        ctx.lineTo(362.6, 365.2);
+        ctx.lineTo(250, 104.2);
+        ctx.moveTo(304, 270.8);
+        ctx.lineTo(216, 270.8);
+        ctx.lineTo(250, 189);
+        ctx.lineTo(284, 270.8);
+        ctx.clip('evenodd');
+        // Draw 50,000 circles at random points
+        ctx.beginPath();
+        ctx.fillStyle = '#DD0031';
+        for (var i = 0; i < 50000; i++) {
+            var x = Math.random() * 500;
+            var y = Math.random() * 500;
+            ctx.moveTo(x, y);
+            ctx.arc(x, y, 1, 0, Math.PI * 2);
+        }
+        ctx.fill();
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('myCanvas'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"])
+    ], StripesOverlayComponent.prototype, "canvasRef", void 0);
+    StripesOverlayComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-stripes-overlay',
+            template: __webpack_require__(/*! ./stripes-overlay.component.html */ "./src/app/stripes-overlay/stripes-overlay.component.html"),
+            styles: [__webpack_require__(/*! ./stripes-overlay.component.css */ "./src/app/stripes-overlay/stripes-overlay.component.css")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], StripesOverlayComponent);
+    return StripesOverlayComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/stripes/stripes.component.css":
 /*!***********************************************!*\
   !*** ./src/app/stripes/stripes.component.css ***!
@@ -839,7 +938,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_2__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/Shared/SWD/BIBBOX-DOCKER-CONTAINER-DEV/app-video-score/client/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /Users/mue/SW-DEV-GITHUB-CLONES/app-video-score/client/src/main.ts */"./src/main.ts");
 
 
 /***/ })
