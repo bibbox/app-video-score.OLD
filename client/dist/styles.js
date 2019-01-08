@@ -598,8 +598,8 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/mue/SW-DEV-GITHUB-CLONES/app-video-score/client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css */"./node_modules/@angular/material/prebuilt-themes/indigo-pink.css");
-module.exports = __webpack_require__(/*! /Users/mue/SW-DEV-GITHUB-CLONES/app-video-score/client/src/styles.css */"./src/styles.css");
+__webpack_require__(/*! /Users/Shared/SWD/BIBBOX-DOCKER-CONTAINER-DEV/app-video-score/client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css */"./node_modules/@angular/material/prebuilt-themes/indigo-pink.css");
+module.exports = __webpack_require__(/*! /Users/Shared/SWD/BIBBOX-DOCKER-CONTAINER-DEV/app-video-score/client/src/styles.css */"./src/styles.css");
 
 
 /***/ })

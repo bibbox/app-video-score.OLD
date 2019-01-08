@@ -3,10 +3,9 @@
 }
 
 .overlaycanvas {
-  border: 1px solid black;
   position: absolute;
 }
 
-stripeimagearray {
+.stripeimagearray {
   position: absolute;
 }

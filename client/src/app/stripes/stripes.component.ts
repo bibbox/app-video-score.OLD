@@ -1,72 +1,86 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { ViewChild } from '@angular/core'
+import { Renderer, ViewChild } from '@angular/core'
 
 import { ActivatedRoute } from '@angular/router';
 import { MovieService }  from '../movie.service';
 import { Stripe } from '../stripe';
-
+import { Cut } from '../cut';
 
 @Component({
   selector: 'app-stripes',
   templateUrl: './stripes.component.html',
   styleUrls: ['./stripes.component.css']
 })
+
+
 export class StripesComponent implements OnInit {
 
   stripes: Stripe[];
-  @ViewChild('myCanvas') canvasRef: ElementRef;
+  cuts:    Cut[];
 
-  constructor(private movieService: MovieService, private route: ActivatedRoute) { }
+  @ViewChild('imageCanvas')   imageCanvas: ElementRef;
+  @ViewChild('overlayCanvas') overlayCanvas: ElementRef;
+
+  constructor(private renderer : Renderer, private movieService: MovieService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.getStripes();
-
-    let ctx: CanvasRenderingContext2D =
-      this.canvasRef.nativeElement.getContext('2d');
-
-    // Clear any previous content.
-    ctx.clearRect(0, 0, 1500, 800);
-
-    // Draw the clip path that will mask everything else
-    // that we'll draw later.
-    ctx.beginPath();
-    ctx.moveTo(250, 60);
-    ctx.lineTo(63.8, 126.4);
-    ctx.lineTo(92.2, 372.6);
-    ctx.lineTo(250, 460);
-    ctx.lineTo(407.8, 372.6);
-    ctx.lineTo(436.2, 126.4);
-    ctx.moveTo(250, 104.2);
-    ctx.lineTo(133.6, 365.2);
-    ctx.lineTo(177, 365.2);
-    ctx.lineTo(200.4, 306.8);
-    ctx.lineTo(299.2, 306.8);
-    ctx.lineTo(325.2, 365.2);
-    ctx.lineTo(362.6, 365.2);
-    ctx.lineTo(250, 104.2);
-    ctx.moveTo(304, 270.8);
-    ctx.lineTo(216, 270.8);
-    ctx.lineTo(250, 189);
-    ctx.lineTo(284, 270.8);
-    ctx.clip('evenodd');
-
-      // Draw 50,000 circles at random points
-    ctx.beginPath();
-    ctx.fillStyle = '#DD0031';
-    for (let i=0 ; i < 5000 ; i++) {
-     let x = Math.random() * 500;
-     let y = Math.random() * 500;
-     ctx.moveTo(x, y);
-     ctx.arc(x, y, 1, 0, Math.PI * 2);
-    }
-    ctx.fill();
+    this.getCuts();
   }
 
+  drawImages () {
+   let ctx: CanvasRenderingContext2D = this.imageCanvas.nativeElement.getContext('2d');
+    ctx.clearRect(0, 0, 1500, 800);
+    var i = 0
+    for (let s of this.stripes) {
+         console.log (i, s)
+         let stripeimage = new Image();
+         stripeimage.src = s.url;
+         let y = i * 80
+         stripeimage.onload = function ()
+              {  ctx.drawImage(stripeimage, 0, y, 800, 75) };
+         i = i + 1
+    }
+  }
+
+  drawOverlay () {
+    let ctx: CanvasRenderingContext2D = this.overlayCanvas.nativeElement.getContext('2d');
+    ctx.strokeStyle = '#ff0000';
+    for (let c of this.cuts) {
+      let y = Math.floor(c.fn / 1500.0)
+      let x = 800 * (c.fn - y*1500) / 1500
+      ctx.beginPath();
+      ctx.moveTo(x, y*80);
+      ctx.lineTo(x, y*80+75);
+      ctx.stroke();
+    }
+  }
+
+  assignStripesAndDrawImages (stripes): void {
+      this.stripes = stripes
+      let h = this.stripes.length * 80
+      this.renderer.setElementProperty(this.imageCanvas.nativeElement, "height", h.toString());
+      this.drawImages()
+  }
+
+  assignCutsAndDrawOverlay (cuts): void {
+      this.cuts = cuts
+      let lastfn =  cuts[cuts.length-1].fn
+      let h = 80 * Math.ceil(lastfn / 1500.0)
+      this.renderer.setElementProperty(this.overlayCanvas.nativeElement, "height", h.toString());
+      this.drawOverlay()
+  }
 
   getStripes(): void {
     const id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.movieService.getStripes(id)
-        .subscribe(stripes => this.stripes = stripes  );
+        .subscribe(stripes => this.assignStripesAndDrawImages(stripes)  );
+  }
+
+  getCuts(): void {
+    const id = parseInt(this.route.snapshot.paramMap.get('id'));
+    this.movieService.getCuts(id)
+        .subscribe ( cuts => this.assignCutsAndDrawOverlay(cuts) );
   }
 
 }

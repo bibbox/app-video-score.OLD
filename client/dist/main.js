@@ -86,7 +86,7 @@ module.exports = "h1 {\n  font-size: 2.0em;\n  color: #999;\n  margin-bottom: 0;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n  <div class=\"appdecoration\">\n    <h1> {{title}} </h1>\n    <nav>\n        <a routerLink=\"/dashboard\">Dashboard</a>\n        <a routerLink=\"/movies\">Movies</a>\n    </nav>\n    <router-outlet></router-outlet>\n    <app-messages></app-messages>\n    {{msg}}\n  </div>\n\n\n"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n  <div class=\"appdecoration\">\n    <h1> {{title}} </h1>\n    <nav>\n        <a routerLink=\"/dashboard\">Dashboard</a>\n        <a routerLink=\"/movies\">Movies</a>\n    </nav>\n    <router-outlet></router-outlet>\n  </div>\n\n\n"
 
 /***/ }),
 
@@ -415,7 +415,7 @@ module.exports = "label {\n    display: inline-block;\n    width: 5em;\n    marg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"movie\">\n  <h2>{{movie.name | uppercase}} </h2>\n  <div><span>id: </span>{{movie.id}}</div>\n  <div>\n    <label>Name:\n      <input [(ngModel)]=\"movie.name\" placeholder=\"movie\"/>\n    </label>\n  </div>\n  <div>\n    <label>URI:\n      <input [(ngModel)]=\"movie.uri\" placeholder=\"uri\"/>\n    </label>\n  </div>\n  <div>\n    <label>Stripe:\n      <input [(ngModel)]=\"movie.hasStripeImage\" placeholder=\"stipe\"/>\n    </label>\n  </div>\n  <div>\n    Completion: {{movie.stripeStatus}}&#37;\n  </div>\n  <div>\n    <button (click)=\"computeStripes()\">compute stripes</button>\n    <button (click)=\"computeCuts()\">compute cuts</button>\n  </div>\n  <button (click)=\"goBack()\">go back</button>\n  <app-stripes-overlay></app-stripes-overlay>\n  <app-stripes></app-stripes>\n</div>\n"
+module.exports = "<div *ngIf=\"movie\">\n  <h2>{{movie.name | uppercase}} </h2>\n  <div><span>id: </span>{{movie.id}}</div>\n  <div>\n    <label>Name:\n      <input [(ngModel)]=\"movie.name\" placeholder=\"movie\"/>\n    </label>\n  </div>\n  <div>\n    <label>URI:\n      <input [(ngModel)]=\"movie.uri\" placeholder=\"uri\"/>\n    </label>\n  </div>\n  <div>\n    <label>Stripe:\n      <input [(ngModel)]=\"movie.hasStripeImage\" placeholder=\"stipe\"/>\n    </label>\n  </div>\n  <div>\n    Completion: {{movie.stripeStatus}}&#37;\n  </div>\n  <div>\n    <button (click)=\"computeStripes()\">compute stripes</button>\n    <button (click)=\"computeCuts()\">compute cuts</button>\n  </div>\n  <button (click)=\"goBack()\">go back</button>\n\n\n  <app-stripes></app-stripes>\n\n\n\n</div>\n"
 
 /***/ }),
 
@@ -561,6 +561,11 @@ var MovieService = /** @class */ (function () {
         var _this = this;
         var url = "http://127.0.0.1:8077/api/movie/" + id + "/stripes";
         return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) { return _this.log("fetched stripes for id=" + id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError("getStripes id=" + id)));
+    };
+    MovieService.prototype.getCuts = function (id) {
+        var _this = this;
+        var url = "http://127.0.0.1:8077/api/movie/" + id + "/cuts";
+        return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) { return _this.log("fetched cuts for id=" + id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError("getCuts id=" + id)));
     };
     MovieService.prototype.addMovie = function (movie) {
         var _this = this;
@@ -820,7 +825,7 @@ var StripesOverlayComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3N0cmlwZXMvc3RyaXBlcy5jb21wb25lbnQuY3NzIn0= */"
+module.exports = ".outerdiv {\n  position: relative;\n}\n\n.overlaycanvas {\n  position: absolute;\n}\n\n.stripeimagearray {\n  position: absolute;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc3RyaXBlcy9zdHJpcGVzLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxtQkFBbUI7Q0FDcEI7O0FBRUQ7RUFDRSxtQkFBbUI7Q0FDcEI7O0FBRUQ7RUFDRSxtQkFBbUI7Q0FDcEIiLCJmaWxlIjoic3JjL2FwcC9zdHJpcGVzL3N0cmlwZXMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5vdXRlcmRpdiB7XG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcbn1cblxuLm92ZXJsYXljYW52YXMge1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG59XG5cbi5zdHJpcGVpbWFnZWFycmF5IHtcbiAgcG9zaXRpb246IGFic29sdXRlO1xufVxuIl19 */"
 
 /***/ }),
 
@@ -831,7 +836,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngFor=\"let stripe of stripes\">\n    <img src=\"{{stripe.url}}\" height=\"70\" width=\"800\" />\n</div>"
+module.exports = "<div class=\"outerdiv\" width=\"800\">\n\n  <canvas class=\"overlaycanvas\" #imageCanvas   width=\"800\" height=\"10\">\n  </canvas>\n  <canvas class=\"overlaycanvas\" #overlayCanvas width=\"800\" height=\"10\">\n  </canvas>\n\n</div>\n"
 
 /***/ }),
 
@@ -853,27 +858,87 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 var StripesComponent = /** @class */ (function () {
-    function StripesComponent(movieService, route) {
+    function StripesComponent(renderer, movieService, route) {
+        this.renderer = renderer;
         this.movieService = movieService;
         this.route = route;
     }
     StripesComponent.prototype.ngOnInit = function () {
         this.getStripes();
+        this.getCuts();
+    };
+    StripesComponent.prototype.drawImages = function () {
+        var ctx = this.imageCanvas.nativeElement.getContext('2d');
+        ctx.clearRect(0, 0, 1500, 800);
+        var i = 0;
+        var _loop_1 = function (s) {
+            console.log(i, s);
+            var stripeimage = new Image();
+            stripeimage.src = s.url;
+            var y = i * 80;
+            stripeimage.onload = function () { ctx.drawImage(stripeimage, 0, y, 800, 75); };
+            i = i + 1;
+        };
+        for (var _i = 0, _a = this.stripes; _i < _a.length; _i++) {
+            var s = _a[_i];
+            _loop_1(s);
+        }
+    };
+    StripesComponent.prototype.drawOverlay = function () {
+        var ctx = this.overlayCanvas.nativeElement.getContext('2d');
+        ctx.strokeStyle = '#ff0000';
+        for (var _i = 0, _a = this.cuts; _i < _a.length; _i++) {
+            var c = _a[_i];
+            var y = Math.floor(c.fn / 1500.0);
+            var x = 800 * (c.fn - y * 1500) / 1500;
+            ctx.beginPath();
+            ctx.moveTo(x, y * 80);
+            ctx.lineTo(x, y * 80 + 75);
+            ctx.stroke();
+        }
+    };
+    StripesComponent.prototype.assignStripesAndDrawImages = function (stripes) {
+        this.stripes = stripes;
+        var h = this.stripes.length * 80;
+        this.renderer.setElementProperty(this.imageCanvas.nativeElement, "height", h.toString());
+        this.drawImages();
+    };
+    StripesComponent.prototype.assignCutsAndDrawOverlay = function (cuts) {
+        this.cuts = cuts;
+        var lastfn = cuts[cuts.length - 1].fn;
+        var h = 80 * Math.ceil(lastfn / 1500.0);
+        this.renderer.setElementProperty(this.overlayCanvas.nativeElement, "height", h.toString());
+        this.drawOverlay();
     };
     StripesComponent.prototype.getStripes = function () {
         var _this = this;
         var id = parseInt(this.route.snapshot.paramMap.get('id'));
         this.movieService.getStripes(id)
-            .subscribe(function (stripes) { return _this.stripes = stripes; });
+            .subscribe(function (stripes) { return _this.assignStripesAndDrawImages(stripes); });
     };
+    StripesComponent.prototype.getCuts = function () {
+        var _this = this;
+        var id = parseInt(this.route.snapshot.paramMap.get('id'));
+        this.movieService.getCuts(id)
+            .subscribe(function (cuts) { return _this.assignCutsAndDrawOverlay(cuts); });
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('imageCanvas'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"])
+    ], StripesComponent.prototype, "imageCanvas", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('overlayCanvas'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"])
+    ], StripesComponent.prototype, "overlayCanvas", void 0);
     StripesComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-stripes',
             template: __webpack_require__(/*! ./stripes.component.html */ "./src/app/stripes/stripes.component.html"),
             styles: [__webpack_require__(/*! ./stripes.component.css */ "./src/app/stripes/stripes.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_movie_service__WEBPACK_IMPORTED_MODULE_3__["MovieService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["Renderer"], _movie_service__WEBPACK_IMPORTED_MODULE_3__["MovieService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"]])
     ], StripesComponent);
     return StripesComponent;
 }());
@@ -938,7 +1003,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_2__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/mue/SW-DEV-GITHUB-CLONES/app-video-score/client/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /Users/Shared/SWD/BIBBOX-DOCKER-CONTAINER-DEV/app-video-score/client/src/main.ts */"./src/main.ts");
 
 
 /***/ })

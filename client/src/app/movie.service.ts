@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Movie } from './movie';
 import { Stripe } from './stripe';
+import { Cut } from './cut';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { MessageService } from './message.service';
@@ -37,6 +38,15 @@ export class MovieService {
       catchError(this.handleError<Stripe[]>(`getStripes id=${id}`))
     );
   }
+
+  getCuts(id: number): Observable<Cut[]> {
+    const url = `http://127.0.0.1:8077/api/movie/${id}/cuts`;
+    return this.http.get<Cut[]>(url).pipe(
+      tap(_ => this.log(`fetched cuts for id=${id}`)),
+      catchError(this.handleError<Cut[]>(`getCuts id=${id}`))
+    );
+  }
+
 
   addMovie (movie: Movie): Observable<Movie> {
     const url = `http://127.0.0.1:8077/api/movies`;

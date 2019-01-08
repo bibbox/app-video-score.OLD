@@ -16,10 +16,15 @@ from scenedetect.detectors      import ContentDetector
 from flask import current_app, render_template
 from server.app import app_celerey
 
+from server.app.models.movie import Movie
+from server.app.models.tag import   Tag
 from server.app.services.movie_service import MovieService
+from server.app.services.tag_service import TagService
+
 from server.app.services.movie_utils import stripeBaseDirectory, stripeFileName
 
 movie_service = MovieService()
+tag_service   = TagService()
 
 def callCommandSync(movieId, command):
     callCommand.delay (movieId, command)
@@ -58,7 +63,7 @@ def generateStripes(movieID):
 #     print("OPENING THE VIDEO WITH ", length, width, height, fps)
 
      stripeimagedir = stripeBaseDirectory (movie)
-     print("dir to write the stripes", stripeimagedir)
+#     print("dir to write the stripes", stripeimagedir)
      if  not os.path.exists(stripeimagedir):
         os.makedirs(stripeimagedir)
 
@@ -130,9 +135,13 @@ def computeCuts(movieID):
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = cap.get(cv2.CAP_PROP_FPS)
 
+    for t in movie.tags:
+        tag_service.delete(t)
+
+    tags = []
     stats_manager = StatsManager()
     scene_manager = SceneManager(stats_manager)
-    scene_manager.add_detector(ContentDetector(threshold=5.0, min_scene_len=15))
+    scene_manager.add_detector(ContentDetector(threshold=40.0, min_scene_len=15))
     scene_manager.detect_scenes(frame_source=cap)
 
     basetimecode = FrameTimecode(timecode=0, fps=fps)
@@ -141,11 +150,15 @@ def computeCuts(movieID):
 
     print('List of scenes obtained:')
     for i, scene in enumerate(scene_list):
-       print('    Scene %2d: Start %s / Frame %d, End %s / Frame %d' % (
-                i + 1,
-                scene[0].get_timecode(), scene[0].get_frames(),
-                scene[1].get_timecode(), scene[1].get_frames(),))
+       tag = Tag (movieID=movieID, fn=scene[0].get_frames(), tag="CUT")
+       tags.append (tag)
+ #      print('    Scene %2d: Start %s / Frame %d, End %s / Frame %d' % (
+ #               i + 1,
+ #               scene[0].get_timecode(), scene[0].get_frames(),
+ #               scene[1].get_timecode(), scene[1].get_frames(),))
 
+    movie.tags = tags
+    movie = movie_service.save(movie)
 
 def testyoutube():
     url = 'https://youtu.be/4iwyvroMhDE'

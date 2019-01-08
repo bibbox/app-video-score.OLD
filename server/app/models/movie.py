@@ -46,9 +46,9 @@ class Movie(BaseModel, db.Model):
 
     active = db.Column(db.Boolean(), default=True, nullable=False)
 
-    tags = db.relationship('FrameTag', backref='movies', lazy=True)
+    tags = db.relationship('Tag', backref='movies', lazy=True)
 
-    def __init__(self, uuid, name, source, uri, active, width, height, stripeStatus=0.0, numberOfStripes=0):
+    def __init__(self, uuid, name, source, uri, active, width, height, stripeStatus=0.0, numberOfStripes=0, tags=[]):
         super().__init__()
         self.uuid = uuid
         self.name = name
@@ -59,22 +59,4 @@ class Movie(BaseModel, db.Model):
         self.height = height
         self.stripeStatus = stripeStatus
         self.numberOfStripes = numberOfStripes
-
-
-class FrameTag (BaseModel, db.Model):
-    """Model for movies table"""
-    __tablename__ = "frametag"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    uuid = db.Column(db.String(128), nullable=True)
-    movieID = db.Column(db.Integer, db.ForeignKey('movies.id'),  nullable=False)
-    fn   = db.Column(db.Integer, nullable=False)
-    tag =  db.Column(db.String(16), nullable=True)
-
-    def __init__(self, movieID,  uuid, uri, active, width, height):
-        super().__init__()
-        self.uuid = uuid
-        self.movieID = movieID
-        self.fn = fn
-        self.tag = tag
-
+        self.tags = tags

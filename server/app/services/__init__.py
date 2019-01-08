@@ -85,6 +85,12 @@ class SQLAlchemyService(BaseService):
     def get_all(self, *ids):
         return self.__model__.query.filter(self.__model__.id.in_(ids)).all()
 
+    def delete(self, obj):
+        self._isinstance(obj)
+        self.__db__.session.delete(obj)
+        self.__db__.session.commit()
+        return None
+
     def return_response(self, data):
         data_dict = [row.as_dict() for row in data]
         return jsonify(data_dict)
