@@ -31,6 +31,7 @@
 * In the client directory (Angular frontend)
   * `ng serve --port 4401`
   * `ng build --deleteOutputPath=false`
+  * `ng generate component stripes`
 
 ## Project Components (Directory Structure)
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Movie } from './movie';
+import { Stripe } from './stripe';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { MessageService } from './message.service';
@@ -24,11 +25,18 @@ export class MovieService {
   getMovie(id: number): Observable<Movie> {
     const url = `http://127.0.0.1:8077/api/movie/${id}`;
     return this.http.get<Movie>(url).pipe(
-      tap(_ => this.log(`fetched movie id=${id}`)),
+      tap(_ => this.log(`fetched movie for id=${id}`)),
       catchError(this.handleError<Movie>(`getMovie id=${id}`))
     );
   }
 
+  getStripes(id: number): Observable<Stripe[]> {
+    const url = `http://127.0.0.1:8077/api/movie/${id}/stripes`;
+    return this.http.get<Stripe[]>(url).pipe(
+      tap(_ => this.log(`fetched stripes for id=${id}`)),
+      catchError(this.handleError<Stripe[]>(`getStripes id=${id}`))
+    );
+  }
 
   addMovie (movie: Movie): Observable<Movie> {
     const url = `http://127.0.0.1:8077/api/movies`;

@@ -153,6 +153,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
 /* harmony import */ var _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./dashboard/dashboard.component */ "./src/app/dashboard/dashboard.component.ts");
 /* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
+/* harmony import */ var _stripes_stripes_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./stripes/stripes.component */ "./src/app/stripes/stripes.component.ts");
+
 
 
 
@@ -176,7 +178,8 @@ var AppModule = /** @class */ (function () {
                 _movies_movies_component__WEBPACK_IMPORTED_MODULE_7__["MoviesComponent"],
                 _movie_detail_movie_detail_component__WEBPACK_IMPORTED_MODULE_8__["MovieDetailComponent"],
                 _messages_messages_component__WEBPACK_IMPORTED_MODULE_9__["MessagesComponent"],
-                _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_11__["DashboardComponent"]
+                _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_11__["DashboardComponent"],
+                _stripes_stripes_component__WEBPACK_IMPORTED_MODULE_13__["StripesComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -409,7 +412,7 @@ module.exports = "label {\n    display: inline-block;\n    width: 5em;\n    marg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"movie\">\n  <h2>{{movie.name | uppercase}} </h2>\n  <div><span>id: </span>{{movie.id}}</div>\n  <div>\n    <label>Name:\n      <input [(ngModel)]=\"movie.name\" placeholder=\"movie\"/>\n    </label>\n  </div>\n  <div>\n    <label>URI:\n      <input [(ngModel)]=\"movie.uri\" placeholder=\"uri\"/>\n    </label>\n  </div>\n  <div>\n    <label>Stripe:\n      <input [(ngModel)]=\"movie.hasStripeImage\" placeholder=\"stipe\"/>\n    </label>\n  </div>\n  <div>\n    Completion: {{movie.stripeStatus}}&#37;\n  </div>\n  <div>\n    <button (click)=\"computeStripes()\">compute stripes</button>\n    <button (click)=\"computeCuts()\">compute cuts</button>\n  </div>\n  <button (click)=\"goBack()\">go back</button>\n</div>\n"
+module.exports = "<div *ngIf=\"movie\">\n  <h2>{{movie.name | uppercase}} </h2>\n  <div><span>id: </span>{{movie.id}}</div>\n  <div>\n    <label>Name:\n      <input [(ngModel)]=\"movie.name\" placeholder=\"movie\"/>\n    </label>\n  </div>\n  <div>\n    <label>URI:\n      <input [(ngModel)]=\"movie.uri\" placeholder=\"uri\"/>\n    </label>\n  </div>\n  <div>\n    <label>Stripe:\n      <input [(ngModel)]=\"movie.hasStripeImage\" placeholder=\"stipe\"/>\n    </label>\n  </div>\n  <div>\n    Completion: {{movie.stripeStatus}}&#37;\n  </div>\n  <div>\n    <button (click)=\"computeStripes()\">compute stripes</button>\n    <button (click)=\"computeCuts()\">compute cuts</button>\n  </div>\n  <button (click)=\"goBack()\">go back</button>\n  <app-stripes></app-stripes>\n</div>\n"
 
 /***/ }),
 
@@ -549,7 +552,12 @@ var MovieService = /** @class */ (function () {
     MovieService.prototype.getMovie = function (id) {
         var _this = this;
         var url = "http://127.0.0.1:8077/api/movie/" + id;
-        return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) { return _this.log("fetched movie id=" + id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError("getMovie id=" + id)));
+        return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) { return _this.log("fetched movie for id=" + id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError("getMovie id=" + id)));
+    };
+    MovieService.prototype.getStripes = function (id) {
+        var _this = this;
+        var url = "http://127.0.0.1:8077/api/movie/" + id + "/stripes";
+        return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) { return _this.log("fetched stripes for id=" + id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError("getStripes id=" + id)));
     };
     MovieService.prototype.addMovie = function (movie) {
         var _this = this;
@@ -706,6 +714,75 @@ var MoviesComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/stripes/stripes.component.css":
+/*!***********************************************!*\
+  !*** ./src/app/stripes/stripes.component.css ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3N0cmlwZXMvc3RyaXBlcy5jb21wb25lbnQuY3NzIn0= */"
+
+/***/ }),
+
+/***/ "./src/app/stripes/stripes.component.html":
+/*!************************************************!*\
+  !*** ./src/app/stripes/stripes.component.html ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div *ngFor=\"let stripe of stripes\">\n    <img src=\"{{stripe.url}}\" height=\"70\" width=\"800\" />\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/stripes/stripes.component.ts":
+/*!**********************************************!*\
+  !*** ./src/app/stripes/stripes.component.ts ***!
+  \**********************************************/
+/*! exports provided: StripesComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StripesComponent", function() { return StripesComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _movie_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../movie.service */ "./src/app/movie.service.ts");
+
+
+
+
+var StripesComponent = /** @class */ (function () {
+    function StripesComponent(movieService, route) {
+        this.movieService = movieService;
+        this.route = route;
+    }
+    StripesComponent.prototype.ngOnInit = function () {
+        this.getStripes();
+    };
+    StripesComponent.prototype.getStripes = function () {
+        var _this = this;
+        var id = parseInt(this.route.snapshot.paramMap.get('id'));
+        this.movieService.getStripes(id)
+            .subscribe(function (stripes) { return _this.stripes = stripes; });
+    };
+    StripesComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-stripes',
+            template: __webpack_require__(/*! ./stripes.component.html */ "./src/app/stripes/stripes.component.html"),
+            styles: [__webpack_require__(/*! ./stripes.component.css */ "./src/app/stripes/stripes.component.css")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_movie_service__WEBPACK_IMPORTED_MODULE_3__["MovieService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"]])
+    ], StripesComponent);
+    return StripesComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/environments/environment.ts":
 /*!*****************************************!*\
   !*** ./src/environments/environment.ts ***!
@@ -762,7 +839,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_2__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/Shared/SWD/ANGULAR-TRAINING/MovieAnnotatorTest/client/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /Users/Shared/SWD/BIBBOX-DOCKER-CONTAINER-DEV/app-video-score/client/src/main.ts */"./src/main.ts");
 
 
 /***/ })

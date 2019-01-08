@@ -15,11 +15,10 @@ services:
       dockerfile: Dockerfile
     volumes:
      - ./client/dist:/usr/share/nginx/html
+     - ./data/movies:/usr/share/nginx/html/static
     ports:
       - "8077:80"
       - "443:443"
-    volumes_from:
-     - bibbox-movie-analyzer-data
     depends_on:
       - bibbox-movie-analyzer-flask
 

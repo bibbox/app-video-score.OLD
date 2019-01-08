@@ -2,6 +2,12 @@ from server.app.services.movie_service import MovieService
 import os
 
 
+def stripeStaticURL (movie, n):
+    stripeimagedir = stripeBaseDirectory (movie)
+    fn = os.path.join(stripeimagedir, "s%06d.jpg" % n)
+    url = fn.replace ("/data/movies", "static")
+    return url
+
 def stripeFileName (movie, n):
     stripeimagedir = stripeBaseDirectory (movie)
     fn = os.path.join(stripeimagedir, "s%06d.jpg" % n)

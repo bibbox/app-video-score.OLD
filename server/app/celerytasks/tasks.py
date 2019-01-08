@@ -104,12 +104,15 @@ def generateStripes(movieID):
                 stripeimagecounter = 0
                 stripenumber += 1
                 writelaststripe = 1
+                movie.numberOfStripes = stripenumber + 1
+                movie = movie_service.save(movie)
 
      if (writelaststripe):
         fn = stripeFileName(movie, stripenumber)
         cv2.imwrite(fn, stripeImage)
 
      movie.stripeStatus = 100.0
+     movie.numberOfStripes = stripenumber + 1
      movie = movie_service.save(movie)
      print (count+1, " frames found, theory = ", length)
 

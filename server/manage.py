@@ -97,6 +97,15 @@ def seed_db():
         width="-1",
         height="-1"
     ))
+    db.session.add(Movie(
+        uuid="",
+        name="DER HUND VON BLACKWOOD CASTLE - Trailer",
+        source="YOUTUBE",
+        uri="https://youtu.be/tiNPFqalCh0",
+        active=True,
+        width="-1",
+        height="-1"
+    ))
     db.session.commit()
 
 if __name__ == '__main__':

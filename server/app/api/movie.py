@@ -11,7 +11,7 @@ from server.app.api import api
 
 from server.app.celerytasks.tasks  import callCommandSync
 from server.app.services.movie_service import MovieService
-from server.app.services.movie_utils import stripeFileName
+from server.app.services.movie_utils import stripeFileName, stripeStaticURL
 
 movie_service = MovieService()
 
@@ -23,8 +23,6 @@ def get_movies():
 @api.route("/movie/<int:id>")
 def get_movie(id):
     movie = movie_service.get(id)
-    # MAKE A REAL RESPONE OBJECT
-    print("*************************************")
     return jsonify(movie.as_dict() )
 
 @api.route("/movie/<int:id>/command", methods = ['POST', 'GET'])
@@ -38,12 +36,22 @@ def execute_command (id):
 
 
 @api.route("/movie/<int:id>/stripe/<int:sid>")
-def get_stripe (id, sid):
+def get_stripe_url (id, sid):
      movie = movie_service.get(id)
      # TODO check if sid is in range
-     filename = stripeFileName (movie, sid)
-     print ("*************************************", filename)
-     return send_file(filename, mimetype='image/jpg')
+     stripe = {'url': stripeStaticURL(movie, sid)}
+     return jsonify(stripe)
+
+
+@api.route("/movie/<int:id>/stripes")
+def get_stripe_urls (id):
+     movie = movie_service.get(id)
+     # TODO check if sid is in range
+     urls = []
+     for i in range(0, movie.numberOfStripes):
+         stripe = {'url': stripeStaticURL (movie, i)}
+         urls.append (stripe)
+     return jsonify(urls)
 
 '''
 

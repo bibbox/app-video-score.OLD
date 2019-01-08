@@ -8,6 +8,9 @@ import { interval} from "rxjs/internal/observable/interval";
 import { startWith, switchMap, takeWhile} from "rxjs/operators";
 import { OnDestroy } from "@angular/core";
 
+import { StripesComponent } from '../stripes/stripes.component';
+
+
 @Component({
   selector: 'app-movie-detail',
   templateUrl: './movie-detail.component.html',
