@@ -4,8 +4,10 @@
 
 .overlaycanvas {
   position: absolute;
+  z-index: 100;
 }
 
 .stripeimagearray {
   position: absolute;
+  z-index: 0;
 }

@@ -7,7 +7,7 @@ label {
   }
   input {
     height: 2em;
-    width: 30em;
+    width: 40em;
     font-size: 1em;
     padding-left: .4em;
   }
@@ -28,4 +28,3 @@ label {
     color: #ccc;
     cursor: auto;
   }
-  

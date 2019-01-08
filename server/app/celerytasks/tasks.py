@@ -141,7 +141,7 @@ def computeCuts(movieID):
     tags = []
     stats_manager = StatsManager()
     scene_manager = SceneManager(stats_manager)
-    scene_manager.add_detector(ContentDetector(threshold=40.0, min_scene_len=15))
+    scene_manager.add_detector(ContentDetector(threshold=27.0, min_scene_len=15))
     scene_manager.detect_scenes(frame_source=cap)
 
     basetimecode = FrameTimecode(timecode=0, fps=fps)
