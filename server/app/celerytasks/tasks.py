@@ -119,7 +119,7 @@ def generateStripes(movieID):
      movie.stripeStatus = 100.0
      movie.numberOfStripes = stripenumber + 1
      movie = movie_service.save(movie)
-     print (count+1, " frames found, theory = ", length)
+     #print (count+1, " frames found, theory = ", length)
 
 
 def computeCuts(movieID):
