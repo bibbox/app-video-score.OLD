@@ -81,9 +81,9 @@ def seed_db():
     ))
     db.session.add(Movie(
         uuid ="",
-        name = "Der Zinker",
+        name = "Die Katze von London",
         source = "YOUTUBE",
-        uri = "https://youtu.be/lQ5c0mhIR9A",
+        uri = "https://youtu.be/SUS9rVwBDH0",
         active = True,
         width = "-1",
         height = "-1"
@@ -99,7 +99,7 @@ def seed_db():
     ))
     db.session.add(Movie(
         uuid="",
-        name="DER HUND VON BLACKWOOD CASTLE - Trailer",
+        name="Der Hund von Blackwood Castle",
         source="YOUTUBE",
         uri="https://youtu.be/tiNPFqalCh0",
         active=True,
