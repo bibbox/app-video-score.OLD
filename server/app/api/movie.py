@@ -12,6 +12,7 @@ from server.app.api import api
 from server.app.celerytasks.tasks  import callCommandSync
 from server.app.services.movie_service import MovieService
 from server.app.services.movie_utils import stripeFileName, stripeStaticURL
+from flask_sse import sse
 
 movie_service = MovieService()
 
@@ -53,11 +54,16 @@ def get_stripe_urls (id):
          urls.append (stripe)
      return jsonify(urls)
 
-
 @api.route("/movie/<int:id>/cuts")
 def get_cuts(id):
      movie = movie_service.get(id)
      return jsonify([x.as_dict() for x in movie.tags])
+
+@api.route('/movie/syncmovie')
+def publish_hello():
+    sse.publish({"message": "Hello!"}, type='greeting')
+    print (url_for("sse.stream", channel="users.social"))
+    return "Message sent!"
 
 
 '''

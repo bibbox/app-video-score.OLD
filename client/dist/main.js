@@ -223,7 +223,17 @@ var AppService = /** @class */ (function () {
         this.http = http;
     }
     AppService.prototype.testRoute = function () {
+        console.log("connect the event listener");
+        this.connect();
         return this.http.get('http://0.0.0.0:8077/api/ping');
+    };
+    AppService.prototype.connect = function () {
+        var _this = this;
+        var source = new EventSource('http://0.0.0.0:8077/stream');
+        source.addEventListener('greeting', function (message) {
+            _this.myData = message;
+            console.log(message);
+        });
     };
     AppService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"])(),

@@ -4,7 +4,7 @@ MAINTAINER Heimo Müller "heimo.mueller@mac.com"
 
 # Copy custom nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
-RUN mkdir -p  /data/movies
+#RUN mkdir -p  /data/movies
 
 EXPOSE 80 443
 

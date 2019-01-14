@@ -22,6 +22,9 @@ class Config(object):
     SECRET_KEY = os.urandom(24)
     TESTING = False
 
+    SSE_REDIS_URL = 'redis://redis:6379'
+
+
     DB_USER = os.getenv('POSTGRES_USER')
     DB_PASS = os.getenv('POSTGRES_PASSWORD')
     DB_SERVICE = os.getenv('DB_SERVICE')

@@ -10,7 +10,8 @@
 
 ## Usage
 * Clone this repository
-* Then navigate back and execute following commands:
+  * `git clone https://github.com/bibbox/app-video-score`
+* Then navigate to the directory and execute following commands:
   * `docker-compose build`
   * `docker-compose up`
   * *OR* just run one command: `docker-compose -f docker-compose.yml up --build`

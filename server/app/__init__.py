@@ -10,6 +10,7 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_sse import sse
 
 from celery import Celery
 from celery.signals import after_setup_logger
@@ -26,7 +27,7 @@ def create_app(config_name):
 
     app = Flask(__name__)
 
-    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+    cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
     app.config.from_object(config[config_name])
     bootstrap.init_app(app)
@@ -56,6 +57,7 @@ def create_app(config_name):
 
     from server.app.api import api as api_1_0_blueprint
     app.register_blueprint(api_1_0_blueprint, url_prefix='/api')
+    app.register_blueprint(sse, url_prefix='/stream')
 
     return app
 
