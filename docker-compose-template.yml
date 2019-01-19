@@ -114,7 +114,7 @@ services:
       - §§INSTANCE-movie-analyzer-redis
 
   §§INSTANCE-movie-analyzer-redis:
-    container_name: bibbox-movie-analyzer-redis
+    container_name: §§INSTANCE-movie-analyzer-redis
     image: redis
     restart: unless-stopped
     networks:
