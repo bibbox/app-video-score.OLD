@@ -15,7 +15,7 @@ const httpOptions = {
 @Injectable({ providedIn: 'root' })
 export class MovieService {
 
-  private movieAPI = 'http://127.0.0.1:8077/api/movies';  // URL to web api
+  private movieAPI = '/api/movies';  // URL to web api
 
   getMovies(): Observable<Movie[]> {
     let movies = this.http.get<Movie[]>(this.movieAPI)

@@ -547,7 +547,7 @@ var MovieService = /** @class */ (function () {
     function MovieService(messageService, http) {
         this.messageService = messageService;
         this.http = http;
-        this.movieAPI = 'http://127.0.0.1:8077/api/movies'; // URL to web api
+        this.movieAPI = '/api/movies'; // URL to web api
     }
     MovieService.prototype.getMovies = function () {
         var movies = this.http.get(this.movieAPI);
