@@ -14,12 +14,14 @@ version: '2'
 
 services:
 
-  §§INSTANCE-movie-analyzer-nginx:
-    container_name: §§INSTANCE-movie-analyzer-nginx
+  §§INSTANCE-video-score-nginx:
+    container_name: §§INSTANCE-video-score-nginx
     restart: unless-stopped
     networks:
       - bibbox-default-network
     image: nginx
+    links:
+        -  §§INSTANCE-video-score-server:video-score-server
     build:
       context:    ./nginx
       dockerfile: Dockerfile
@@ -29,29 +31,29 @@ services:
     ports:
       - "§§PORT-MAINAPP:80"
     depends_on:
-      - §§INSTANCE-movie-analyzer-flask
+      - §§§INSTANCE-video-score-server
 
-  §§INSTANCE-movie-analyzer-flask:
-    container_name: §§INSTANCE-movie-analyzer-flask
+  §§INSTANCE-video-score-server:
+    container_name: §§INSTANCE-video-score-server
     restart: unless-stopped
     networks:
       - bibbox-default-network
     links:
-        - §§INSTANCE-movie-analyzer-postgres:postgres
-        - §§INSTANCE-movie-analyzer-redis:redis
-        - §§INSTANCE-movie-analyzer-celery:celery
+        - §§INSTANCE-video-score-postgres:postgres
+        - §§INSTANCE-video-score-redis:redis
+        - §§INSTANCE-video-score-celery:celery
     build:
       context:    ./server
       dockerfile: Dockerfile
     depends_on:
-      - §§INSTANCE-movie-analyzer-postgres
+      - §§INSTANCE-video-score-postgres
     volumes_from:
-     - §§INSTANCE-movie-analyzer-data
+     - §§INSTANCE-video-score-data
     env_file:
      - .env
 
-  §§INSTANCE-movie-analyzer-postgres:
-      container_name: §§INSTANCE-movie-analyzer-postgres
+  §§INSTANCE-video-score-postgres:
+      container_name: §§INSTANCE-video-score-postgres
       restart: unless-stopped
       networks:
         - bibbox-default-network
@@ -61,41 +63,41 @@ services:
       env_file:
         - .env
 
-  §§INSTANCE-movie-analyzer-adminer:
+  §§INSTANCE-video-score-adminer:
     image: adminer
     restart: unless-stopped
     networks:
       - bibbox-default-network
-    container_name: §§INSTANCE-movie-analyzer-adminer
+    container_name: §§INSTANCE-video-score-adminer
     links:
-      - §§INSTANCE-movie-analyzer-postgres:db
+      - §§INSTANCE-video-score-postgres:db
     depends_on:
-      - §§INSTANCE-movie-analyzer-postgres
+      - §§INSTANCE-video-score-postgres
     ports:
       - "§§PORT-ADMINER:8080"
 
-  §§INSTANCE-movie-analyzer-celery:
-    container_name: §§INSTANCE-movie-analyzer-celery
+  §§INSTANCE-video-score-celery:
+    container_name: §§INSTANCE-video-score-celery
     restart: unless-stopped
     networks:
       - bibbox-default-network
     links:
-        - §§INSTANCE-movie-analyzer-postgres:postgres
-        - §§INSTANCE-movie-analyzer-redis:redis
+        - §§INSTANCE-video-score-postgres:postgres
+        - §§INSTANCE-video-score-redis:redis
     build:
       context:    ./server
       dockerfile: Dockerfile
     command: "celery worker  -A celery_worker.app_celerey --loglevel=info"
     user: nobody
     depends_on:
-      - §§INSTANCE-movie-analyzer-postgres
+      - §§INSTANCE-video-score-postgres
     volumes_from:
-        - §§INSTANCE-movie-analyzer-data
+        - §§INSTANCE-video-score-data
     env_file:
       - .env
 
-  §§INSTANCE-movie-analyzer-celery-monitor:
-    container_name: §§INSTANCE-movie-analyzer-celery-monitor
+  §§INSTANCE-video-score-celery-monitor:
+    container_name: §§INSTANCE-video-score-celery-monitor
     build:
       context:    ./server
       dockerfile: Dockerfile
@@ -105,24 +107,24 @@ services:
     ports:
      - "§§PORT-CELERY-MONITOR:5555"
     links:
-     - §§INSTANCE-movie-analyzer-redis:redis
+     - §§INSTANCE-video-score-redis:redis
     volumes_from:
-     - §§INSTANCE-movie-analyzer-data
+     - §§INSTANCE-video-score-data
     entrypoint: flower
     command:  -celery A celery_worker.app_celerey --port=5555 --broker=redis://redis:6379/0
     depends_on:
-      - §§INSTANCE-movie-analyzer-redis
+      - §§INSTANCE-video-score-redis
 
-  §§INSTANCE-movie-analyzer-redis:
-    container_name: §§INSTANCE-movie-analyzer-redis
+  §§INSTANCE-video-score-redis:
+    container_name: §§INSTANCE-video-score-redis
     image: redis
     restart: unless-stopped
     networks:
       - bibbox-default-network
 
-  §§INSTANCE-movie-analyzer-data:
+  §§INSTANCE-video-score-data:
     image: busybox
-    container_name: §§INSTANCE-movie-analyzer-data
+    container_name: §§INSTANCE-video-score-data
     networks:
       - bibbox-default-network
     volumes:
