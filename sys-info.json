@@ -1,12 +1,12 @@
 {
-  runningcontainers:["§§INSTANCE-movie-analyzer-nginx",
-                     "§§INSTANCE-movie-analyzer-flask",
-                     "§§INSTANCE-movie-analyzer-postgres",
-                     "§§INSTANCE-movie-analyzer-postgres",
-                     "§§INSTANCE-movie-analyzer-adminer",
-                     "§§INSTANCE-movie-analyzer-celery",
-                     "§§INSTANCE-movie-analyzer-celery-monitor",
-                     "§§INSTANCE-movie-analyzer-redis"
+  runningcontainers:["§§INSTANCE-video-score-nginx",
+                     "§§INSTANCE-video-score-flask",
+                     "§§INSTANCE-video-score-postgres",
+                     "§§INSTANCE-video-score-postgres",
+                     "§§INSTANCE-video-score-adminer",
+                     "§§INSTANCE-video-score-celery",
+                     "§§INSTANCE-video-score-celery-monitor",
+                     "§§INSTANCE-video-score-redis"
                     ],
-  supportcontainers:["§§INSTANCE-movie-analyzer-data"]
+  supportcontainers:["§§INSTANCE-video-score-data"]
 }
