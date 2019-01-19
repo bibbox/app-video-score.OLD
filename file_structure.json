@@ -1,6 +1,8 @@
 {
   "makefolders":[
     "data/postgresql/data",
+    "data/movies/yt",
+    "data/movies/fs",
     "data/movies",
     "data/celery"
   ],
