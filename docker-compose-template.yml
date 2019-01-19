@@ -31,7 +31,7 @@ services:
     ports:
       - "§§PORT-MAINAPP:80"
     depends_on:
-      - §§§INSTANCE-video-score-server
+      - §§INSTANCE-video-score-server
 
   §§INSTANCE-video-score-server:
     container_name: §§INSTANCE-video-score-server
