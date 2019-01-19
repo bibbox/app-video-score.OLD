@@ -1,4 +1,12 @@
 {
-  runningcontainers:["§§INSTANCE-xx", "§§INSTANCE-xx-db"],
-  supportcontainers:["§§INSTANCE-xx-data"]
+  runningcontainers:["§§INSTANCE-movie-analyzer-nginx",
+                     "§§INSTANCE-movie-analyzer-flask",
+                     "§§INSTANCE-movie-analyzer-postgres",
+                     "§§INSTANCE-movie-analyzer-postgres",
+                     "§§INSTANCE-movie-analyzer-adminer",
+                     "§§INSTANCE-movie-analyzer-celery",
+                     "§§INSTANCE-movie-analyzer-celery-monitor",
+                     "§§INSTANCE-movie-analyzer-redis"
+                    ],
+  supportcontainers:["§§INSTANCE-movie-analyzer-data"]
 }

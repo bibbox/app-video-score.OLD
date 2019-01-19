@@ -127,12 +127,13 @@ COPY ./entrypoint.sh    /usr/src/movieannotator
 COPY ./*.py      /usr/src/movieannotator/
 COPY ./uwsgi.*   /usr/src/movieannotator/
 COPY ./.env      /usr/src/movieannotator
+
 # Give execute permission to below file, so that the script can be executed by docker.
 RUN chmod 777 /usr/src/movieannotator/entrypoint.sh
 
-# Install the Python libraries
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
+
 
 # COPY uswgi.ini
 COPY ./uwsgi.ini /etc/uwsgi.ini

@@ -1,6 +1,13 @@
 {
   "makefolders":[
-    "var/lib/mysql"
+    "/data/postgressql/data",
+    "/data/movies",
+    "/data/celery"
   ],
-  "copyfiles":[]
+  "copyfiles":[
+    {
+            "source":      "server",
+            "destination": "server"
+    }
+  ]
 }

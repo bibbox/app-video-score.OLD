@@ -15,7 +15,6 @@ def stripeFileName (movie, n):
 
 def stripeBaseDirectory (movie):
 
-    os.system("ls /data")
     dirname = os.path.dirname("/data/movies/yt/")
 
     stripeimagedir = ""

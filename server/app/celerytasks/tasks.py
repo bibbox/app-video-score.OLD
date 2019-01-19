@@ -49,7 +49,7 @@ def callCommand(self, movieId, command):
 def generateStripes(movieID):
 
      movie = movie_service.get(movieID)
-     print("*************** GENERATE STRIPE ***************")
+     print("*************** SZART OF GENERATE STRIPES  ***************")
 
      if (movie.source  == "YOUTUBE"):
         vPafy = pafy.new(movie.uri)

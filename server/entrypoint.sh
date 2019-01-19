@@ -3,7 +3,9 @@
 # Below shells script is required because the flask container need to wait for postgres db server to startup before
 # accessing it below.
 
-RETRIES=5
+
+# TODO - for production take the password from the .env
+RETRIES=20
 USER=postgres
 DATABASE=users_dev
 HOST=postgres
@@ -16,9 +18,14 @@ done
 
 echo "PostgreSQL started!"
 
-# Run below commands from manage.py to initialize db and have some default data.
-# add a flag (in the data dirextory), to preserve the DB at a build
 
-#python manage.py recreate_db
-#python manage.py seed_db
-uwsgi --ini /etc/uwsgi.ini
+# Run below commands from manage.py to initialize db and have some default data.
+# add a flag to preserve the DB at a build
+if [ ! -f  DBINIT.DONE ]; then
+    python manage.py recreate_db
+    python manage.py seed_db
+    touch DBINIT.DONE
+fi
+
+
+uwsgi --py-autoreload 1 --ini /etc/uwsgi.ini
