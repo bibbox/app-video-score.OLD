@@ -11,14 +11,19 @@ export class AppService {
 
   testRoute() {
     console.log ("connect the event listener")
-    this.connect();
+//    this.connect();
     return this.http.get('http://0.0.0.0:8077/api/ping');
   }
+
+/*
   connect(): void {
     let source = new EventSource('http://0.0.0.0:8077/stream');
     source.addEventListener('greeting', message => {
         this.myData = message;
         console.log (message)
     });
+
  }
+*/
+
 }

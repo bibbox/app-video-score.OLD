@@ -1,27 +1,12 @@
 <div *ngIf="movie">
-  <h2>{{movie.name | uppercase}} </h2>
-  <div><span>id: </span>{{movie.id}}</div>
+
+  <br>
+
+  <a href={{movie.uri}} target="_blank"> {{movie.name}}</a>  stripes:{{movie.stripeStatus}}&#37;  cuts:
+
   <div>
-    <label>Name:
-      <input [(ngModel)]="movie.name" placeholder="movie"/>
-    </label>
-  </div>
-  <div>
-    <label>URI:
-      <input [(ngModel)]="movie.uri" placeholder="uri"/>
-    </label>
-  </div>
-  <div>
-    <label>Stripe:
-      <input [(ngModel)]="movie.hasStripeImage" placeholder="stipe"/>
-    </label>
-  </div>
-  <div>
-    Completion: {{movie.stripeStatus}}&#37;
-  </div>
-  <div>
-    <button (click)="computeStripes()">compute stripes</button>
-    <button (click)="computeCuts()">compute cuts</button>
+    <button (click)="computeStripes()">(re)compute stripes</button>
+    <button (click)="computeCuts()">(re)compute cuts</button>
   </div>
   <button (click)="goBack()">go back</button>
 

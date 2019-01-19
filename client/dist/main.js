@@ -224,16 +224,8 @@ var AppService = /** @class */ (function () {
     }
     AppService.prototype.testRoute = function () {
         console.log("connect the event listener");
-        this.connect();
+        //    this.connect();
         return this.http.get('http://0.0.0.0:8077/api/ping');
-    };
-    AppService.prototype.connect = function () {
-        var _this = this;
-        var source = new EventSource('http://0.0.0.0:8077/stream');
-        source.addEventListener('greeting', function (message) {
-            _this.myData = message;
-            console.log(message);
-        });
     };
     AppService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"])(),
@@ -425,7 +417,7 @@ module.exports = "label {\n    display: inline-block;\n    width: 5em;\n    marg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"movie\">\n  <h2>{{movie.name | uppercase}} </h2>\n  <div><span>id: </span>{{movie.id}}</div>\n  <div>\n    <label>Name:\n      <input [(ngModel)]=\"movie.name\" placeholder=\"movie\"/>\n    </label>\n  </div>\n  <div>\n    <label>URI:\n      <input [(ngModel)]=\"movie.uri\" placeholder=\"uri\"/>\n    </label>\n  </div>\n  <div>\n    <label>Stripe:\n      <input [(ngModel)]=\"movie.hasStripeImage\" placeholder=\"stipe\"/>\n    </label>\n  </div>\n  <div>\n    Completion: {{movie.stripeStatus}}&#37;\n  </div>\n  <div>\n    <button (click)=\"computeStripes()\">compute stripes</button>\n    <button (click)=\"computeCuts()\">compute cuts</button>\n  </div>\n  <button (click)=\"goBack()\">go back</button>\n\n\n  <app-stripes></app-stripes>\n\n\n\n</div>\n"
+module.exports = "<div *ngIf=\"movie\">\n\n  <br>\n\n  <a href={{movie.uri}} target=\"_blank\"> {{movie.name}}</a>  stripes:{{movie.stripeStatus}}&#37;  cuts:\n\n  <div>\n    <button (click)=\"computeStripes()\">(re)compute stripes</button>\n    <button (click)=\"computeCuts()\">(re)compute cuts</button>\n  </div>\n  <button (click)=\"goBack()\">go back</button>\n\n\n  <app-stripes></app-stripes>\n\n\n\n</div>\n"
 
 /***/ }),
 

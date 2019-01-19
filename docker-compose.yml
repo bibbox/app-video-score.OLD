@@ -101,7 +101,7 @@ services:
     image: busybox
     container_name: bibbox-movie-analyzer-data
     volumes:
-      - ./data/postgressql/data:/var/lib/postgresql/data
+      - ./data/postgresql/data:/var/lib/postgresql/data
       - ./data/movies:/data/movies
       - ./server:/usr/src/movieannotator/server
       - ./celery:/queue

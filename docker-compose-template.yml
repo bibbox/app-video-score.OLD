@@ -16,7 +16,9 @@ services:
 
   §§INSTANCE-movie-analyzer-nginx:
     container_name: §§INSTANCE-movie-analyzer-nginx
-    restart: always
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
     image: nginx
     build:
       context:    ./nginx
@@ -31,7 +33,9 @@ services:
 
   §§INSTANCE-movie-analyzer-flask:
     container_name: §§INSTANCE-movie-analyzer-flask
-    restart: always
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
     links:
         - §§INSTANCE-movie-analyzer-postgres:postgres
         - §§INSTANCE-movie-analyzer-redis:redis
@@ -48,17 +52,20 @@ services:
 
   §§INSTANCE-movie-analyzer-postgres:
       container_name: §§INSTANCE-movie-analyzer-postgres
-      restart: always
+      restart: unless-stopped
+      networks:
+        - bibbox-default-network
       build:
         context:   ./postgresql
         dockerfile: Dockerfile
-      ports:
-         - "5432:5432"
       env_file:
         - .env
 
   §§INSTANCE-movie-analyzer-adminer:
     image: adminer
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
     container_name: §§INSTANCE-movie-analyzer-adminer
     links:
       - §§INSTANCE-movie-analyzer-postgres:db
@@ -69,6 +76,9 @@ services:
 
   §§INSTANCE-movie-analyzer-celery:
     container_name: §§INSTANCE-movie-analyzer-celery
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
     links:
         - §§INSTANCE-movie-analyzer-postgres:postgres
         - §§INSTANCE-movie-analyzer-redis:redis
@@ -89,6 +99,9 @@ services:
     build:
       context:    ./server
       dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
     ports:
      - "§§PORT-CELERY-MONITOR:5555"
     links:
@@ -101,14 +114,19 @@ services:
       - §§INSTANCE-movie-analyzer-redis
 
   §§INSTANCE-movie-analyzer-redis:
-     container_name: bibbox-movie-analyzer-redis
-     image: redis
+    container_name: bibbox-movie-analyzer-redis
+    image: redis
+    restart: unless-stopped
+    networks:
+      - bibbox-default-network
 
   §§INSTANCE-movie-analyzer-data:
     image: busybox
     container_name: §§INSTANCE-movie-analyzer-data
+    networks:
+      - bibbox-default-network
     volumes:
-      - ./data/postgressql/data:/var/lib/postgresql/data
+      - ./data/postgresql/data:/var/lib/postgresql/data
       - ./data/movies:/data/movies
       - ./server:/usr/src/movieannotator/server
       - ./data/celery:/queue
