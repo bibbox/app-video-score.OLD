@@ -24,7 +24,7 @@ export class MovieService {
   }
 
   getMovie(id: number): Observable<Movie> {
-    const url = `http://127.0.0.1:8077/api/movie/${id}`;
+    const url = `/api/movie/${id}`;
     return this.http.get<Movie>(url).pipe(
       tap(_ => this.log(`fetched movie for id=${id}`)),
       catchError(this.handleError<Movie>(`getMovie id=${id}`))
@@ -32,7 +32,7 @@ export class MovieService {
   }
 
   getStripes(id: number): Observable<Stripe[]> {
-    const url = `http://127.0.0.1:8077/api/movie/${id}/stripes`;
+    const url = `/api/movie/${id}/stripes`;
     return this.http.get<Stripe[]>(url).pipe(
       tap(_ => this.log(`fetched stripes for id=${id}`)),
       catchError(this.handleError<Stripe[]>(`getStripes id=${id}`))
@@ -40,7 +40,7 @@ export class MovieService {
   }
 
   getCuts(id: number): Observable<Cut[]> {
-    const url = `http://127.0.0.1:8077/api/movie/${id}/cuts`;
+    const url = `/api/movie/${id}/cuts`;
     return this.http.get<Cut[]>(url).pipe(
       tap(_ => this.log(`fetched cuts for id=${id}`)),
       catchError(this.handleError<Cut[]>(`getCuts id=${id}`))
@@ -49,7 +49,7 @@ export class MovieService {
 
 
   addMovie (movie: Movie): Observable<Movie> {
-    const url = `http://127.0.0.1:8077/api/movies`;
+    const url = `/api/movies`;
     return this.http.post<Movie>(url, movie, httpOptions).pipe(
       tap((Movie: Movie) => this.log(`added movie w/ id=${movie.id}`)),
       catchError(this.handleError<Movie>('addMovie'))
@@ -60,7 +60,7 @@ export class MovieService {
   deleteMovie(movie: Movie | number): Observable<Movie> {
 
     const id = typeof movie === 'number' ? movie : movie.id;
-    const url = `http://127.0.0.1:8077/api/movie/${id}`;
+    const url = `/api/movie/${id}`;
 
     return this.http.delete<Movie>(url, httpOptions).pipe(
       tap(_ => this.log(`deleted movie id=${id}`)),
@@ -73,7 +73,7 @@ export class MovieService {
     console.log("Compute Stripes Process in MOVIE SERVICES")
 
     const id = typeof movie === 'number' ? movie : movie.id;
-    const url = `http://127.0.0.1:8077/api/movie/${id}/command`;
+    const url = `/api/movie/${id}/command`;
     const command = `{ "command": "generate-stripes", "parameters": {"silent": "true"} }`
 
     return this.http.post<Movie>(url, command, httpOptions).pipe(
@@ -86,7 +86,7 @@ export class MovieService {
 
     console.log("Compute Cut Process in MOVIE SERVICES")
     const id = typeof movie === 'number' ? movie : movie.id;
-    const url = `http://127.0.0.1:8077/api/movie/${id}/command`;
+    const url = `/api/movie/${id}/command`;
     const command = `{ "command": "compute-cuts", "parameters": {"silent": "true"} }`
     return this.http.post<Movie>(url, command, httpOptions).pipe(
       tap(_ => this.log(`compute cuts movie id=${id}`)),

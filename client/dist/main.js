@@ -556,36 +556,36 @@ var MovieService = /** @class */ (function () {
     };
     MovieService.prototype.getMovie = function (id) {
         var _this = this;
-        var url = "http://127.0.0.1:8077/api/movie/" + id;
+        var url = "/api/movie/" + id;
         return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) { return _this.log("fetched movie for id=" + id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError("getMovie id=" + id)));
     };
     MovieService.prototype.getStripes = function (id) {
         var _this = this;
-        var url = "http://127.0.0.1:8077/api/movie/" + id + "/stripes";
+        var url = "/api/movie/" + id + "/stripes";
         return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) { return _this.log("fetched stripes for id=" + id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError("getStripes id=" + id)));
     };
     MovieService.prototype.getCuts = function (id) {
         var _this = this;
-        var url = "http://127.0.0.1:8077/api/movie/" + id + "/cuts";
+        var url = "/api/movie/" + id + "/cuts";
         return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) { return _this.log("fetched cuts for id=" + id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError("getCuts id=" + id)));
     };
     MovieService.prototype.addMovie = function (movie) {
         var _this = this;
-        var url = "http://127.0.0.1:8077/api/movies";
+        var url = "/api/movies";
         return this.http.post(url, movie, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (Movie) { return _this.log("added movie w/ id=" + movie.id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError('addMovie')));
     };
     /** DELETE: delete the hero from the server */
     MovieService.prototype.deleteMovie = function (movie) {
         var _this = this;
         var id = typeof movie === 'number' ? movie : movie.id;
-        var url = "http://127.0.0.1:8077/api/movie/" + id;
+        var url = "/api/movie/" + id;
         return this.http.delete(url, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) { return _this.log("deleted movie id=" + id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError('deleteMovie')));
     };
     MovieService.prototype.computeStripe = function (movie) {
         var _this = this;
         console.log("Compute Stripes Process in MOVIE SERVICES");
         var id = typeof movie === 'number' ? movie : movie.id;
-        var url = "http://127.0.0.1:8077/api/movie/" + id + "/command";
+        var url = "/api/movie/" + id + "/command";
         var command = "{ \"command\": \"generate-stripes\", \"parameters\": {\"silent\": \"true\"} }";
         return this.http.post(url, command, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) { return _this.log("generate stripes id=" + id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError('computeStripe')));
     };
@@ -593,7 +593,7 @@ var MovieService = /** @class */ (function () {
         var _this = this;
         console.log("Compute Cut Process in MOVIE SERVICES");
         var id = typeof movie === 'number' ? movie : movie.id;
-        var url = "http://127.0.0.1:8077/api/movie/" + id + "/command";
+        var url = "/api/movie/" + id + "/command";
         var command = "{ \"command\": \"compute-cuts\", \"parameters\": {\"silent\": \"true\"} }";
         return this.http.post(url, command, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(function (_) { return _this.log("compute cuts movie id=" + id); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError('computeCuts')));
     };
