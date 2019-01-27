@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Movie } from '../movie';
 import { MovieService } from '../movie.service';
+import { Movie } from '../entities/movie.model';
 import { ConditionalExpr } from '@angular/compiler';
+import { Observable, of } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+
+import { UpsertMovie, DeleteMovie } from '../entities/movie.actions';
+import { selectMovieState, selectAllMovies, selectMoviesEntities } from '../entities/movie.selectors';
+
+import { AppState } from '../app-state/app-state';
+
 
 @Component({
   selector: 'app-movies',
@@ -11,30 +19,39 @@ import { ConditionalExpr } from '@angular/compiler';
 
 export class MoviesComponent implements OnInit {
 
-  movies: Movie[];
+  movies$: any = this.store.pipe(select(selectAllMovies));
 
-  constructor(private movieService: MovieService) { }
+  baselmovies$: any = this.store.pipe(select(selectMovieState));
+
+  constructor(  private  movieService: MovieService,
+                public   store: Store<AppState> ) { }
 
   ngOnInit() {
-      this.getMovies();
+
+    this.movies$.subscribe(m => console.log(m));
+    this.baselmovies$.subscribe(m => console.log(m));
+
+ //   this.getMovies();
   }
 
+  /*
   getMovies(): void {
-    this.movieService.getMovies()
-        .subscribe(movies => this.movies =movies  );
-  }
+   this.movieService.getMovies()
+#        .subscribe(movies => this.movies =movies  );
+#  }
 
   add(name: string): void {
     name = name.trim();
     if (!name) { return; }
-    this.movieService.addMovie({ name } as Movie)
+    this.movieService.addMovie({ name } as OOMovie)
       .subscribe(movie => {
         this.movies.push(movie);
       });
   }
 
-  delete(movie: Movie): void {
+  delete(movie: OOMovie): void {
     this.movies = this.movies.filter(h => h !== movie);
     this.movieService.deleteMovie(movie).subscribe();
   }
+*/  
 }

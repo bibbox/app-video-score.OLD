@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Movie } from './movie';
 import { Stripe } from './stripe';
 import { Cut } from './cut';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { MessageService } from './message.service';
-
+import { Movie, MovieState } from './entities/movie.model';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -16,20 +15,6 @@ const httpOptions = {
 export class MovieService {
 
   private movieAPI = '/api/movies';  // URL to web api
-
-  getMovies(): Observable<Movie[]> {
-    let movies = this.http.get<Movie[]>(this.movieAPI)
-    this.messageService.add('MovieService: fetched movies');
-    return movies;
-  }
-
-  getMovie(id: number): Observable<Movie> {
-    const url = `/api/movie/${id}`;
-    return this.http.get<Movie>(url).pipe(
-      tap(_ => this.log(`fetched movie for id=${id}`)),
-      catchError(this.handleError<Movie>(`getMovie id=${id}`))
-    );
-  }
 
   getStripes(id: number): Observable<Stripe[]> {
     const url = `/api/movie/${id}/stripes`;
@@ -47,15 +32,6 @@ export class MovieService {
     );
   }
 
-
-  addMovie (movie: Movie): Observable<Movie> {
-    const url = `/api/movies`;
-    return this.http.post<Movie>(url, movie, httpOptions).pipe(
-      tap((Movie: Movie) => this.log(`added movie w/ id=${movie.id}`)),
-      catchError(this.handleError<Movie>('addMovie'))
-    );
-  }
-
   /** DELETE: delete the hero from the server */
   deleteMovie(movie: Movie | number): Observable<Movie> {
 
@@ -68,13 +44,12 @@ export class MovieService {
     );
   }
 
- computeStripe(movie: Movie | number): Observable<Movie> {
+ computeStripe(id:number): Observable<Movie> {
 
     console.log("Compute Stripes Process in MOVIE SERVICES")
-
-    const id = typeof movie === 'number' ? movie : movie.id;
     const url = `/api/movie/${id}/command`;
     const command = `{ "command": "generate-stripes", "parameters": {"silent": "true"} }`
+    console.log(url)
 
     return this.http.post<Movie>(url, command, httpOptions).pipe(
       tap(_ => this.log(`generate stripes id=${id}`)),
@@ -82,12 +57,12 @@ export class MovieService {
     );
   }
 
-   computeCuts(movie: Movie | number): Observable<Movie> {
+   computeCuts(id:number): Observable<Movie> {
 
     console.log("Compute Cut Process in MOVIE SERVICES")
-    const id = typeof movie === 'number' ? movie : movie.id;
     const url = `/api/movie/${id}/command`;
     const command = `{ "command": "compute-cuts", "parameters": {"silent": "true"} }`
+
     return this.http.post<Movie>(url, command, httpOptions).pipe(
       tap(_ => this.log(`compute cuts movie id=${id}`)),
       catchError(this.handleError<Movie>('computeCuts'))
@@ -112,6 +87,7 @@ export class MovieService {
   private log(message: string) {
     this.messageService.add(`MovieService: ${message}`);
   }
+  
   constructor( private messageService: MessageService, private http: HttpClient) { }
 
 

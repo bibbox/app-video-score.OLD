@@ -1,9 +1,7 @@
-<div *ngIf="movie">
+<div *ngIf=(movies$|async)(id)>
 
   <br>
-
-  <a href={{movie.uri}} target="_blank"> {{movie.name}}</a>  stripes:{{movie.stripeStatus}}&#37;  cuts:
-
+  <a href="{{(movies$|async)(id).uri}}" target="_blank"> {{(movies$|async)(id).name}}</a>  stripes:{{(movies$|async)(id).stripeStatus}}&#37;  cuts:
   <div>
     <button (click)="computeStripes()">(re)compute stripes</button>
     <button (click)="computeCuts()">(re)compute cuts</button>

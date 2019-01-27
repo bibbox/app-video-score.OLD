@@ -37,7 +37,9 @@
   * `ng serve --port 4401`
   * `ng build --deleteOutputPath=false`
   * `ng generate component stripes`
-
+  * `ng config cli.defaultCollection @ngrx/schematics`
+  * `ng generate entity Cuts`
+  
 ## Project Components (Directory Structure)
 
 * **client** 
