@@ -1063,11 +1063,11 @@ var MoviesComponent = /** @class */ (function () {
         this.movieService = movieService;
         this.store = store;
         this.movies$ = this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_3__["select"])(_entities_movie_selectors__WEBPACK_IMPORTED_MODULE_4__["selectAllMovies"]));
-        this.baselmovies$ = this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_3__["select"])(_entities_movie_selectors__WEBPACK_IMPORTED_MODULE_4__["selectMovieState"]));
+        this.movientitiedes$ = this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_3__["select"])(_entities_movie_selectors__WEBPACK_IMPORTED_MODULE_4__["selectMoviesEntities"]));
     }
     MoviesComponent.prototype.ngOnInit = function () {
         this.movies$.subscribe(function (m) { return console.log(m); });
-        this.baselmovies$.subscribe(function (m) { return console.log(m); });
+        this.movientitiedes$.subscribe(function (m) { return console.log(m); });
         //   this.getMovies();
     };
     MoviesComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([

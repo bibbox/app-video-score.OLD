@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
 import { UpsertMovie, DeleteMovie } from '../entities/movie.actions';
-import { selectMovieState, selectAllMovies, selectMoviesEntities } from '../entities/movie.selectors';
+import { selectAllMovies, selectMoviesEntities } from '../entities/movie.selectors';
 
 import { AppState } from '../app-state/app-state';
 
@@ -20,8 +20,7 @@ import { AppState } from '../app-state/app-state';
 export class MoviesComponent implements OnInit {
 
   movies$: any = this.store.pipe(select(selectAllMovies));
-
-  baselmovies$: any = this.store.pipe(select(selectMovieState));
+  movientitiedes$: any = this.store.pipe(select(selectMoviesEntities));
 
   constructor(  private  movieService: MovieService,
                 public   store: Store<AppState> ) { }
@@ -29,7 +28,7 @@ export class MoviesComponent implements OnInit {
   ngOnInit() {
 
     this.movies$.subscribe(m => console.log(m));
-    this.baselmovies$.subscribe(m => console.log(m));
+    this.movientitiedes$.subscribe(m => console.log(m));
 
  //   this.getMovies();
   }
