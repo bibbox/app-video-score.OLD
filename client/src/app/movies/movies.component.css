@@ -1,4 +1,10 @@
 /* Movies Component's private CSS styles */
+
+table {
+  width: 100%;
+}
+
+
 .selected {
   background-color: #CFD8DC !important;
   color: white;

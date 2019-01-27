@@ -1,7 +1,7 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import { BrowserModule} from '@angular/platform-browser';
+import { NgModule} from '@angular/core';
+import { FormsModule} from '@angular/forms';
+import { HttpClientModule} from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { MovieApiEffects } from './entities/movies-api.effects';
 
@@ -16,9 +16,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StripesComponent } from './stripes/stripes.component';
 import { StripesOverlayComponent } from './stripes-overlay/stripes-overlay.component';
 
+// STORE
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './reducers';
+
+// MATERIAL
+import {MatCheckboxModule} from '@angular/material';
+import {MatTableModule} from '@angular/material/table';
 
 
 @NgModule({
@@ -38,12 +43,16 @@ import { reducers } from './reducers';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatCheckboxModule,
+    MatTableModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot([]),
     EffectsModule.forFeature([MovieApiEffects])
-      
-  ],
+    ],
+
+  exports: [ MatCheckboxModule],
+
   providers: [AppService],
   bootstrap: [AppComponent]
 })

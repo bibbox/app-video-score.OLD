@@ -9,14 +9,17 @@ const { selectEntities, selectAll } = adapter.getSelectors();
 export const selectMovieState = (state: AppState) => state.movies;
 
 export const selectAllMovies  = createSelector(
-  selectMovieState, 
+  selectMovieState,
   selectAll);
 
   export const selectMoviesEntities = createSelector(
-    selectMovieState, 
+    selectMovieState,
     selectEntities);
 
-export const selectMovie= createSelector(
-  selectMoviesEntities, 
+export const selectMovie = createSelector(
+  selectMoviesEntities,
   movie => (id: number) => movie[id]
 );
+
+
+

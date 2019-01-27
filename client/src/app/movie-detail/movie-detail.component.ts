@@ -1,29 +1,30 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Movie } from '../entities/movie.model';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { MatButtonModule} from '@angular/material/button';
-import { MovieService }  from '../movie.service';
-import { interval} from "rxjs/internal/observable/interval";
-import { startWith, switchMap, takeWhile} from "rxjs/operators";
-import { OnDestroy } from "@angular/core";
 
+import { startWith, switchMap, takeWhile} from "rxjs/operators";
+import { interval} from "rxjs/internal/observable/interval";
 import { Observable, of } from 'rxjs';
 import { map, tap, mergeMap, catchError, finalize } from 'rxjs/operators';
 
 import { Store, select } from '@ngrx/store';
 
-import { StripesComponent } from '../stripes/stripes.component';
-import { selectAllMovies, selectMovie, selectMoviesEntities } from '../entities/movie.selectors';
 import { AppState } from '../app-state/app-state';
-import { ConditionalExpr, CompileShallowModuleMetadata } from '@angular/compiler';
 
+import { Movie } from '../entities/movie.model';
+import { selectAllMovies, selectMovie, selectMoviesEntities } from '../entities/movie.selectors';
+import { MovieService } from '../movie.service';
+import { StripesComponent } from '../stripes/stripes.component';
+
+//import {MatButtonModule, MatCheckboxModule} from '@angular/material';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-movie-detail',
   templateUrl: './movie-detail.component.html',
   styleUrls: ['./movie-detail.component.css']
 })
+
 
 export class MovieDetailComponent implements OnInit, OnDestroy {
 
@@ -35,9 +36,9 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   private  id: number;
 
   constructor(
-    private route: ActivatedRoute,
-    private movieService: MovieService,
-    private location: Location,
+    private  route: ActivatedRoute,
+    private  movieService: MovieService,
+    private  location: Location,
     public   store: Store<AppState>) { }
 
   ngOnDestroy() {
@@ -74,17 +75,18 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   }
 
   computeStripes(): void {
-    console.log("Start the Compute Stripes Process")
+    console.log('Start the Compute Stripes Process');
     this.store.pipe(
-      select(selectMovie), 
+      select(selectMovie),
       map( f => f(this.id))
       ).subscribe(m => this.movieService.computeStripe(m.id).subscribe());
   }
 
  computeCuts(): void {
-    console.log("Start the Compute Cut Process")
+    console.log('Start the Compute Cut Process');
+
     this.store.pipe(
-      select(selectMovie), 
+      select(selectMovie),
       map( f => f(this.id))
       ).subscribe(m => this.movieService.computeCuts(m.id).subscribe());
   }

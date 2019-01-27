@@ -1,5 +1,6 @@
 # data diretory of docker
 /data
+/client/snipplets
 
 /video-score-env
 

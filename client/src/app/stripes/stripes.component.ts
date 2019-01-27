@@ -33,7 +33,7 @@ export class StripesComponent implements OnInit {
     ctx.clearRect(0, 0, 1500, 800);
     var i = 0
     for (let s of this.stripes) {
-         console.log (i, s)
+//         console.log (i, s)
          let stripeimage = new Image();
          stripeimage.src = s.url;
          let y = i * 80

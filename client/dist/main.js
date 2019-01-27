@@ -86,7 +86,7 @@ module.exports = "h1 {\n  font-size: 2.0em;\n  color: #999;\n  margin-bottom: 0;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n  <div class=\"appdecoration\">\n    <h1> {{title}} </h1>\n    <nav>\n        <a routerLink=\"/dashboard\">Dashboard</a>\n        <a routerLink=\"/movies\">Movies</a>\n    </nav>\n    <router-outlet></router-outlet>\n  </div>\n\n\n"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n  <div class=\"appdecoration\">\n    <h1> {{title}} </h1>\n    <nav>\n        <a routerLink=\"/dashboard\">Dashboard</a>\n        <a routerLink=\"/movies\">Movies</a>\n    </nav>\n    <router-outlet></router-outlet>\n\n\n    \n  </div>\n\n\n"
 
 /***/ }),
 
@@ -109,11 +109,11 @@ __webpack_require__.r(__webpack_exports__);
 var AppComponent = /** @class */ (function () {
     function AppComponent(appService) {
         this.appService = appService;
-        this.title = 'Movie Annotator';
+        this.title = 'Video Score';
     }
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.appService.testRoute().subscribe(function (data) { return _this.msg = data['msg']; });
+        this.appService.initStore().subscribe(function (data) { return _this.msg = data['msg']; });
     };
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -160,6 +160,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @ngrx/store-devtools */ "./node_modules/@ngrx/store-devtools/fesm5/store-devtools.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./reducers */ "./src/app/reducers/index.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm5/table.es5.js");
 
 
 
@@ -177,7 +179,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// STORE
 
+
+
+// MATERIAL
 
 
 var AppModule = /** @class */ (function () {
@@ -200,11 +206,14 @@ var AppModule = /** @class */ (function () {
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"],
                 _app_routing_module__WEBPACK_IMPORTED_MODULE_12__["AppRoutingModule"],
                 _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_14__["BrowserAnimationsModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_20__["MatCheckboxModule"],
+                _angular_material_table__WEBPACK_IMPORTED_MODULE_21__["MatTableModule"],
                 _ngrx_store__WEBPACK_IMPORTED_MODULE_18__["StoreModule"].forRoot(_reducers__WEBPACK_IMPORTED_MODULE_19__["reducers"]),
                 _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_17__["StoreDevtoolsModule"].instrument({ maxAge: 25 }),
                 _ngrx_effects__WEBPACK_IMPORTED_MODULE_5__["EffectsModule"].forRoot([]),
                 _ngrx_effects__WEBPACK_IMPORTED_MODULE_5__["EffectsModule"].forFeature([_entities_movies_api_effects__WEBPACK_IMPORTED_MODULE_6__["MovieApiEffects"]])
             ],
+            exports: [_angular_material__WEBPACK_IMPORTED_MODULE_20__["MatCheckboxModule"]],
             providers: [_app_service__WEBPACK_IMPORTED_MODULE_8__["AppService"]],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"]]
         })
@@ -241,36 +250,10 @@ var AppService = /** @class */ (function () {
         this.http = http;
         this.store = store;
     }
-    /*
-      private movieAPI = '/api/movies';  // URL to web api
-    
-    
-      assignMoviesFromHttpRequest (movies) {
-           console.log ("assign movies");
-           this.movies = movies;
-           this.store.dispatch(new MovieActions.LoadMovies ({movies:movies}));
-           
-    //       for (let m of  movies) {
-    //          this.store.dispatch(new MovieActions.ActionMoviesUpsertOne({movie:m}));
-    //       }
-      }
-    
-      getMovies(): void {
-        console.log ("in the APP SERVICE class *** getMovies")
-        this.getMoviesObs()
-            .subscribe(movies => this.assignMoviesFromHttpRequest(movies) );
-      }
-    
-      getMoviesObs(): Observable<OOMovie[]> {
-        let movies = this.http.get<OOMovie[]>(this.movieAPI)
-        return movies;
-      }
-    
-    */
-    AppService.prototype.testRoute = function () {
-        console.log("in the APP SERVICE class");
+    AppService.prototype.initStore = function () {
+        console.log('in the APP SERVICE class');
         this.store.dispatch(new _entities_movies_api_actions__WEBPACK_IMPORTED_MODULE_4__["LoadMovies"]());
-        return this.http.get('http://0.0.0.0:8077/api/ping');
+        return this.http.get('/api/ping');
     };
     AppService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"])(),
@@ -557,22 +540,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var _a = _movie_reducer__WEBPACK_IMPORTED_MODULE_1__["adapter"].getSelectors(), selectEntities = _a.selectEntities, selectAll = _a.selectAll;
-/*
-export interface State extends AppState {
-  movies: MovieState;
-}
-*/
 var selectMovieState = function (state) { return state.movies; };
 var selectAllMovies = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(selectMovieState, selectAll);
 var selectMoviesEntities = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(selectMovieState, selectEntities);
 var selectMovie = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(selectMoviesEntities, function (movie) { return function (id) { return movie[id]; }; });
-/*
-export const singleMovieSelector = createSelector(
-  selectMoviesEntities,
-  yourIdSelector,
-  (entities, id) => entities[id]
-);
-*/ 
 
 
 /***/ }),
@@ -657,13 +628,9 @@ var MovieApiEffects = /** @class */ (function () {
         this.store = store;
         this.movieAPI = '/api/movies'; // URL to web api
         this.loadMovies$ = this.actions$
-            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_movies_api_actions__WEBPACK_IMPORTED_MODULE_8__["MoviesAPIActionTypes"].LoadMovies), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["mergeMap"])(function () { return _this.getMovies$()
+            .pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_movies_api_actions__WEBPACK_IMPORTED_MODULE_8__["MoviesAPIActionTypes"].LoadMovies), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["mergeMap"])(function () { return _this.http.get(_this.movieAPI)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (movies) { return (new _movie_actions__WEBPACK_IMPORTED_MODULE_7__["LoadMovies"]({ movies: movies })); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["catchError"])(function () { return Object(rxjs__WEBPACK_IMPORTED_MODULE_6__["of"])({ type: '[Movie] Movies Loaded Error' }); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["finalize"])(function () { return _this.store.dispatch(new _movies_api_actions__WEBPACK_IMPORTED_MODULE_8__["LoadMoviesSucess"]()); })); }));
     }
-    MovieApiEffects.prototype.getMovies$ = function () {
-        var movies = this.http.get(this.movieAPI);
-        return movies;
-    };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["Effect"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
@@ -822,7 +789,7 @@ var MessagesComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "label {\n    display: inline-block;\n    width: 5em;\n    margin: .5em 0;\n    color: #607D8B;\n    font-weight: bold;\n  }\n  input {\n    height: 2em;\n    width: 40em;\n    font-size: 1em;\n    padding-left: .4em;\n  }\n  button {\n    margin-top: 20px;\n    font-family: Arial;\n    background-color: #eee;\n    border: none;\n    padding: 5px 10px;\n    border-radius: 4px;\n    cursor: pointer; cursor: hand;\n  }\n  button:hover {\n    background-color: #cfd8dc;\n  }\n  button:disabled {\n    background-color: #eee;\n    color: #ccc;\n    cursor: auto;\n  }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL21vdmllLWRldGFpbC9tb3ZpZS1kZXRhaWwuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLHNCQUFzQjtJQUN0QixXQUFXO0lBQ1gsZUFBZTtJQUNmLGVBQWU7SUFDZixrQkFBa0I7R0FDbkI7RUFDRDtJQUNFLFlBQVk7SUFDWixZQUFZO0lBQ1osZUFBZTtJQUNmLG1CQUFtQjtHQUNwQjtFQUNEO0lBQ0UsaUJBQWlCO0lBQ2pCLG1CQUFtQjtJQUNuQix1QkFBdUI7SUFDdkIsYUFBYTtJQUNiLGtCQUFrQjtJQUNsQixtQkFBbUI7SUFDbkIsZ0JBQWdCLENBQUMsYUFBYTtHQUMvQjtFQUNEO0lBQ0UsMEJBQTBCO0dBQzNCO0VBQ0Q7SUFDRSx1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLGFBQWE7R0FDZCIsImZpbGUiOiIuLi9tb3ZpZS1kZXRhaWwvbW92aWUtZGV0YWlsLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJsYWJlbCB7XG4gICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xuICAgIHdpZHRoOiA1ZW07XG4gICAgbWFyZ2luOiAuNWVtIDA7XG4gICAgY29sb3I6ICM2MDdEOEI7XG4gICAgZm9udC13ZWlnaHQ6IGJvbGQ7XG4gIH1cbiAgaW5wdXQge1xuICAgIGhlaWdodDogMmVtO1xuICAgIHdpZHRoOiA0MGVtO1xuICAgIGZvbnQtc2l6ZTogMWVtO1xuICAgIHBhZGRpbmctbGVmdDogLjRlbTtcbiAgfVxuICBidXR0b24ge1xuICAgIG1hcmdpbi10b3A6IDIwcHg7XG4gICAgZm9udC1mYW1pbHk6IEFyaWFsO1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNlZWU7XG4gICAgYm9yZGVyOiBub25lO1xuICAgIHBhZGRpbmc6IDVweCAxMHB4O1xuICAgIGJvcmRlci1yYWRpdXM6IDRweDtcbiAgICBjdXJzb3I6IHBvaW50ZXI7IGN1cnNvcjogaGFuZDtcbiAgfVxuICBidXR0b246aG92ZXIge1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNjZmQ4ZGM7XG4gIH1cbiAgYnV0dG9uOmRpc2FibGVkIHtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZWVlO1xuICAgIGNvbG9yOiAjY2NjO1xuICAgIGN1cnNvcjogYXV0bztcbiAgfVxuIl19 */"
+module.exports = "\nlabel {\n    display: inline-block;\n    width: 5em;\n    margin: .5em 0;\n    color: #607D8B;\n    font-weight: bold;\n  }\n  input {\n    height: 2em;\n    width: 40em;\n    font-size: 1em;\n    padding-left: .4em;\n  }\n  button {\n    margin-top: 20px;\n    font-family: Arial;\n    background-color: #eee;\n    border: none;\n    padding: 5px 10px;\n    border-radius: 4px;\n    cursor: pointer; cursor: hand;\n  }\n  button:hover {\n    background-color: #cfd8dc;\n  }\n  button:disabled {\n    background-color: #eee;\n    color: #ccc;\n    cursor: auto;\n  }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL21vdmllLWRldGFpbC9tb3ZpZS1kZXRhaWwuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQ0E7SUFDSSxzQkFBc0I7SUFDdEIsV0FBVztJQUNYLGVBQWU7SUFDZixlQUFlO0lBQ2Ysa0JBQWtCO0dBQ25CO0VBQ0Q7SUFDRSxZQUFZO0lBQ1osWUFBWTtJQUNaLGVBQWU7SUFDZixtQkFBbUI7R0FDcEI7RUFDRDtJQUNFLGlCQUFpQjtJQUNqQixtQkFBbUI7SUFDbkIsdUJBQXVCO0lBQ3ZCLGFBQWE7SUFDYixrQkFBa0I7SUFDbEIsbUJBQW1CO0lBQ25CLGdCQUFnQixDQUFDLGFBQWE7R0FDL0I7RUFDRDtJQUNFLDBCQUEwQjtHQUMzQjtFQUNEO0lBQ0UsdUJBQXVCO0lBQ3ZCLFlBQVk7SUFDWixhQUFhO0dBQ2QiLCJmaWxlIjoiLi4vbW92aWUtZGV0YWlsL21vdmllLWRldGFpbC5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiXG5sYWJlbCB7XG4gICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xuICAgIHdpZHRoOiA1ZW07XG4gICAgbWFyZ2luOiAuNWVtIDA7XG4gICAgY29sb3I6ICM2MDdEOEI7XG4gICAgZm9udC13ZWlnaHQ6IGJvbGQ7XG4gIH1cbiAgaW5wdXQge1xuICAgIGhlaWdodDogMmVtO1xuICAgIHdpZHRoOiA0MGVtO1xuICAgIGZvbnQtc2l6ZTogMWVtO1xuICAgIHBhZGRpbmctbGVmdDogLjRlbTtcbiAgfVxuICBidXR0b24ge1xuICAgIG1hcmdpbi10b3A6IDIwcHg7XG4gICAgZm9udC1mYW1pbHk6IEFyaWFsO1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNlZWU7XG4gICAgYm9yZGVyOiBub25lO1xuICAgIHBhZGRpbmc6IDVweCAxMHB4O1xuICAgIGJvcmRlci1yYWRpdXM6IDRweDtcbiAgICBjdXJzb3I6IHBvaW50ZXI7IGN1cnNvcjogaGFuZDtcbiAgfVxuICBidXR0b246aG92ZXIge1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNjZmQ4ZGM7XG4gIH1cbiAgYnV0dG9uOmRpc2FibGVkIHtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZWVlO1xuICAgIGNvbG9yOiAjY2NjO1xuICAgIGN1cnNvcjogYXV0bztcbiAgfVxuIl19 */"
 
 /***/ }),
 
@@ -833,7 +800,7 @@ module.exports = "label {\n    display: inline-block;\n    width: 5em;\n    marg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=(movies$|async)(id)>\n\n  <br>\n  <a href=\"{{(movies$|async)(id).uri}}\" target=\"_blank\"> {{(movies$|async)(id).name}}</a>  stripes:{{(movies$|async)(id).stripeStatus}}&#37;  cuts:\n  <div>\n    <button (click)=\"computeStripes()\">(re)compute stripes</button>\n    <button (click)=\"computeCuts()\">(re)compute cuts</button>\n  </div>\n  <button (click)=\"goBack()\">go back</button>\n\n\n  <app-stripes></app-stripes>\n\n\n\n</div>\n"
+module.exports = "<div *ngIf=(movies$|async)(id)>\n\n  <br>\n  <a href=\"{{(movies$|async)(id).uri}}\" target=\"_blank\"> {{(movies$|async)(id).name}}</a>  stripes:{{(movies$|async)(id).stripeStatus}}&#37;  cuts:\n  <div>\n    <button (click)=\"computeStripes()\">(re)compute stripes</button>\n    <button (click)=\"computeCuts()\">(re)compute cuts</button>\n  </div>\n  <button (click)=\"goBack()\">go back</button>\n\n  <mat-checkbox>Check me</mat-checkbox> \n\n  <app-stripes></app-stripes>\n\n\n\n</div>\n"
 
 /***/ }),
 
@@ -851,10 +818,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
-/* harmony import */ var _movie_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../movie.service */ "./src/app/movie.service.ts");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _entities_movie_selectors__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../entities/movie.selectors */ "./src/app/entities/movie.selectors.ts");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _entities_movie_selectors__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../entities/movie.selectors */ "./src/app/entities/movie.selectors.ts");
+/* harmony import */ var _movie_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../movie.service */ "./src/app/movie.service.ts");
 
 
 
@@ -869,7 +836,7 @@ var MovieDetailComponent = /** @class */ (function () {
         this.movieService = movieService;
         this.location = location;
         this.store = store;
-        this.movies$ = this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_6__["select"])(_entities_movie_selectors__WEBPACK_IMPORTED_MODULE_7__["selectMovie"]));
+        this.movies$ = this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_5__["select"])(_entities_movie_selectors__WEBPACK_IMPORTED_MODULE_6__["selectMovie"]));
         this.alive = true;
     }
     MovieDetailComponent.prototype.ngOnDestroy = function () {
@@ -901,13 +868,13 @@ var MovieDetailComponent = /** @class */ (function () {
     };
     MovieDetailComponent.prototype.computeStripes = function () {
         var _this = this;
-        console.log("Start the Compute Stripes Process");
-        this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_6__["select"])(_entities_movie_selectors__WEBPACK_IMPORTED_MODULE_7__["selectMovie"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (f) { return f(_this.id); })).subscribe(function (m) { return _this.movieService.computeStripe(m.id).subscribe(); });
+        console.log('Start the Compute Stripes Process');
+        this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_5__["select"])(_entities_movie_selectors__WEBPACK_IMPORTED_MODULE_6__["selectMovie"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (f) { return f(_this.id); })).subscribe(function (m) { return _this.movieService.computeStripe(m.id).subscribe(); });
     };
     MovieDetailComponent.prototype.computeCuts = function () {
         var _this = this;
-        console.log("Start the Compute Cut Process");
-        this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_6__["select"])(_entities_movie_selectors__WEBPACK_IMPORTED_MODULE_7__["selectMovie"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (f) { return f(_this.id); })).subscribe(function (m) { return _this.movieService.computeCuts(m.id).subscribe(); });
+        console.log('Start the Compute Cut Process');
+        this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_5__["select"])(_entities_movie_selectors__WEBPACK_IMPORTED_MODULE_6__["selectMovie"]), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (f) { return f(_this.id); })).subscribe(function (m) { return _this.movieService.computeCuts(m.id).subscribe(); });
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
@@ -920,9 +887,9 @@ var MovieDetailComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./movie-detail.component.css */ "./src/app/movie-detail/movie-detail.component.css")]
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
-            _movie_service__WEBPACK_IMPORTED_MODULE_4__["MovieService"],
+            _movie_service__WEBPACK_IMPORTED_MODULE_7__["MovieService"],
             _angular_common__WEBPACK_IMPORTED_MODULE_3__["Location"],
-            _ngrx_store__WEBPACK_IMPORTED_MODULE_6__["Store"]])
+            _ngrx_store__WEBPACK_IMPORTED_MODULE_5__["Store"]])
     ], MovieDetailComponent);
     return MovieDetailComponent;
 }());
@@ -1028,7 +995,7 @@ var MovieService = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/* Movies Component's private CSS styles */\n.selected {\n  background-color: #CFD8DC !important;\n  color: white;\n}\n.movies {\n  margin: 0 0 2em 0;\n  list-style-type: none;\n  padding: 0;\n  position: left;\n  width: 45em;\n  text-align: left;\n}\n.movies li {\n  cursor: pointer;\n  position: relative;\n  left: 0;\n  background-color: #EEE;\n  margin: .5em;\n  padding: .3em 0;\n  height: 1.6em;\n  border-radius: 4px;\n}\n.movies li.selected:hover {\n  background-color: #BBD8DC !important;\n  color: white;\n}\n.movies li:hover {\n  color: #607D8B;\n  background-color: #DDD;\n  left: .1em;\n}\n.movies .text {\n  position: relative;\n  top: -3px;\n}\n.movies .badge {\n  display: inline-block;\n  font-size: small;\n  color: white;\n  padding: 0.8em 0.7em 0 0.7em;\n  background-color: #607D8B;\n  line-height: 1em;\n  position: relative;\n  left: -1px;\n  top: -4px;\n  height: 1.8em;\n  margin-right: .8em;\n  border-radius: 4px 0 0 4px;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL21vdmllcy9tb3ZpZXMuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSwyQ0FBMkM7QUFDM0M7RUFDRSxxQ0FBcUM7RUFDckMsYUFBYTtDQUNkO0FBQ0Q7RUFDRSxrQkFBa0I7RUFDbEIsc0JBQXNCO0VBQ3RCLFdBQVc7RUFDWCxlQUFlO0VBQ2YsWUFBWTtFQUNaLGlCQUFpQjtDQUNsQjtBQUNEO0VBQ0UsZ0JBQWdCO0VBQ2hCLG1CQUFtQjtFQUNuQixRQUFRO0VBQ1IsdUJBQXVCO0VBQ3ZCLGFBQWE7RUFDYixnQkFBZ0I7RUFDaEIsY0FBYztFQUNkLG1CQUFtQjtDQUNwQjtBQUNEO0VBQ0UscUNBQXFDO0VBQ3JDLGFBQWE7Q0FDZDtBQUNEO0VBQ0UsZUFBZTtFQUNmLHVCQUF1QjtFQUN2QixXQUFXO0NBQ1o7QUFDRDtFQUNFLG1CQUFtQjtFQUNuQixVQUFVO0NBQ1g7QUFDRDtFQUNFLHNCQUFzQjtFQUN0QixpQkFBaUI7RUFDakIsYUFBYTtFQUNiLDZCQUE2QjtFQUM3QiwwQkFBMEI7RUFDMUIsaUJBQWlCO0VBQ2pCLG1CQUFtQjtFQUNuQixXQUFXO0VBQ1gsVUFBVTtFQUNWLGNBQWM7RUFDZCxtQkFBbUI7RUFDbkIsMkJBQTJCO0NBQzVCIiwiZmlsZSI6Ii4uL21vdmllcy9tb3ZpZXMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi8qIE1vdmllcyBDb21wb25lbnQncyBwcml2YXRlIENTUyBzdHlsZXMgKi9cbi5zZWxlY3RlZCB7XG4gIGJhY2tncm91bmQtY29sb3I6ICNDRkQ4REMgIWltcG9ydGFudDtcbiAgY29sb3I6IHdoaXRlO1xufVxuLm1vdmllcyB7XG4gIG1hcmdpbjogMCAwIDJlbSAwO1xuICBsaXN0LXN0eWxlLXR5cGU6IG5vbmU7XG4gIHBhZGRpbmc6IDA7XG4gIHBvc2l0aW9uOiBsZWZ0O1xuICB3aWR0aDogNDVlbTtcbiAgdGV4dC1hbGlnbjogbGVmdDtcbn1cbi5tb3ZpZXMgbGkge1xuICBjdXJzb3I6IHBvaW50ZXI7XG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgbGVmdDogMDtcbiAgYmFja2dyb3VuZC1jb2xvcjogI0VFRTtcbiAgbWFyZ2luOiAuNWVtO1xuICBwYWRkaW5nOiAuM2VtIDA7XG4gIGhlaWdodDogMS42ZW07XG4gIGJvcmRlci1yYWRpdXM6IDRweDtcbn1cbi5tb3ZpZXMgbGkuc2VsZWN0ZWQ6aG92ZXIge1xuICBiYWNrZ3JvdW5kLWNvbG9yOiAjQkJEOERDICFpbXBvcnRhbnQ7XG4gIGNvbG9yOiB3aGl0ZTtcbn1cbi5tb3ZpZXMgbGk6aG92ZXIge1xuICBjb2xvcjogIzYwN0Q4QjtcbiAgYmFja2dyb3VuZC1jb2xvcjogI0RERDtcbiAgbGVmdDogLjFlbTtcbn1cbi5tb3ZpZXMgLnRleHQge1xuICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gIHRvcDogLTNweDtcbn1cbi5tb3ZpZXMgLmJhZGdlIHtcbiAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xuICBmb250LXNpemU6IHNtYWxsO1xuICBjb2xvcjogd2hpdGU7XG4gIHBhZGRpbmc6IDAuOGVtIDAuN2VtIDAgMC43ZW07XG4gIGJhY2tncm91bmQtY29sb3I6ICM2MDdEOEI7XG4gIGxpbmUtaGVpZ2h0OiAxZW07XG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgbGVmdDogLTFweDtcbiAgdG9wOiAtNHB4O1xuICBoZWlnaHQ6IDEuOGVtO1xuICBtYXJnaW4tcmlnaHQ6IC44ZW07XG4gIGJvcmRlci1yYWRpdXM6IDRweCAwIDAgNHB4O1xufVxuIl19 */"
+module.exports = "/* Movies Component's private CSS styles */\n\ntable {\n  width: 100%;\n}\n\n.selected {\n  background-color: #CFD8DC !important;\n  color: white;\n}\n\n.movies {\n  margin: 0 0 2em 0;\n  list-style-type: none;\n  padding: 0;\n  position: left;\n  width: 45em;\n  text-align: left;\n}\n\n.movies li {\n  cursor: pointer;\n  position: relative;\n  left: 0;\n  background-color: #EEE;\n  margin: .5em;\n  padding: .3em 0;\n  height: 1.6em;\n  border-radius: 4px;\n}\n\n.movies li.selected:hover {\n  background-color: #BBD8DC !important;\n  color: white;\n}\n\n.movies li:hover {\n  color: #607D8B;\n  background-color: #DDD;\n  left: .1em;\n}\n\n.movies .text {\n  position: relative;\n  top: -3px;\n}\n\n.movies .badge {\n  display: inline-block;\n  font-size: small;\n  color: white;\n  padding: 0.8em 0.7em 0 0.7em;\n  background-color: #607D8B;\n  line-height: 1em;\n  position: relative;\n  left: -1px;\n  top: -4px;\n  height: 1.8em;\n  margin-right: .8em;\n  border-radius: 4px 0 0 4px;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL21vdmllcy9tb3ZpZXMuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSwyQ0FBMkM7O0FBRTNDO0VBQ0UsWUFBWTtDQUNiOztBQUdEO0VBQ0UscUNBQXFDO0VBQ3JDLGFBQWE7Q0FDZDs7QUFDRDtFQUNFLGtCQUFrQjtFQUNsQixzQkFBc0I7RUFDdEIsV0FBVztFQUNYLGVBQWU7RUFDZixZQUFZO0VBQ1osaUJBQWlCO0NBQ2xCOztBQUNEO0VBQ0UsZ0JBQWdCO0VBQ2hCLG1CQUFtQjtFQUNuQixRQUFRO0VBQ1IsdUJBQXVCO0VBQ3ZCLGFBQWE7RUFDYixnQkFBZ0I7RUFDaEIsY0FBYztFQUNkLG1CQUFtQjtDQUNwQjs7QUFDRDtFQUNFLHFDQUFxQztFQUNyQyxhQUFhO0NBQ2Q7O0FBQ0Q7RUFDRSxlQUFlO0VBQ2YsdUJBQXVCO0VBQ3ZCLFdBQVc7Q0FDWjs7QUFDRDtFQUNFLG1CQUFtQjtFQUNuQixVQUFVO0NBQ1g7O0FBQ0Q7RUFDRSxzQkFBc0I7RUFDdEIsaUJBQWlCO0VBQ2pCLGFBQWE7RUFDYiw2QkFBNkI7RUFDN0IsMEJBQTBCO0VBQzFCLGlCQUFpQjtFQUNqQixtQkFBbUI7RUFDbkIsV0FBVztFQUNYLFVBQVU7RUFDVixjQUFjO0VBQ2QsbUJBQW1CO0VBQ25CLDJCQUEyQjtDQUM1QiIsImZpbGUiOiIuLi9tb3ZpZXMvbW92aWVzLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBNb3ZpZXMgQ29tcG9uZW50J3MgcHJpdmF0ZSBDU1Mgc3R5bGVzICovXG5cbnRhYmxlIHtcbiAgd2lkdGg6IDEwMCU7XG59XG5cblxuLnNlbGVjdGVkIHtcbiAgYmFja2dyb3VuZC1jb2xvcjogI0NGRDhEQyAhaW1wb3J0YW50O1xuICBjb2xvcjogd2hpdGU7XG59XG4ubW92aWVzIHtcbiAgbWFyZ2luOiAwIDAgMmVtIDA7XG4gIGxpc3Qtc3R5bGUtdHlwZTogbm9uZTtcbiAgcGFkZGluZzogMDtcbiAgcG9zaXRpb246IGxlZnQ7XG4gIHdpZHRoOiA0NWVtO1xuICB0ZXh0LWFsaWduOiBsZWZ0O1xufVxuLm1vdmllcyBsaSB7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICBsZWZ0OiAwO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiAjRUVFO1xuICBtYXJnaW46IC41ZW07XG4gIHBhZGRpbmc6IC4zZW0gMDtcbiAgaGVpZ2h0OiAxLjZlbTtcbiAgYm9yZGVyLXJhZGl1czogNHB4O1xufVxuLm1vdmllcyBsaS5zZWxlY3RlZDpob3ZlciB7XG4gIGJhY2tncm91bmQtY29sb3I6ICNCQkQ4REMgIWltcG9ydGFudDtcbiAgY29sb3I6IHdoaXRlO1xufVxuLm1vdmllcyBsaTpob3ZlciB7XG4gIGNvbG9yOiAjNjA3RDhCO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiAjREREO1xuICBsZWZ0OiAuMWVtO1xufVxuLm1vdmllcyAudGV4dCB7XG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgdG9wOiAtM3B4O1xufVxuLm1vdmllcyAuYmFkZ2Uge1xuICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XG4gIGZvbnQtc2l6ZTogc21hbGw7XG4gIGNvbG9yOiB3aGl0ZTtcbiAgcGFkZGluZzogMC44ZW0gMC43ZW0gMCAwLjdlbTtcbiAgYmFja2dyb3VuZC1jb2xvcjogIzYwN0Q4QjtcbiAgbGluZS1oZWlnaHQ6IDFlbTtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICBsZWZ0OiAtMXB4O1xuICB0b3A6IC00cHg7XG4gIGhlaWdodDogMS44ZW07XG4gIG1hcmdpbi1yaWdodDogLjhlbTtcbiAgYm9yZGVyLXJhZGl1czogNHB4IDAgMCA0cHg7XG59XG4iXX0= */"
 
 /***/ }),
 
@@ -1039,7 +1006,7 @@ module.exports = "/* Movies Component's private CSS styles */\n.selected {\n  ba
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ul class=\"movies\">\n  <li *ngFor=\"let movie of movies$|async\">\n    <a routerLink=\"/detail/{{movie.id}}\">\n      <span class=\"badge\">{{movie.id}}</span> {{movie.name}}\n    </a>\n  </li>\n</ul>\n"
+module.exports = "<table mat-table [dataSource]=\"movies$|async\" class=\"mat-elevation-z8\">\n\n  <!--- Note that these columns can be defined in any order.\n        The actual rendered columns are set as a property on the row definition\" -->\n\n  <!-- Position Column -->\n  <ng-container matColumnDef=\"id\">\n    <th mat-header-cell *matHeaderCellDef> ID </th>\n    <td mat-cell *matCellDef=\"let m\"> {{m.id}} </td>\n  </ng-container>\n\n  <!-- Name Column -->\n  <ng-container matColumnDef=\"name\">\n    <th mat-header-cell *matHeaderCellDef> Name </th>\n      <td mat-cell *matCellDef=\"let m\"> \n        <a routerLink=\"/detail/{{m.id}}\"> {{m.name}}</a> \n  </td>\n  </ng-container>\n\n  <!-- Weight Column -->\n  <ng-container matColumnDef=\"uri\">\n    <th mat-header-cell *matHeaderCellDef> Link </th>\n    <td mat-cell *matCellDef=\"let m\"> \n        <a href=\"{{m.uri}}\" target=\"_blank\"> {{m.uri}}</a>       \n  </ng-container>\n\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>"
 
 /***/ }),
 
@@ -1066,6 +1033,7 @@ var MoviesComponent = /** @class */ (function () {
         this.store = store;
         this.movies$ = this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["select"])(_entities_movie_selectors__WEBPACK_IMPORTED_MODULE_3__["selectAllMovies"]));
         this.movientitiedes$ = this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["select"])(_entities_movie_selectors__WEBPACK_IMPORTED_MODULE_3__["selectMoviesEntities"]));
+        this.displayedColumns = ['id', 'name', 'uri'];
     }
     MoviesComponent.prototype.ngOnInit = function () {
         this.movies$.subscribe(function (m) { return console.log(m); });
@@ -1261,7 +1229,7 @@ var StripesComponent = /** @class */ (function () {
         ctx.clearRect(0, 0, 1500, 800);
         var i = 0;
         var _loop_1 = function (s) {
-            console.log(i, s);
+            //         console.log (i, s)
             var stripeimage = new Image();
             stripeimage.src = s.url;
             var y = i * 80;

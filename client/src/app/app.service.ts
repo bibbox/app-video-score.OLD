@@ -20,42 +20,16 @@ export class AppService {
               public   store: Store<AppState>) {
   }
 
-/*
-  private movieAPI = '/api/movies';  // URL to web api
-
-
-  assignMoviesFromHttpRequest (movies) {
-       console.log ("assign movies");
-       this.movies = movies;
-       this.store.dispatch(new MovieActions.LoadMovies ({movies:movies}));
-       
-//       for (let m of  movies) {
-//          this.store.dispatch(new MovieActions.ActionMoviesUpsertOne({movie:m}));
-//       }
-  }
-
-  getMovies(): void {
-    console.log ("in the APP SERVICE class *** getMovies")
-    this.getMoviesObs()
-        .subscribe(movies => this.assignMoviesFromHttpRequest(movies) );
-  }
-
-  getMoviesObs(): Observable<OOMovie[]> {
-    let movies = this.http.get<OOMovie[]>(this.movieAPI)
-    return movies;
-  }
-
-*/
-
-  testRoute() {
-    console.log ("in the APP SERVICE class")
+  initStore() {
+    console.log ('in the APP SERVICE class');
     this.store.dispatch(new MovieAPIActions.LoadMovies ());
-    return this.http.get('http://0.0.0.0:8077/api/ping');
+    return this.http.get('/api/ping');
   }
 
+  // SSE TESTING
 /*
   connect(): void {
-    let source = new EventSource('http://0.0.0.0:8077/stream');
+    let source = new EventSource('/stream');
     source.addEventListener('greeting', message => {
         this.myData = message;
         console.log (message)
