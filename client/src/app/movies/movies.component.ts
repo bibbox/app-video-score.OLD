@@ -19,11 +19,10 @@ import { AppState } from '../app-state/app-state';
 
 export class MoviesComponent implements OnInit {
 
-  movies$: any = this.store.pipe(select(selectAllMovies));
+  movies$: any         = this.store.pipe(select(selectAllMovies));
   movientitiedes$: any = this.store.pipe(select(selectMoviesEntities));
 
-  constructor(  private  movieService: MovieService,
-                public   store: Store<AppState> ) { }
+  constructor( private  store: Store<AppState> ) { }
 
   ngOnInit() {
 

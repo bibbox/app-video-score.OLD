@@ -6,10 +6,6 @@ import { AppState} from '../app-state/app-state';
 const { selectEntities, selectAll } = adapter.getSelectors();
 
 
-export interface State extends AppState {
-  movies: MovieState;
-}
-
 export const selectMovieState = (state: AppState) => state.movies;
 
 export const selectAllMovies  = createSelector(
@@ -24,11 +20,3 @@ export const selectMovie= createSelector(
   selectMoviesEntities, 
   movie => (id: number) => movie[id]
 );
-
-/*
-export const singleMovieSelector = createSelector(
-  selectMoviesEntities,
-  yourIdSelector,
-  (entities, id) => entities[id]
-);
-*/

@@ -3,16 +3,16 @@ import { Update } from '@ngrx/entity';
 import { Cut } from './cut.model';
 
 export enum CutActionTypes {
-  LoadCuts = '[Cut] Load Cuts',
-  AddCut = '[Cut] Add Cut',
-  UpsertCut = '[Cut] Upsert Cut',
-  AddCuts = '[Cut] Add Cuts',
+  LoadCuts   = '[Cut] Load Cuts',
+  AddCut     = '[Cut] Add Cut',
+  UpsertCut  = '[Cut] Upsert Cut',
+  AddCuts    = '[Cut] Add Cuts',
   UpsertCuts = '[Cut] Upsert Cuts',
-  UpdateCut = '[Cut] Update Cut',
+  UpdateCut  = '[Cut] Update Cut',
   UpdateCuts = '[Cut] Update Cuts',
-  DeleteCut = '[Cut] Delete Cut',
+  DeleteCut  = '[Cut] Delete Cut',
   DeleteCuts = '[Cut] Delete Cuts',
-  ClearCuts = '[Cut] Clear Cuts'
+  ClearCuts  = '[Cut] Clear Cuts'
 }
 
 export class LoadCuts implements Action {

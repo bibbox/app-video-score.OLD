@@ -18,7 +18,6 @@ export class AppStateModule implements OnInit  {
 
 }
 
-
 export interface AppState {
   movies: MovieState;
 }
