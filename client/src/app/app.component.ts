@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AppService} from './app.service';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTable} from '@angular/material';
+import {MatMenuModule} from '@angular/material';
 
 @Component({
   selector: 'app-root',

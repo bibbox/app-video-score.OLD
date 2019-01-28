@@ -24,6 +24,8 @@ import { reducers } from './reducers';
 // MATERIAL
 import {MatCheckboxModule} from '@angular/material';
 import {MatTableModule} from '@angular/material/table';
+import {MatMenuModule} from '@angular/material';
+import {MatButtonModule} from '@angular/material';
 
 
 @NgModule({
@@ -45,13 +47,15 @@ import {MatTableModule} from '@angular/material/table';
     BrowserAnimationsModule,
     MatCheckboxModule,
     MatTableModule,
+    MatMenuModule,
+    MatButtonModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot([]),
     EffectsModule.forFeature([MovieApiEffects])
     ],
 
-  exports: [ MatCheckboxModule],
+  exports: [ MatCheckboxModule, MatMenuModule],
 
   providers: [AppService],
   bootstrap: [AppComponent]
