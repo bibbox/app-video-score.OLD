@@ -2,10 +2,12 @@
  
   <div class="appdecoration">
 
+    <mat-icon svgIcon="home"></mat-icon>
     <button mat-button [matMenuTriggerFor]="menu">File</button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item>New</button>
-        <button mat-menu-item>Open</button>
+        <button mat-menu-item (click)="openMovieList()">Open</button>
+        <button mat-menu-item>Recent</button>
         <button mat-menu-item>Upload</button>
         <button mat-menu-item>Link to Nextcloud</button>
         <button mat-menu-item>Export</button>
@@ -46,10 +48,6 @@
         <button mat-menu-item>Help</button>
     </mat-menu>
 
-    <nav>
-        <a routerLink="/dashboard">Dashboard</a>
-        <a routerLink="/movies">Movies</a>
-    </nav>
     <router-outlet></router-outlet>
   </div>
 

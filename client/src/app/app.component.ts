@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AppService} from './app.service';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatTable} from '@angular/material';
-import {MatMenuModule} from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +13,16 @@ export class AppComponent implements OnInit {
   title = 'Video Score';
   msg: string;
 
-  constructor(private appService: AppService) {
+  constructor(private appService: AppService,
+              private router: Router) {
   }
 
   ngOnInit() {
     this.appService.initStore().subscribe(data => this.msg = data['msg']);
+  }
+
+  openMovieList() {
+    console.log ("KLICJ");
+    this.router.navigateByUrl('/movies');
   }
 }
