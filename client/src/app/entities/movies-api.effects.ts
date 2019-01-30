@@ -23,10 +23,10 @@ export class MovieApiEffects {
   loadMovies$ = this.actions$
   .pipe(
     ofType(APIActions.MoviesAPIActionTypes.LoadMovies),
-    mergeMap(() => this.http.get<Movie[]>(this.movieAPI) 
+    mergeMap(() => this.http.get<Movie[]>(this.movieAPI)
       .pipe
       (
-        map (movies => (new MovieActions.LoadMovies ({movies:movies})) ),
+        map (movies => (new MovieActions.LoadMovies ({movies: movies})) ),
         catchError(() => of({ type: '[Movie] Movies Loaded Error' })),
         finalize(() => this.store.dispatch(new APIActions.LoadMoviesSucess ()))
       )

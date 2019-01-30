@@ -22,7 +22,9 @@ export class AppComponent implements OnInit {
   }
 
   openMovieList() {
-    console.log ("KLICJ");
     this.router.navigateByUrl('/movies');
   }
+
+
+
 }

@@ -15,21 +15,21 @@ export const initialState: State = {
 };
 
 export function reducer(
-  state = initialState, 
-  action: MoviesAPIActions 
+  state = initialState,
+  action: MoviesAPIActions
   ): State {
   switch (action.type) {
 
     case MoviesAPIActionTypes.LoadMovies: {
-      console.log ("MoviesAPIActionTypes.LoadMovies")
-      return Object.assign({}, state, {pending: true, error: null})
+      console.log ('MoviesAPIActionTypes.LoadMovies');
+      return Object.assign({}, state, {pending: true, error: null});
     }
     case MoviesAPIActionTypes.LoadMoviesSucess: {
-      console.log ("MoviesAPIActionTypes.LoadMoviesSucess")
-      return Object.assign({}, state, {pending: false})
+      console.log ('MoviesAPIActionTypes.LoadMoviesSucess');
+      return Object.assign({}, state, {pending: false});
     }
     case MoviesAPIActionTypes.LoadMoviesError: {
-      return Object.assign({}, state, {pending: false, error: "ERROR"})
+      return Object.assign({}, state, {pending: false, error: 'ERROR'});
     }
 
     default:

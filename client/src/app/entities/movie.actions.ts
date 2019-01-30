@@ -3,16 +3,16 @@ import { Update } from '@ngrx/entity';
 import { Movie } from './movie.model';
 
 export enum MovieActionTypes {
-  LoadMovies = '[Movie] Load Movies',
-  AddMovie = '[Movie] Add Movie',
-  UpsertMovie = '[Movie] Upsert Movie',
-  AddMovies = '[Movie] Add Movies',
+  LoadMovies =   '[Movie] Load Movies',
+  AddMovie =     '[Movie] Add Movie',
+  UpsertMovie =  '[Movie] Upsert Movie',
+  AddMovies =    '[Movie] Add Movies',
   UpsertMovies = '[Movie] Upsert Movies',
-  UpdateMovie = '[Movie] Update Movie',
+  UpdateMovie =  '[Movie] Update Movie',
   UpdateMovies = '[Movie] Update Movies',
-  DeleteMovie = '[Movie] Delete Movie',
+  DeleteMovie =  '[Movie] Delete Movie',
   DeleteMovies = '[Movie] Delete Movies',
-  ClearMovies = '[Movie] Clear Movies'
+  ClearMovies =  '[Movie] Clear Movies'
 }
 
 export class LoadMovies implements Action {
