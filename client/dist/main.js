@@ -118,7 +118,6 @@ var AppComponent = /** @class */ (function () {
         this.appService.initStore().subscribe(function (data) { return _this.msg = data['msg']; });
     };
     AppComponent.prototype.openMovieList = function () {
-        console.log("KLICJ");
         this.router.navigateByUrl('/movies');
     };
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -565,7 +564,7 @@ var selectMovie = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelecto
 /*!************************************************!*\
   !*** ./src/app/entities/movies-api.actions.ts ***!
   \************************************************/
-/*! exports provided: MoviesAPIActionTypes, LoadMovies, LoadMoviesSucess, LoadMoviesError */
+/*! exports provided: MoviesAPIActionTypes, LoadMovies, LoadMoviesSucess, LoadMoviesError, AddMovie, AddMovieSucess, AddMovieError */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -574,11 +573,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoadMovies", function() { return LoadMovies; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoadMoviesSucess", function() { return LoadMoviesSucess; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoadMoviesError", function() { return LoadMoviesError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddMovie", function() { return AddMovie; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddMovieSucess", function() { return AddMovieSucess; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddMovieError", function() { return AddMovieError; });
 var MoviesAPIActionTypes;
 (function (MoviesAPIActionTypes) {
     MoviesAPIActionTypes["LoadMovies"] = "[Movies API] Load Movies";
     MoviesAPIActionTypes["LoadMoviesSucess"] = "[Movies API] Load Movies Success";
     MoviesAPIActionTypes["LoadMoviesError"] = "[Movies API] Load Movies Error";
+    MoviesAPIActionTypes["AddMovie"] = "[Movies API] Add Movie";
+    MoviesAPIActionTypes["AddMovieSucess"] = "[Movies API] Add Success";
+    MoviesAPIActionTypes["AddMovieError"] = "[Movies API] Add Error";
 })(MoviesAPIActionTypes || (MoviesAPIActionTypes = {}));
 var LoadMovies = /** @class */ (function () {
     function LoadMovies() {
@@ -599,6 +604,27 @@ var LoadMoviesError = /** @class */ (function () {
         this.type = MoviesAPIActionTypes.LoadMoviesError;
     }
     return LoadMoviesError;
+}());
+
+var AddMovie = /** @class */ (function () {
+    function AddMovie() {
+        this.type = MoviesAPIActionTypes.AddMovie;
+    }
+    return AddMovie;
+}());
+
+var AddMovieSucess = /** @class */ (function () {
+    function AddMovieSucess() {
+        this.type = MoviesAPIActionTypes.AddMovieSucess;
+    }
+    return AddMovieSucess;
+}());
+
+var AddMovieError = /** @class */ (function () {
+    function AddMovieError() {
+        this.type = MoviesAPIActionTypes.AddMovieError;
+    }
+    return AddMovieError;
 }());
 
 
@@ -682,15 +708,15 @@ function reducer(state, action) {
     if (state === void 0) { state = initialState; }
     switch (action.type) {
         case _movies_api_actions__WEBPACK_IMPORTED_MODULE_0__["MoviesAPIActionTypes"].LoadMovies: {
-            console.log("MoviesAPIActionTypes.LoadMovies");
+            console.log('MoviesAPIActionTypes.LoadMovies');
             return Object.assign({}, state, { pending: true, error: null });
         }
         case _movies_api_actions__WEBPACK_IMPORTED_MODULE_0__["MoviesAPIActionTypes"].LoadMoviesSucess: {
-            console.log("MoviesAPIActionTypes.LoadMoviesSucess");
+            console.log('MoviesAPIActionTypes.LoadMoviesSucess');
             return Object.assign({}, state, { pending: false });
         }
         case _movies_api_actions__WEBPACK_IMPORTED_MODULE_0__["MoviesAPIActionTypes"].LoadMoviesError: {
-            return Object.assign({}, state, { pending: false, error: "ERROR" });
+            return Object.assign({}, state, { pending: false, error: 'ERROR' });
         }
         default:
             return state;
