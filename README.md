@@ -31,6 +31,8 @@
 * In the flask docker container
     * `ps aux | grep uwsgi`
     * `kill - SIGHUP `  add the uwsgi root process number to reload the server 
+    * `python3 -m venv video-score-env` make a python environmnet in the root (this name is the .gitignore)
+    * `source video-score-env/bin/activate`
 * In the client directory (Angular frontend)
   * `npm install` - install the modules, call the first time after download
   * `ng --version`
