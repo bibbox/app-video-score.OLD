@@ -36,7 +36,7 @@
 * In the client directory (Angular frontend)
   * `npm install` - install the modules, call the first time after download
   * `ng --version`
-  * `ng serve --port 4401`
+  * `ng serve --proxy-config proxy.conf.json --port 4401`
   * `ng build --deleteOutputPath=false`
   * `ng generate component stripes`
   * `ng config cli.defaultCollection @ngrx/schematics`
