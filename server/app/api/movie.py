@@ -8,11 +8,14 @@ import random
 from celery import Celery
 
 from server.app.api import api
+from server.app     import socketio
 
 from server.app.celerytasks.tasks  import callCommandSync
 from server.app.services.movie_service import MovieService
 from server.app.services.movie_utils import stripeFileName, stripeStaticURL
+
 from flask_sse import sse
+from flask_socketio import send, emit
 
 movie_service = MovieService()
 
@@ -61,10 +64,24 @@ def get_cuts(id):
 
 @api.route('/movie/syncmovie')
 def publish_hello():
-    sse.publish({"message": "Hello!"}, type='greeting')
+#   sse.publish(  {'id': 2, 'changes':{'name':'HEIMO'} }, type='greeting')
+    sse.publish(  type='greeting',
+                  data=
+                  { 'storeID':'MOVIE', 
+                    'operation':'UPDATE',
+                    'payload' : { 'id': 2, 'changes':{'name':'HEIMO'} }
+                  }
+                  ); 
+
+
+#    send ('TEST', broadcast=True, namespace='/') 
     print (url_for("sse.stream", channel="users.social"))
     return "Message sent!"
 
+@socketio.on('connect', namespace='/chat')
+def test_connect():
+    print ('WEBSOCKETS CONNECTED')
+    emit('my response', {'data': 'Connected'})
 
 '''
 

@@ -6,5 +6,9 @@
     "/static": {
       "target": "http://localhost:8077",
       "secure": false
+    },
+    "/stream": {
+      "target": "http://localhost:8077",
+      "secure": false
     }
 }

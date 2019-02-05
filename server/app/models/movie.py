@@ -41,6 +41,7 @@ class Movie(BaseModel, db.Model):
     width     = db.Column(db.Integer, nullable=True)
     height    = db.Column(db.Integer, nullable=True)
     stripeStatus   = db.Column(db.Float(), default=0.0, nullable=True)
+    cutStatus   = db.Column(db.Float(), default=0.0, nullable=True)
     hasStripeImage = db.Column(db.Boolean(), default=False, nullable=False)
     numberOfStripes  = db.Column(db.Integer(), default=0, nullable=False)
 

@@ -6,6 +6,8 @@ import numpy as np
 import csv
 import pafy
 
+import logging
+
 import scenedetect
 from scenedetect.video_manager  import VideoManager
 from scenedetect.scene_manager  import SceneManager
@@ -13,6 +15,7 @@ from scenedetect.frame_timecode import FrameTimecode
 from scenedetect.stats_manager  import StatsManager
 from scenedetect.detectors      import ContentDetector
 
+from flask_sse import sse
 from flask import current_app, render_template
 from server.app import app_celerey
 
@@ -23,8 +26,42 @@ from server.app.services.tag_service import TagService
 
 from server.app.services.movie_utils import stripeBaseDirectory, stripeFileName
 
+
+from celery.utils.log import get_task_logger
+
+cel_logger = app_celerey.log.get_default_logger()
+app_celerey.log.redirect_stdouts_to_logger (cel_logger)
+
 movie_service = MovieService()
 tag_service   = TagService()
+
+tasklogger = get_task_logger(__name__)
+
+taskID_ofCutDededection__MovieID = {}
+
+class ParseCutDedectionProgress(logging.Filter):
+    def filter(self, record):
+        
+# [2019-02-04 23:54:28,934: INFO/ForkPoolWorker-1] tasks.callCommand[46e3a4c7-2581-4dd3-8700-aacabdc3358f]: START COMPUTE CUTS=3
+# [2019-02-04 23:46:29,592: WARNING/ForkPoolWorker-1] 96%|#########5| 6063/6317 [00:30<00:01, 223.79frames/s]
+# [2019-02-04 23:46:30,864: INFO/ForkPoolWorker-1] tasks.callCommand[3ecdcbf5-a9ed-4742-813a-3c2650f69c23]: END COMPUTE CUTS=3
+
+        if record.getMessage().find('START COMPUTE CUTS'):
+            print ("=========================> REGISTER ID")
+            movieID = 3
+            TaskID = 'ForkPoolWorker-1'
+            taskID_ofCutDededection__MovieID.update({TaskID : movieID})
+        if record.getMessage().find('END COMPUTE CUTS'):
+            print ("X=========================>  DELETE ID", record.getMessage())
+        
+        print ('YY', record.getMessage())
+
+        # loog for TaskID, filter pecentage and set in DB
+        
+        return True
+
+tasklogger.addFilter(ParseCutDedectionProgress())
+tasklogger.setLevel(logging.INFO)
 
 def callCommandSync(movieId, command):
     callCommand.delay (movieId, command)
@@ -33,11 +70,13 @@ def callCommandSync(movieId, command):
 @app_celerey.task(bind=True, name='tasks.callCommand')
 def callCommand(self, movieId, command):
 
-    """Background task that runs a long function with progress reports."""
+    print (cel_logger)
+    print (tasklogger)
 
-#    print ("************  execute ", movieId, command['command'] )
+    print ("************  execute ", movieId, command['command'] )
     if (command['command'] == "generate-stripes"):
-        generateStripes(movieId)
+       n=1
+#        generateStripes(movieId)
 
     if (command['command'] == "compute-cuts"):
         computeCuts (movieId)
@@ -49,7 +88,6 @@ def callCommand(self, movieId, command):
 def generateStripes(movieID):
 
      movie = movie_service.get(movieID)
-     print("*************** SZART OF GENERATE STRIPES  ***************")
 
      if (movie.source  == "YOUTUBE"):
         vPafy = pafy.new(movie.uri)
@@ -60,13 +98,16 @@ def generateStripes(movieID):
      width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
      height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
      fps = cap.get(cv2.CAP_PROP_FPS)
-#     print("OPENING THE VIDEO WITH ", length, width, height, fps)
+     print("OPENING THE VIDEO WITH ", length, width, height, fps)
 
      stripeimagedir = stripeBaseDirectory (movie)
 #     print("dir to write the stripes", stripeimagedir)
      if  not os.path.exists(stripeimagedir):
         os.makedirs(stripeimagedir)
 
+     movie.stripeStatus = 0
+     movie = movie_service.save(movie)
+     syncMovieInClient (movie)   
      maxstripesize = 1500
      stripeImage = np.zeros((height,maxstripesize,3), np.uint8)
 
@@ -96,9 +137,10 @@ def generateStripes(movieID):
                 seconds +=2
                 perz =  100.0 * float(count+1) / float (length)
                 perzi = int (perz+0.5)
-                movie.stripeStatus = 1.0 * perzi
-                movie = movie_service.save(movie)
-
+                if (perzi != movie.stripeStatus):
+                    movie.stripeStatus = 1.0 * perzi
+                    movie = movie_service.save(movie)
+                    syncMovieInClient (movie)    
             if (countbig == 10*fps):
                 countbig = 0
 
@@ -111,6 +153,7 @@ def generateStripes(movieID):
                 writelaststripe = 1
                 movie.numberOfStripes = stripenumber + 1
                 movie = movie_service.save(movie)
+                syncMovieInClient (movie)   
 
      if (writelaststripe):
         fn = stripeFileName(movie, stripenumber)
@@ -119,12 +162,27 @@ def generateStripes(movieID):
      movie.stripeStatus = 100.0
      movie.numberOfStripes = stripenumber + 1
      movie = movie_service.save(movie)
+     syncMovieInClient (movie)   
+
      #print (count+1, " frames found, theory = ", length)
+
+def syncMovieInClient (movie):
+    n = 4
+    sse.publish(  type='greeting',
+                  data=
+                  { 'storeID':'MOVIE', 
+                    'operation':'UPDATE',
+                    'payload' : { 'id': movie.id, 'changes':{'stripeStatus':movie.stripeStatus, 'numberOfStripes':movie.numberOfStripes } }
+                  }
+               ); 
 
 
 def computeCuts(movieID):
+
     movie = movie_service.get(movieID)
-    print("*************** Compute Cuts ***************")
+
+    print ('START COMPUTE CUTS=' + str(movieID))
+    tasklogger.info ('START COMPUTE CUTS=')
     if (movie.source  == "YOUTUBE"):
         vPafy = pafy.new(movie.uri)
         play = vPafy.getbest(preftype="webm")
@@ -148,14 +206,11 @@ def computeCuts(movieID):
     scene_list = scene_manager.get_scene_list(basetimecode)
 
 
-    print('List of scenes obtained:')
     for i, scene in enumerate(scene_list):
        tag = Tag (movieID=movieID, fn=scene[0].get_frames(), tag="CUT")
        tags.append (tag)
- #      print('    Scene %2d: Start %s / Frame %d, End %s / Frame %d' % (
- #               i + 1,
- #               scene[0].get_timecode(), scene[0].get_frames(),
- #               scene[1].get_timecode(), scene[1].get_frames(),))
+
+    print ('END COMPUTE CUTS=' + str(movieID))
 
     movie.tags = tags
     movie = movie_service.save(movie)

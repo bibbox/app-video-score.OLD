@@ -5,7 +5,7 @@ import { Location } from '@angular/common';
 import { startWith, switchMap, takeWhile} from "rxjs/operators";
 import { interval} from "rxjs/internal/observable/interval";
 import { Observable, of } from 'rxjs';
-import { map, tap, mergeMap, catchError, finalize } from 'rxjs/operators';
+import { map, tap, take, mergeMap, catchError, finalize } from 'rxjs/operators';
 
 import { Store, select } from '@ngrx/store';
 
@@ -16,8 +16,9 @@ import { selectAllMovies, selectMovie, selectMoviesEntities } from '../entities/
 import { MovieService } from '../movie.service';
 import { StripesComponent } from '../stripes/stripes.component';
 
-//import {MatButtonModule, MatCheckboxModule} from '@angular/material';
+// import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { CompileShallowModuleMetadata } from '@angular/compiler';
 
 @Component({
   selector: 'app-movie-detail',
@@ -28,7 +29,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 
 export class MovieDetailComponent implements OnInit, OnDestroy {
 
-  @Input() movie: Movie;
+  @Input() movie: Movie; q
 
   movies$ = this.store.pipe(select(selectMovie));
 
@@ -48,25 +49,16 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
  //   this.id = parseInt(this.route.snapshot.paramMap.get('id'));
-    this.id = parseInt( this.route.snapshot.paramMap.get('id'));
-    console.log (this.id)
-    console.log (this.movies$)
+    this.id = parseInt( this.route.snapshot.paramMap.get('id'), 10);
+    console.log (this.id);
+    this.store.subscribe ( s  => console.log(s) );
   }
 
-  checkMovieStripeStatus () {
-    if  (!this.alive)
-        return false;
-    if (this.movie)
-        return (this.movie.stripeStatus < 100);
-    else
-        return true;
-  }
-
-  assignMovie (movie) {
-    this.movie = movie
-    console.log("Movie Data Structures, received from the Movie Service")
-    console.log (movie)
-    console.log (movie.stripeStatus)
+  assignMovie (movie: Movie) {
+    this.movie = movie;
+    console.log('Movie Data Structures, received from the Movie Service');
+    console.log (movie);
+    console.log (movie.stripeStatus);
   }
 
 
@@ -74,21 +66,24 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
       this.location.back();
   }
 
+
   computeStripes(): void {
     console.log('Start the Compute Stripes Process');
     this.store.pipe(
+      take(1),
       select(selectMovie),
-      map( f => f(this.id))
-      ).subscribe(m => this.movieService.computeStripe(m.id).subscribe());
+      map( f => f(this.id),
+      tap( m => console.log(m)))
+      ).subscribe(m => this.movieService.computeStripe(m.id));
   }
 
  computeCuts(): void {
     console.log('Start the Compute Cut Process');
-
     this.store.pipe(
+      take(1),
       select(selectMovie),
       map( f => f(this.id))
-      ).subscribe(m => this.movieService.computeCuts(m.id).subscribe());
+      ).subscribe(m => this.movieService.computeCuts(m.id));
   }
 
 

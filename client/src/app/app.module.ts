@@ -15,6 +15,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StripesComponent } from './stripes/stripes.component';
 import { StripesOverlayComponent } from './stripes-overlay/stripes-overlay.component';
+import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 
 // STORE
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -53,7 +54,8 @@ import {MatIconModule} from '@angular/material';
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot([]),
-    EffectsModule.forFeature([MovieApiEffects])
+    EffectsModule.forFeature([MovieApiEffects]),
+    StoreRouterConnectingModule.forRoot()
     ],
 
   exports: [ MatCheckboxModule, MatMenuModule,MatIconModule ],

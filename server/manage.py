@@ -32,7 +32,7 @@ COV = coverage(
 COV.start()
 
 # create flask application instance
-app = create_app ('development')
+socketio, app  = create_app ('development')
 manager = Manager(app)
 
 

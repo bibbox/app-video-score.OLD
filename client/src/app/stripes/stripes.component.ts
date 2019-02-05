@@ -21,7 +21,7 @@ export class StripesComponent implements OnInit {
   @ViewChild('imageCanvas')   imageCanvas: ElementRef;
   @ViewChild('overlayCanvas') overlayCanvas: ElementRef;
 
-  constructor(private renderer : Renderer, private movieService: MovieService, private route: ActivatedRoute) { }
+  constructor(private renderer: Renderer, private movieService: MovieService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.getStripes();
@@ -29,17 +29,17 @@ export class StripesComponent implements OnInit {
   }
 
   drawImages () {
-   let ctx: CanvasRenderingContext2D = this.imageCanvas.nativeElement.getContext('2d');
+   const ctx: CanvasRenderingContext2D = this.imageCanvas.nativeElement.getContext('2d');
     ctx.clearRect(0, 0, 1500, 800);
-    var i = 0
-    for (let s of this.stripes) {
+    let i = 0;
+    for (const s of this.stripes) {
 //         console.log (i, s)
          let stripeimage = new Image();
          stripeimage.src = s.url;
-         let y = i * 80
+         const y = i * 80;
          stripeimage.onload = function ()
               {  ctx.drawImage(stripeimage, 0, y, 800, 75) };
-         i = i + 1
+         i = i + 1;
     }
   }
 

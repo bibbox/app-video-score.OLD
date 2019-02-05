@@ -1,4 +1,6 @@
 import { Action } from '@ngrx/store';
+import { Update } from '@ngrx/entity';
+import { Movie } from './movie.model';
 
 export enum MoviesAPIActionTypes {
   LoadMovies       = '[Movies API] Load Movies',
@@ -7,6 +9,7 @@ export enum MoviesAPIActionTypes {
   AddMovie         = '[Movies API] Add Movie',
   AddMovieSucess   = '[Movies API] Add Success',
   AddMovieError    = '[Movies API] Add Error',
+  SyncMovie        = '[Movies API] Sync Movie'
 }
 
 export class LoadMovies implements Action {
@@ -33,10 +36,16 @@ export class AddMovieError implements Action {
   readonly type = MoviesAPIActionTypes.AddMovieError;
 }
 
+export class SyncMovie implements Action {
+  readonly type = MoviesAPIActionTypes.SyncMovie;
+  constructor(public payload: { movie: Update<Movie> }) {}
+}
+
 export type MoviesAPIActions =
 LoadMovies
   | LoadMoviesSucess
   | LoadMoviesError
   | AddMovie
   | AddMovieSucess
-  | AddMovieError;
+  | AddMovieError
+  | SyncMovie ;

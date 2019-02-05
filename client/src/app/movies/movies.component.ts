@@ -21,21 +21,18 @@ import { AppState } from '../app-state/app-state';
   templateUrl: './movies.component.html',
   styleUrls: ['./movies.component.css']
 })
+
 export class MoviesComponent implements OnInit {
 
   movies$: any         = this.store.pipe(select(selectAllMovies));
   movientitiedes$: any = this.store.pipe(select(selectMoviesEntities));
 
-  displayedColumns: string[] = ['id', 'name', 'uri'];
+  displayedColumns: string[] = ['id', 'name', 'stripe', 'uri'];
 
   constructor( private  store: Store<AppState> ) { }
 
   ngOnInit() {
-
-    this.movies$.subscribe(m => console.log(m));
-    this.movientitiedes$.subscribe(m => console.log(m));
-
- //   this.getMovies();
+    this.store.subscribe ( s  => console.log(s) );
   }
 
   /*

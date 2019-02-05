@@ -1,7 +1,10 @@
 import { HttpClient} from '@angular/common/http';
 import { Injectable} from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
+
+
 import { Store, select } from '@ngrx/store';
+import { Update } from '@ngrx/entity';
 
 import { AppState } from './app-state/app-state';
 
@@ -11,12 +14,17 @@ import * as MovieAPIActions from './entities/movies-api.actions';
 import { Movie, MovieState } from './entities/movie.model';
 
 
+import { SyncstoreService } from './syncstore.service';
+import { SseService } from './sse.service';
+
+
 @Injectable()
 export class AppService {
 
   myData: any;
 
   constructor(private  http: HttpClient,
+              private  syncstore: SyncstoreService,
               public   store: Store<AppState>) {
   }
 
@@ -26,16 +34,5 @@ export class AppService {
     return this.http.get('/api/ping');
   }
 
-  // SSE TESTING
-/*
-  connect(): void {
-    let source = new EventSource('/stream');
-    source.addEventListener('greeting', message => {
-        this.myData = message;
-        console.log (message)
-    });
-
- }
-*/
-
+ 
 }

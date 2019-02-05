@@ -26,7 +26,7 @@ redis==2.10.6
 tornado==5.0.2
 vine==1.1.4
 python-dotenv==0.10.1
-
+flask-socketio
 moviepy==0.2.3.5
 pafy==0.5.4
 youtube-dl==2018.12.17

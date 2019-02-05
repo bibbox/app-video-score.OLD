@@ -1,6 +1,8 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Movie } from './movie.model';
 import { MovieActions, MovieActionTypes } from './movie.actions';
+import { nsend } from 'q';
+import { Update } from '@ngrx/entity';
 
 export interface State extends EntityState<Movie> {
   // additional entities state properties
@@ -44,7 +46,8 @@ export function reducer(
     }
 
     case MovieActionTypes.UpdateMovie: {
-      return adapter.updateOne(action.payload.movie, state);
+      const ns = adapter.updateOne(action.payload.movie, state);
+      return ns;
     }
 
     case MovieActionTypes.UpdateMovies: {

@@ -5,7 +5,7 @@
 
 
 # TODO - for production take the password from the .env
-RETRIES=20
+RETRIES=4
 USER=postgres
 DATABASE=users_dev
 HOST=postgres
@@ -27,5 +27,5 @@ if [ ! -f  DBINIT.DONE ]; then
     touch DBINIT.DONE
 fi
 
-
-uwsgi --py-autoreload 1 --ini /etc/uwsgi.ini
+python runflask.py
+#uwsgi --py-autoreload 1 --ini /etc/uwsgi.ini
