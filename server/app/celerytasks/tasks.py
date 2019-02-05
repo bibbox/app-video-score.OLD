@@ -46,7 +46,7 @@ class ParseCutDedectionProgress(logging.Filter):
 # [2019-02-04 23:46:29,592: WARNING/ForkPoolWorker-1] 96%|#########5| 6063/6317 [00:30<00:01, 223.79frames/s]
 # [2019-02-04 23:46:30,864: INFO/ForkPoolWorker-1] tasks.callCommand[3ecdcbf5-a9ed-4742-813a-3c2650f69c23]: END COMPUTE CUTS=3
 
-        print ('0', record.getMessage())
+        print ('record = ', record.getMessage())
 
         if record.getMessage().find('START COMPUTE CUTS'):
             print ("(1) =========================> REGISTER ID")
@@ -182,8 +182,8 @@ def computeCuts(movieID):
 
     movie = movie_service.get(movieID)
 
-    print ('START COMPUTE CUTS=' + str(movieID))
-    tasklogger.info ('START COMPUTE CUTS=')
+    print ('PPR START COMPUTE CUTS=' + str(movieID))
+    tasklogger.info ('INFO START COMPUTE CUTS=')
     if (movie.source  == "YOUTUBE"):
         vPafy = pafy.new(movie.uri)
         play = vPafy.getbest(preftype="webm")
@@ -211,7 +211,7 @@ def computeCuts(movieID):
        tag = Tag (movieID=movieID, fn=scene[0].get_frames(), tag="CUT")
        tags.append (tag)
 
-    print ('END COMPUTE CUTS=' + str(movieID))
+    print ('PPR END COMPUTE CUTS=' + str(movieID))
 
     movie.tags = tags
     movie = movie_service.save(movie)
