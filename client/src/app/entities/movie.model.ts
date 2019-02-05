@@ -9,6 +9,7 @@ export interface Movie {
   height: number;
   width:  number;
   stripeStatus: number;
+  cutStatus: number;
 }
 
 export interface MovieState extends EntityState<Movie> {}

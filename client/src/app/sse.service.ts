@@ -15,6 +15,7 @@ export class SseService implements OnInit {
 
   ngOnInit() {
     this.sseEvent = this.getEvent();
+    this.sseEvent.subscribe (v => console.log(v))
   }
 
   getEvent(): Observable<MessageEvent> {

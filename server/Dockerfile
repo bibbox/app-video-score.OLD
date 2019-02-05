@@ -39,7 +39,6 @@ RUN apt-get install -y \
     libmp3lame-dev \
     checkinstall
 
-
 RUN apt-get install -y libopus-dev  libx264-142 libx264-dev
 
 RUN mkdir -p /tmp
@@ -133,7 +132,6 @@ RUN chmod 777 /usr/src/movieannotator/entrypoint.sh
 
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-
 
 # COPY uswgi.ini
 COPY ./uwsgi.ini /etc/uwsgi.ini

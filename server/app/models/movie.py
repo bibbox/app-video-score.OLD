@@ -59,5 +59,6 @@ class Movie(BaseModel, db.Model):
         self.width = width
         self.height = height
         self.stripeStatus = stripeStatus
+        self.cutStatus = cutStatus
         self.numberOfStripes = numberOfStripes
         self.tags = tags
