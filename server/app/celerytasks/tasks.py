@@ -46,15 +46,16 @@ class ParseCutDedectionProgress(logging.Filter):
 # [2019-02-04 23:46:29,592: WARNING/ForkPoolWorker-1] 96%|#########5| 6063/6317 [00:30<00:01, 223.79frames/s]
 # [2019-02-04 23:46:30,864: INFO/ForkPoolWorker-1] tasks.callCommand[3ecdcbf5-a9ed-4742-813a-3c2650f69c23]: END COMPUTE CUTS=3
 
+        print ('0', record.getMessage())
+
         if record.getMessage().find('START COMPUTE CUTS'):
-            print ("=========================> REGISTER ID")
+            print ("(1) =========================> REGISTER ID")
             movieID = 3
             TaskID = 'ForkPoolWorker-1'
             taskID_ofCutDededection__MovieID.update({TaskID : movieID})
         if record.getMessage().find('END COMPUTE CUTS'):
-            print ("X=========================>  DELETE ID", record.getMessage())
+            print ("(2) =========================>  DELETE ID", record.getMessage())
         
-        print ('YY', record.getMessage())
 
         # loog for TaskID, filter pecentage and set in DB
         
