@@ -48,12 +48,12 @@ class ParseCutDedectionProgress(logging.Filter):
 
         print ('record = ', record.getMessage())
 
-        if record.getMessage().find('START COMPUTE CUTS'):
+        if record.getMessage().find("START COMPUTE CUTS") is not -1:
             print ("(1) =========================> REGISTER ID")
             movieID = 3
             TaskID = 'ForkPoolWorker-1'
             taskID_ofCutDededection__MovieID.update({TaskID : movieID})
-        if record.getMessage().find('END COMPUTE CUTS'):
+        if record.getMessage().find("END COMPUTE CUTS") is not -1:
             print ("(2) =========================>  DELETE ID", record.getMessage())
         
 
@@ -61,7 +61,10 @@ class ParseCutDedectionProgress(logging.Filter):
         
         return True
 
-tasklogger.addFilter(ParseCutDedectionProgress())
+cel_logger.setLevel(logging.NOTSET)
+cel_logger.addFilter(ParseCutDedectionProgress())
+cel_logger.setLevel(logging.NOTSET)
+
 tasklogger.setLevel(logging.INFO)
 
 def callCommandSync(movieId, command):
@@ -183,7 +186,7 @@ def computeCuts(movieID):
     movie = movie_service.get(movieID)
 
     print ('PPR START COMPUTE CUTS=' + str(movieID))
-    tasklogger.info ('INFO START COMPUTE CUTS=')
+    cel_logger.warning ('INFO START COMPUTE CUTS=')
     if (movie.source  == "YOUTUBE"):
         vPafy = pafy.new(movie.uri)
         play = vPafy.getbest(preftype="webm")
@@ -201,7 +204,7 @@ def computeCuts(movieID):
     stats_manager = StatsManager()
     scene_manager = SceneManager(stats_manager)
     scene_manager.add_detector(ContentDetector(threshold=27.0, min_scene_len=15))
-    scene_manager.detect_scenes(frame_source=cap)
+    scene_manager.detect_scenes(frame_source=cap, show_progress=True)
 
     basetimecode = FrameTimecode(timecode=0, fps=fps)
     scene_list = scene_manager.get_scene_list(basetimecode)
@@ -212,6 +215,7 @@ def computeCuts(movieID):
        tags.append (tag)
 
     print ('PPR END COMPUTE CUTS=' + str(movieID))
+    cel_logger.info ('PPR END COMPUTE CUTS=' + str(movieID))
 
     movie.tags = tags
     movie = movie_service.save(movie)
