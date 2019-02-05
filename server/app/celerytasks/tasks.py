@@ -8,12 +8,12 @@ import pafy
 
 import logging
 
-import scenedetect
-from scenedetect.video_manager  import VideoManager
-from scenedetect.scene_manager  import SceneManager
-from scenedetect.frame_timecode import FrameTimecode
-from scenedetect.stats_manager  import StatsManager
-from scenedetect.detectors      import ContentDetector
+import server.app.scenedetect
+from server.app.scenedetect.video_manager  import VideoManager
+from server.app.scenedetect.scene_manager  import SceneManager
+from server.app.scenedetect.frame_timecode import FrameTimecode
+from server.app.scenedetect.stats_manager  import StatsManager
+from server.app.scenedetect.detectors      import ContentDetector
 
 from flask_sse import sse
 from flask import current_app, render_template
@@ -71,13 +71,9 @@ def callCommandSync(movieId, command):
 @app_celerey.task(bind=True, name='tasks.callCommand')
 def callCommand(self, movieId, command):
 
-    print (cel_logger)
-    print (tasklogger)
-
     print ("************  execute ", movieId, command['command'] )
     if (command['command'] == "generate-stripes"):
-       n=1
-#        generateStripes(movieId)
+       generateStripes(movieId)
 
     if (command['command'] == "compute-cuts"):
         computeCuts (movieId)
@@ -99,16 +95,13 @@ def generateStripes(movieID):
      width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
      height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
      fps = cap.get(cv2.CAP_PROP_FPS)
-     print("OPENING THE VIDEO WITH ", length, width, height, fps)
+     print("G STRIPES - FOR  ", length, width, height, fps)
 
      stripeimagedir = stripeBaseDirectory (movie)
 #     print("dir to write the stripes", stripeimagedir)
      if  not os.path.exists(stripeimagedir):
         os.makedirs(stripeimagedir)
 
-     movie.stripeStatus = 0
-     movie = movie_service.save(movie)
-     syncMovieInClient (movie)   
      maxstripesize = 1500
      stripeImage = np.zeros((height,maxstripesize,3), np.uint8)
 
@@ -119,6 +112,12 @@ def generateStripes(movieID):
      stripeimagecounter = 0
      stripenumber       = 0
      writelaststripe = 0
+
+
+     movie.stripeStatus = 0.0
+     movie.numberOfStripes = 0
+     movie = movie_service.save(movie)
+     syncMovieInClient (movie)    
 
      success = 1
      while success:
@@ -133,7 +132,7 @@ def generateStripes(movieID):
             countbig += 1
             stripeimagecounter +=1
 
-            if  (countsec==2*fps):
+            if  (countsec > 2*fps):
                 countsec = 0
                 seconds +=2
                 perz =  100.0 * float(count+1) / float (length)
@@ -168,12 +167,30 @@ def generateStripes(movieID):
      #print (count+1, " frames found, theory = ", length)
 
 def syncMovieInClient (movie):
-    n = 4
+
+    payload =  { 'id': movie.id, 'changes':{'stripeStatus':movie.stripeStatus, 'numberOfStripes':movie.numberOfStripes }}
     sse.publish(  type='greeting',
                   data=
                   { 'storeID':'MOVIE', 
                     'operation':'UPDATE',
-                    'payload' : { 'id': movie.id, 'changes':{'stripeStatus':movie.stripeStatus, 'numberOfStripes':movie.numberOfStripes } }
+                    'payload' : payload
+                  }
+               ); 
+
+
+def logProgressCutDetection(id, t, f):
+    movie = movie_service.get(id)
+    perz =  100.0 * float(f) / float (t)
+    perzi = 1.0 * int (perz+0.5)
+    if (perzi != movie.cutStatus):
+        movie.cutStatus =  perzi
+        movie = movie_service.save(movie)
+        payload =  { 'id': movie.id, 'changes':{'cutStatus':movie.cutStatus }}
+        sse.publish(  type='greeting',
+                  data=
+                  { 'storeID':'MOVIE', 
+                    'operation':'UPDATE',
+                    'payload' : payload
                   }
                ); 
 
@@ -190,9 +207,9 @@ def computeCuts(movieID):
         cap = cv2.VideoCapture(play.url)
 
     length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
+    fps    = float(cap.get(cv2.CAP_PROP_FPS))
 
     for t in movie.tags:
         tag_service.delete(t)
@@ -201,17 +218,17 @@ def computeCuts(movieID):
     stats_manager = StatsManager()
     scene_manager = SceneManager(stats_manager)
     scene_manager.add_detector(ContentDetector(threshold=27.0, min_scene_len=15))
-    scene_manager.detect_scenes(frame_source=cap)
+    scene_manager.detect_scenes(frame_source=cap, id=movieID, progresscallback = logProgressCutDetection)
+
+    print (fps, type(fps))
 
     basetimecode = FrameTimecode(timecode=0, fps=fps)
     scene_list = scene_manager.get_scene_list(basetimecode)
 
 
     for i, scene in enumerate(scene_list):
-       tag = Tag (movieID=movieID, fn=scene[0].get_frames(), tag="CUT")
+       tag = Tag (movieID=movieID, fn=scene[0].get_frames(), tag="CUT")             
        tags.append (tag)
-
-    print ('PPR END COMPUTE CUTS=' + str(movieID))
 
     movie.tags = tags
     movie = movie_service.save(movie)

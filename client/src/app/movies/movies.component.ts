@@ -27,12 +27,12 @@ export class MoviesComponent implements OnInit {
   movies$: any         = this.store.pipe(select(selectAllMovies));
   movientitiedes$: any = this.store.pipe(select(selectMoviesEntities));
 
-  displayedColumns: string[] = ['id', 'name', 'stripe', 'uri'];
+  displayedColumns: string[] = ['id', 'name', 'stripe', 'cut', 'uri'];
 
   constructor( private  store: Store<AppState> ) { }
 
-  ngOnInit() {
-    this.store.subscribe ( s  => console.log(s) );
+  ngOnInit() {0
+//  this.store.subscribe ( s  => console.log(s) );
   }
 
   /*

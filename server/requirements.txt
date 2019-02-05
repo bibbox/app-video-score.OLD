@@ -30,4 +30,3 @@ flask-socketio
 moviepy==0.2.3.5
 pafy==0.5.4
 youtube-dl==2018.12.17
-scenedetect==0.5
