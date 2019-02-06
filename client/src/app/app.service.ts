@@ -32,6 +32,8 @@ export class AppService {
     console.log ('in the APP SERVICE class');
     this.store.dispatch(new MovieAPIActions.LoadMovies ());
     return this.http.get('/api/ping');
+
+    
   }
 
  

@@ -42,31 +42,31 @@ from string import Template
 # Third-Party Library Imports
 import click
 import cv2
-from scenedetect.platform import tqdm
+from server.app.scenedetect.platform import tqdm
 
 # PySceneDetect Library Imports
-import scenedetect.detectors
+import server.app.scenedetect.detectors
 
-from scenedetect.scene_manager import SceneManager
-from scenedetect.scene_manager import write_scene_list
+from server.app.scenedetect.scene_manager import SceneManager
+from server.app.scenedetect.scene_manager import write_scene_list
 
-from scenedetect.stats_manager import StatsManager
-from scenedetect.stats_manager import StatsFileCorrupt
-from scenedetect.stats_manager import StatsFileFramerateMismatch
+from server.app.scenedetect.stats_manager import StatsManager
+from server.app.scenedetect.stats_manager import StatsFileCorrupt
+from server.app.scenedetect.stats_manager import StatsFileFramerateMismatch
 
-from scenedetect.video_manager import VideoManager
-from scenedetect.video_manager import VideoOpenFailure
-from scenedetect.video_manager import VideoFramerateUnavailable
-from scenedetect.video_manager import VideoParameterMismatch
-from scenedetect.video_manager import InvalidDownscaleFactor
+from server.app.scenedetect.video_manager import VideoManager
+from server.app.scenedetect.video_manager import VideoOpenFailure
+from server.app.scenedetect.video_manager import VideoFramerateUnavailable
+from server.app.scenedetect.video_manager import VideoParameterMismatch
+from server.app.scenedetect.video_manager import InvalidDownscaleFactor
 
-from scenedetect.video_splitter import is_mkvmerge_available
-from scenedetect.video_splitter import is_ffmpeg_available
-from scenedetect.video_splitter import split_video_mkvmerge
-from scenedetect.video_splitter import split_video_ffmpeg
+from server.app.scenedetect.video_splitter import is_mkvmerge_available
+from server.app.scenedetect.video_splitter import is_ffmpeg_available
+from server.app.scenedetect.video_splitter import split_video_mkvmerge
+from server.app.scenedetect.video_splitter import split_video_ffmpeg
 
-from scenedetect.platform import get_cv2_imwrite_params
-from scenedetect.platform import check_opencv_ffmpeg_dll
+from server.app.scenedetect.platform import get_cv2_imwrite_params
+from server.app.scenedetect.platform import check_opencv_ffmpeg_dll
 
 
 def get_plural(val_list):

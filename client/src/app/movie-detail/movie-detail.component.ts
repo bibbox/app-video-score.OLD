@@ -29,7 +29,7 @@ import { CompileShallowModuleMetadata } from '@angular/compiler';
 
 export class MovieDetailComponent implements OnInit, OnDestroy {
 
-  @Input() movie: Movie; q
+  @Input() movie: Movie;
 
   movies$ = this.store.pipe(select(selectMovie));
 

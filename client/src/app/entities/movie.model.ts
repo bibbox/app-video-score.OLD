@@ -11,5 +11,3 @@ export interface Movie {
   stripeStatus: number;
   cutStatus: number;
 }
-
-export interface MovieState extends EntityState<Movie> {}

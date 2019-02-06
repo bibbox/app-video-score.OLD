@@ -19,57 +19,20 @@ from flask_sse import sse
 from flask import current_app, render_template
 from server.app import app_celerey
 
+from server.app import db
 from server.app.models.movie import Movie
 from server.app.models.tag import   Tag
 from server.app.services.movie_service import MovieService
 from server.app.services.tag_service import TagService
 
 from server.app.services.movie_utils import stripeBaseDirectory, stripeFileName
-
-
 from celery.utils.log import get_task_logger
-
-cel_logger = app_celerey.log.get_default_logger()
-app_celerey.log.redirect_stdouts_to_logger (cel_logger)
 
 movie_service = MovieService()
 tag_service   = TagService()
 
-tasklogger = get_task_logger(__name__)
-
-taskID_ofCutDededection__MovieID = {}
-
-class ParseCutDedectionProgress(logging.Filter):
-    def filter(self, record):
-        
-# [2019-02-04 23:54:28,934: INFO/ForkPoolWorker-1] tasks.callCommand[46e3a4c7-2581-4dd3-8700-aacabdc3358f]: START COMPUTE CUTS=3
-# [2019-02-04 23:46:29,592: WARNING/ForkPoolWorker-1] 96%|#########5| 6063/6317 [00:30<00:01, 223.79frames/s]
-# [2019-02-04 23:46:30,864: INFO/ForkPoolWorker-1] tasks.callCommand[3ecdcbf5-a9ed-4742-813a-3c2650f69c23]: END COMPUTE CUTS=3
-
-        print ('record = ', record.getMessage())
-
-        if record.getMessage().find("START COMPUTE CUTS") is not -1:
-            print ("(1) =========================> REGISTER ID")
-            movieID = 3
-            TaskID = 'ForkPoolWorker-1'
-            taskID_ofCutDededection__MovieID.update({TaskID : movieID})
-        if record.getMessage().find("END COMPUTE CUTS") is not -1:
-            print ("(2) =========================>  DELETE ID", record.getMessage())
-        
-
-        # loog for TaskID, filter pecentage and set in DB
-        
-        return True
-
-cel_logger.setLevel(logging.NOTSET)
-cel_logger.addFilter(ParseCutDedectionProgress())
-cel_logger.setLevel(logging.NOTSET)
-
-tasklogger.setLevel(logging.INFO)
-
 def callCommandSync(movieId, command):
     callCommand.delay (movieId, command)
-
 
 @app_celerey.task(bind=True, name='tasks.callCommand')
 def callCommand(self, movieId, command):
@@ -180,7 +143,6 @@ def syncMovieInClient (movie):
                   }
                ); 
 
-
 def logProgressCutDetection(id, t, f):
     movie = movie_service.get(id)
     perz =  100.0 * float(f) / float (t)
@@ -201,9 +163,11 @@ def logProgressCutDetection(id, t, f):
 def computeCuts(movieID):
 
     movie = movie_service.get(movieID)
+    
+    tags = db.session.query(Tag) \
+        .filter(Tag.movieID == movieID) \
+        .delete()
 
-    print ('PPR START COMPUTE CUTS=' + str(movieID))
-    cel_logger.warning ('INFO START COMPUTE CUTS=')
     if (movie.source  == "YOUTUBE"):
         vPafy = pafy.new(movie.uri)
         play = vPafy.getbest(preftype="webm")
@@ -214,37 +178,18 @@ def computeCuts(movieID):
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps    = float(cap.get(cv2.CAP_PROP_FPS))
 
+    print (length)
+
     for t in movie.tags:
         tag_service.delete(t)
 
     tags = []
     stats_manager = StatsManager()
     scene_manager = SceneManager(stats_manager)
+
     scene_manager.add_detector(ContentDetector(threshold=27.0, min_scene_len=15))
-<<<<<<< HEAD
-    scene_manager.detect_scenes(frame_source=cap, show_progress=True)
-=======
-    scene_manager.detect_scenes(frame_source=cap, id=movieID, progresscallback = logProgressCutDetection)
-
-    print (fps, type(fps))
->>>>>>> f2997b21d722cf266442790534df0a39cefb8aaa
-
-    basetimecode = FrameTimecode(timecode=0, fps=fps)
-    scene_list = scene_manager.get_scene_list(basetimecode)
-
-
-    for i, scene in enumerate(scene_list):
-       tag = Tag (movieID=movieID, fn=scene[0].get_frames(), tag="CUT")             
-       tags.append (tag)
-
-<<<<<<< HEAD
-    print ('PPR END COMPUTE CUTS=' + str(movieID))
-    cel_logger.info ('PPR END COMPUTE CUTS=' + str(movieID))
-
-=======
->>>>>>> f2997b21d722cf266442790534df0a39cefb8aaa
-    movie.tags = tags
-    movie = movie_service.save(movie)
+    n = scene_manager.detect_scenes(frame_source=cap, id=movieID, progresscallback = logProgressCutDetection, show_progress=False )
+    print (n)
 
 def testyoutube():
     url = 'https://youtu.be/4iwyvroMhDE'

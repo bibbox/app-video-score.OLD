@@ -46,10 +46,15 @@ This speeds up subsequent calls to the :py:meth:`SceneManager.detect_scenes` met
 that process the same frames with the same detection algorithm, even if different
 threshold values (or other algorithm options) are used.
 """
-
 # Standard Library Imports
 from __future__ import print_function
 import math
+
+# Database
+from server.app import db
+from server.app.models.movie import Movie
+from server.app.models.tag import   Tag
+
 
 # Third-Party Library Imports
 import cv2
@@ -59,7 +64,6 @@ from server.app.scenedetect.platform import tqdm
 from server.app.scenedetect.frame_timecode import FrameTimecode
 from server.app.scenedetect.platform import get_csv_writer
 from server.app.scenedetect.stats_manager import FrameMetricRegistered
-
 
 ##
 ## SceneManager Helper Functions
@@ -157,7 +161,7 @@ class SceneManager(object):
         self._stats_manager = stats_manager
         self._num_frames = 0
         self._start_frame = 0
-
+        self._movieID = 0
 
     def add_detector(self, detector):
         # type: (SceneDetector) -> None
@@ -261,6 +265,15 @@ class SceneManager(object):
     def _add_cuts(self, cut_list):
         # type: (List[int]) -> None
         # Adds a list of cuts to the cutting list.
+
+        if len(cut_list) > 0:
+#            print (cut_list)
+            for c in cut_list:
+               tag = Tag (movieID=self._movieID, fn=c, tag="CUT")             
+               db.session.add(tag)
+               db.session.commit()
+
+
         self._cutting_list += cut_list
 
 
@@ -317,9 +330,10 @@ class SceneManager(object):
             ValueError: `frame_skip` **must** be 0 (the default) if the SceneManager
                 was constructed with a StatsManager object.
         """
-
         if frame_skip > 0 and self._stats_manager is not None:
             raise ValueError('frame_skip must be 0 when using a StatsManager.')
+
+        self._movieID = id
 
         start_frame = 0
         curr_frame = 0

@@ -29,7 +29,7 @@ import cv2
 import numpy
 
 
-from scenedetect.scene_detector import SceneDetector
+from server.app.scenedetect.scene_detector import SceneDetector
 
 class MotionDetector(SceneDetector):
     """Detects motion events in scenes containing a static background.

@@ -54,7 +54,7 @@ import {MatIconModule} from '@angular/material';
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot([]),
-    EffectsModule.forFeature([MovieApiEffects]),
+    EffectsModule.forFeature([MovieApiEffects]), 
     StoreRouterConnectingModule.forRoot()
     ],
 

@@ -36,7 +36,7 @@ import numpy
 import cv2
 
 # PySceneDetect Library Imports
-from scenedetect.scene_detector import SceneDetector
+from server.app.scenedetect.scene_detector import SceneDetector
 
 
 class ContentDetector(SceneDetector):

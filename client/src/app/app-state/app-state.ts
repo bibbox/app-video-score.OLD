@@ -1,14 +1,11 @@
 import { NgModule,  OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Movie, MovieState } from '../entities/movie.model';
+import { ActionReducerMap } from '@ngrx/store';
 
 
-@NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
-})
+import * as fMovieReducer from '../entities/movie.reducer';
+import * as fMovieApiReducer from '../entities/movies-api.reducer';
+
 
 export class AppStateModule implements OnInit  {
 
@@ -19,5 +16,13 @@ export class AppStateModule implements OnInit  {
 }
 
 export interface AppState {
-  movies: MovieState;
+  movies: fMovieReducer.State;
+  movieapi: fMovieApiReducer.State;
 }
+
+export const reducers: ActionReducerMap<any> = {
+  movies:   fMovieReducer.reducer,
+  movieapi: fMovieApiReducer.reducer
+};
+
+

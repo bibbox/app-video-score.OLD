@@ -34,25 +34,29 @@ export class StripesComponent implements OnInit {
     let i = 0;
     for (const s of this.stripes) {
 //         console.log (i, s)
-         let stripeimage = new Image();
+         const stripeimage = new Image();
          stripeimage.src = s.url;
          const y = i * 80;
-         stripeimage.onload = function ()
-              {  ctx.drawImage(stripeimage, 0, y, 800, 75) };
+         stripeimage.onload = function () {  ctx.drawImage(stripeimage, 0, y, 800, 75) };
          i = i + 1;
     }
   }
 
   drawOverlay () {
-    let ctx: CanvasRenderingContext2D = this.overlayCanvas.nativeElement.getContext('2d');
+    const ctx: CanvasRenderingContext2D = this.overlayCanvas.nativeElement.getContext('2d');
     ctx.strokeStyle = '#ff0000';
+    let i = 0;
     for (let c of this.cuts) {
-      let y = Math.floor(c.fn / 1500.0)
-      let x = 800 * (c.fn - y*1500) / 1500
-      ctx.beginPath();
-      ctx.moveTo(x, y*80);
-      ctx.lineTo(x, y*80+75);
-      ctx.stroke();
+      if (i > 0) {
+        let y = Math.floor(c.fn / 1500.0);
+        let x = 800 * (c.fn - y * 1500) / 1500
+        ctx.beginPath();
+        ctx.moveTo(x, y * 80-1);
+        ctx.lineTo(x, y * 80 + 75+1);
+        ctx.stroke();
+        //console.log(c.fn, x,y)
+      }
+      i += 1;
     }
   }
 

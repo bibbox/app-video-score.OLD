@@ -31,8 +31,8 @@ export class MoviesComponent implements OnInit {
 
   constructor( private  store: Store<AppState> ) { }
 
-  ngOnInit() {0
-//  this.store.subscribe ( s  => console.log(s) );
+  ngOnInit() {
+      this.store.subscribe ( s  => console.log(s) );
   }
 
   /*

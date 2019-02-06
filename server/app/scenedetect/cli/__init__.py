@@ -50,13 +50,13 @@ import logging
 import click
 
 # PySceneDetect Library Imports
-import scenedetect
-from scenedetect.cli.context import CliContext
-from scenedetect.frame_timecode import FrameTimecode
-from scenedetect.video_manager import VideoManager
+import server.app.scenedetect
+from server.app.scenedetect.cli.context import CliContext
+from server.app.scenedetect.frame_timecode import FrameTimecode
+from server.app.scenedetect.video_manager import VideoManager
 
-from scenedetect.video_splitter import is_mkvmerge_available
-from scenedetect.video_splitter import is_ffmpeg_available
+from server.app.scenedetect.video_splitter import is_mkvmerge_available
+from server.app.scenedetect.video_splitter import is_ffmpeg_available
 
 
 def get_help_command_preface(command_name='scenedetect'):

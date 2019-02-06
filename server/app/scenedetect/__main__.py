@@ -42,8 +42,8 @@ will also add the `scenedetect` command to %PATH% be used from anywhere.
 """
 
 # PySceneDetect Library Imports
-from scenedetect.cli import CliContext
-from scenedetect.cli import scenedetect_cli as cli
+from server.app.scenedetect.cli import CliContext
+from server.app.scenedetect.cli import scenedetect_cli as cli
 
 def main():
     """ Main: PySceneDetect command-line interface (CLI) entry point.

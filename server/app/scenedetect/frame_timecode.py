@@ -100,9 +100,6 @@ class FrameTimecode(object):
             if isinstance(fps, FrameTimecode):
                 fps = fps.framerate
 
-            print (fps, type(fps))
-            print (isinstance(fps, (int, float)))
-
             # Process the given framerate, if it was not already set.
 
 #            if not isinstance(fps, (int, float)):

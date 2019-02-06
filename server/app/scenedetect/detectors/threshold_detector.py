@@ -34,7 +34,7 @@ to detect scene cuts when the average frame intensity passes the set threshold.
 import numpy
 
 # PySceneDetect Library Imports
-from scenedetect.scene_detector import SceneDetector
+from server.app.scenedetect.scene_detector import SceneDetector
 
 
 ##
