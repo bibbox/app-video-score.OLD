@@ -49,7 +49,7 @@ class Movie(BaseModel, db.Model):
 
     tags = db.relationship('Tag', backref='movies', lazy=True)
 
-    def __init__(self, uuid, name, source, uri, active, width, height, stripeStatus=0.0, numberOfStripes=0, tags=[]):
+    def __init__(self, uuid, name, source, uri, active, width, height, stripeStatus=0.0, cutStatus=0.0, numberOfStripes=0, tags=[]):
         super().__init__()
         self.uuid = uuid
         self.name = name
