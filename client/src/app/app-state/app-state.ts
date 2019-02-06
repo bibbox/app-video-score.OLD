@@ -10,7 +10,7 @@ import * as fMovieApiReducer from '../entities/movies-api.reducer';
 export class AppStateModule implements OnInit  {
 
   ngOnInit() {
-      console.log ("*********** AppStateModule  *******************")
+      console.log ("AppStateModule")
   }
 
 }
