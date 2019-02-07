@@ -15,10 +15,10 @@ load_dotenv()
 
 class Config(object):
     """ Common config options """
-    APPNAME = 'Movie Analyzer Beta 0'
+    APPNAME = 'Video Score Beta 0'
     SUPPORT_EMAIL = 'heimo.mueller@mac.com'
     VERSION = '0.0.1'
-    APPID = 'movie_analyzer'
+    APPID = 'videoscore'
     SECRET_KEY = os.urandom(24)
     TESTING = False
 

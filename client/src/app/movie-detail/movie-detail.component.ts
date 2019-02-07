@@ -32,8 +32,6 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   @Input() movie: Movie;
 
   movies$ = this.store.pipe(select(selectMovie));
-
-  private alive = true;
   private  id: number;
 
   constructor(
@@ -43,14 +41,12 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
     public   store: Store<AppState>) { }
 
   ngOnDestroy() {
-      console.log('[takeWhile] ngOnDestory');
-      this.alive = false;
   }
 
   ngOnInit() {
  //   this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.id = parseInt( this.route.snapshot.paramMap.get('id'), 10);
-    console.log (this.id);
+ //   console.log (this.id);
  //   this.store.subscribe ( s  => console.log(s) );
   }
 
@@ -65,7 +61,6 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   goBack(): void {
       this.location.back();
   }
-
 
   computeStripes(): void {
     console.log('Start the Compute Stripes Process');

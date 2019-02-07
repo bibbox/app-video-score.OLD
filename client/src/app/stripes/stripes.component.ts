@@ -69,7 +69,7 @@ export class StripesComponent implements OnInit {
 
   assignCutsAndDrawOverlay (cuts): void {
       this.cuts = cuts
-      console.log (cuts)
+      //console.log (cuts)
       let lastfn =  cuts[cuts.length-1].fn
       let h = 80 * Math.ceil(lastfn / 1500.0)
       this.renderer.setElementProperty(this.overlayCanvas.nativeElement, "height", h.toString());

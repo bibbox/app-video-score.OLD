@@ -273,7 +273,6 @@ class SceneManager(object):
                db.session.add(tag)
                db.session.commit()
 
-
         self._cutting_list += cut_list
 
 

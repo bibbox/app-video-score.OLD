@@ -9,4 +9,4 @@ from flask import Blueprint
 
 api = Blueprint('api', __name__)
 
-from server.app.api import default, movie, user
+from server.app.api import default, movie, user, task

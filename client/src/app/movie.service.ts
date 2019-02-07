@@ -68,11 +68,11 @@ export class MovieService {
 
  computeStripe(id: number) {
 
-    console.log('Compute Stripes Process in MOVIE SERVICES')
+    console.log('Compute Stripes Process in MOVIE SERVICES');
     const url = `/api/movie/${id}/command`;
-    const command = `{ "command": "generate-stripes", "parameters": {"silent": "true"} }`
+    const command = `{ "command": "[MOVIE] MAKE STRIPES", "parameters": {"silent": "true"} }`;
     console.log(url, command);
-   
+
     this.http.post(url, command, httpOptions).pipe(
       tap(_ => this.log(`generate stripes id=${id}`)),
       catchError(this.handleError<Movie>('computeStripe'))
@@ -81,9 +81,9 @@ export class MovieService {
 
  computeCuts (id: number) {
 
-    console.log('Compute Cut Process in MOVIE SERVICES')
+    console.log('Compute Cut Process in MOVIE SERVICES');
     const url = `/api/movie/${id}/command`;
-    const command = `{ "command": "compute-cuts", "parameters": {"silent": "true"} }`
+    const command = `{ "command": "[MOVIE] ANALYZE CUTS", "parameters": {"silent": "true"} }`;
 
     this.http.post<Movie>(url, command, httpOptions).pipe(
       tap(_ => this.log(`compute cuts movie id=${id}`)),

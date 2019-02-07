@@ -5,8 +5,10 @@ import cv2
 import numpy as np
 import csv
 import pafy
-
 import logging
+
+from flask import current_app, render_template
+from server.app import app_celerey
 
 import server.app.scenedetect
 from server.app.scenedetect.video_manager  import VideoManager
@@ -16,8 +18,6 @@ from server.app.scenedetect.stats_manager  import StatsManager
 from server.app.scenedetect.detectors      import ContentDetector
 
 from flask_sse import sse
-from flask import current_app, render_template
-from server.app import app_celerey
 
 from server.app import db
 from server.app.models.movie import Movie
@@ -31,25 +31,58 @@ from celery.utils.log import get_task_logger
 movie_service = MovieService()
 tag_service   = TagService()
 
-def callCommandSync(movieId, command):
-    callCommand.delay (movieId, command)
 
-@app_celerey.task(bind=True, name='tasks.callCommand')
-def callCommand(self, movieId, command):
+# UPDATE PROGRESS in MOVIE STORE
+def syncMovieInClient (movie):
+    payload =  { 'id': movie.id, 'changes':{'stripeStatus':movie.stripeStatus, 'numberOfStripes':movie.numberOfStripes }}
+    sse.publish(  type='greeting',
+                  data=
+                  { 'storeID':'MOVIE', 
+                    'operation':'UPDATE',
+                    'payload' : payload
+                  }
+               ); 
 
-    print ("************  execute ", movieId, command['command'] )
-    if (command['command'] == "generate-stripes"):
-       generateStripes(movieId)
+# UPDATE TASK STORE
+def syncTaskListInClient ():
+    payload =  { }
+    sse.publish(  type='greeting',
+                  data=
+                  { 'storeID':'TASK', 
+                    'operation':'RELOAD',
+                    'payload' : payload
+                  }
+               );          
 
-    if (command['command'] == "compute-cuts"):
-        computeCuts (movieId)
+# UPDATE PROGRESS in TASK STORE
+def syncTaskInClient (taskid, progress):
+    payload =  { 'id': taskid, 'changes':{'progress':progress }}
+    sse.publish(  type='greeting',
+                  data=
+                  { 'storeID':'TASK', 
+                    'operation':'UPDATE',
+                    'payload' : payload
+                  }
+               );   
 
-#    self.update_state(state='PROGRESS', meta={'current': i, 'total': total, 'status': message})
-    return {'current': 100, 'total': 100, 'status': 'Task completed!','result': 42}
 
+#
+# ENTRY POINT FOR COMMANDS
+#
+def analyzeMovieSync(movieId, command):
+#    print ("************  execute ", movieId, command['command'] )
+    if (command['command'] == "[MOVIE] MAKE STRIPES"):
+       generateStripes.delay(movieId, command['command'] )
+    if (command['command'] == "[MOVIE] ANALYZE CUTS"):
+       computeCuts.delay (movieId, command['command'] )
+    return 1
 
-def generateStripes(movieID):
-
+#
+# GENERATE STRIPE IMAGE DATA STRUCTURE
+#
+@app_celerey.task(bind=True, name='tasks.generateStripes')
+def generateStripes(self, movieID, actionID):
+     syncTaskListInClient ()
      movie = movie_service.get(movieID)
 
      if (movie.source  == "YOUTUBE"):
@@ -79,11 +112,14 @@ def generateStripes(movieID):
      stripenumber       = 0
      writelaststripe = 0
 
-
      movie.stripeStatus = 0.0
      movie.numberOfStripes = 0
      movie = movie_service.save(movie)
      syncMovieInClient (movie)    
+
+     self.update_state (
+         state='PROGRESS', 
+         meta={'movieID': movieID, 'actionID' :actionID, 'progress': 0}  )
 
      success = 1
      while success:
@@ -103,10 +139,16 @@ def generateStripes(movieID):
                 seconds +=2
                 perz =  100.0 * float(count+1) / float (length)
                 perzi = int (perz+0.5)
+
+                self.update_state (
+                    state='PROGRESS', 
+                    meta={'movieID': movieID, 'actionID' :actionID, 'progress': perzi} )
+
                 if (perzi != movie.stripeStatus):
                     movie.stripeStatus = 1.0 * perzi
                     movie = movie_service.save(movie)
                     syncMovieInClient (movie)    
+
             if (countbig == 10*fps):
                 countbig = 0
 
@@ -129,41 +171,42 @@ def generateStripes(movieID):
      movie.numberOfStripes = stripenumber + 1
      movie = movie_service.save(movie)
      syncMovieInClient (movie)   
-
-     #print (count+1, " frames found, theory = ", length)
-
-def syncMovieInClient (movie):
-
-    payload =  { 'id': movie.id, 'changes':{'stripeStatus':movie.stripeStatus, 'numberOfStripes':movie.numberOfStripes }}
-    sse.publish(  type='greeting',
-                  data=
-                  { 'storeID':'MOVIE', 
-                    'operation':'UPDATE',
-                    'payload' : payload
-                  }
-               ); 
-
-def logProgressCutDetection(id, t, f):
-    movie = movie_service.get(id)
-    perz =  100.0 * float(f) / float (t)
-    perzi = 1.0 * int (perz+0.5)
-    if (perzi != movie.cutStatus):
-        movie.cutStatus =  perzi
-        movie = movie_service.save(movie)
-        payload =  { 'id': movie.id, 'changes':{'cutStatus':movie.cutStatus }}
-        sse.publish(  type='greeting',
-                  data=
-                  { 'storeID':'MOVIE', 
-                    'operation':'UPDATE',
-                    'payload' : payload
-                  }
-               ); 
+     self.update_state (
+         state='FINISHED', 
+         meta={'movieID': movieID, 'actionID' :actionID, 'progress': 100}    )
+     
+     syncTaskListInClient ()     
 
 
-def computeCuts(movieID):
-
+#
+# ANALYZE CUTS
+#
+@app_celerey.task(bind=True, name='tasks.computeCuts')
+def computeCuts(self, movieID, actionID):
+    syncTaskListInClient ()     
     movie = movie_service.get(movieID)
-    
+
+    def logProgressCutDetection(id, t, f):      
+        movie = movie_service.get(id)
+        perz =  100.0 * float(f) / float (t)
+        perzi = 1.0 * int (perz+0.5)
+
+        self.update_state (
+                    state='PROGRESS', 
+                    meta={'movieID': movieID, 'actionID' :actionID, 'progress': perzi} )
+
+        if (perzi != movie.cutStatus):
+            movie.cutStatus =  perzi
+            movie = movie_service.save(movie)
+            payload =  { 'id': movie.id, 'changes':{'cutStatus':movie.cutStatus }}
+            sse.publish(  type='greeting',
+                  data=
+                  { 'storeID':'MOVIE', 
+                    'operation':'UPDATE',
+                    'payload' : payload
+                  }
+               ); 
+
     tags = db.session.query(Tag) \
         .filter(Tag.movieID == movieID) \
         .delete()
@@ -173,23 +216,28 @@ def computeCuts(movieID):
         play = vPafy.getbest(preftype="webm")
         cap = cv2.VideoCapture(play.url)
 
-    length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps    = float(cap.get(cv2.CAP_PROP_FPS))
-
-    print (length)
-
-    for t in movie.tags:
-        tag_service.delete(t)
-
-    tags = []
     stats_manager = StatsManager()
     scene_manager = SceneManager(stats_manager)
-
     scene_manager.add_detector(ContentDetector(threshold=27.0, min_scene_len=15))
+
     n = scene_manager.detect_scenes(frame_source=cap, id=movieID, progresscallback = logProgressCutDetection, show_progress=False )
+
+    self.update_state (
+         state='FINISHED', 
+         meta={'movieID': movieID, 'actionID' :actionID, 'progress': 100}    )
+    syncTaskListInClient ()
     print (n)
+
+
+
+@app_celerey.task(bind=True, name='tasks.create_test_task')
+def create_test_task(self, id, command):
+    for i in range (1,10):
+        time.sleep (1)
+        perzi = int (100*float(i)/120)
+        self.update_state ( state='PROGRESS', meta={'movieID': -1, 'actionID' :command, 'progress': perzi} )
+    self.update_state (state='FINISHED',  meta={'movieID': -1, 'actionID' :command, 'progress': 100} )
+    return 1
 
 def testyoutube():
     url = 'https://youtu.be/4iwyvroMhDE'
