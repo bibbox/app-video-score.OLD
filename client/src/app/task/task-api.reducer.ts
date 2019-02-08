@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { MoviesAPIActions, MoviesAPIActionTypes } from './movies-api.actions';
+import { TasksAPIActions, TasksAPIActionTypes } from './task-api.actions';
 import { ConditionalExpr } from '@angular/compiler';
 import { AppState} from '../app-state/app-state';
 
@@ -16,19 +16,19 @@ export const initialState: State = {
 
 export function reducer(
   state = initialState,
-  action: MoviesAPIActions
+  action: TasksAPIActions
   ): State {
   switch (action.type) {
 
-    case MoviesAPIActionTypes.LoadMovies: {
-      console.log ('MoviesAPIActionTypes.LoadMovies');
+    case TasksAPIActionTypes.LoadTasks: {
+      console.log ('TasksAPIActionTypes.LoadTasks');
       return Object.assign({}, state, {pending: true, error: null});
     }
-    case MoviesAPIActionTypes.LoadMoviesSucess: {
-      console.log ('MoviesAPIActionTypes.LoadMoviesSucess');
+    case TasksAPIActionTypes.LoadTasksSucess: {
+      console.log ('TasksAPIActionTypes.LoadTasksSucess');
       return Object.assign({}, state, {pending: false});
     }
-    case MoviesAPIActionTypes.LoadMoviesError: {
+    case TasksAPIActionTypes.LoadTasksError: {
       return Object.assign({}, state, {pending: false, error: 'ERROR'});
     }
 

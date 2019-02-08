@@ -47,7 +47,7 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
  //   this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.id = parseInt( this.route.snapshot.paramMap.get('id'), 10);
  //   console.log (this.id);
- //   this.store.subscribe ( s  => console.log(s) );
+    this.store.subscribe ( s  => console.log(s) );
   }
 
   assignMovie (movie: Movie) {

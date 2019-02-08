@@ -22,6 +22,10 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './reducers';
 
+import * as fromTask from './task/task.state';
+import { TaskEffects } from './task/task.effects';
+
+
 // MATERIAL
 import {MatCheckboxModule} from '@angular/material';
 import {MatTableModule} from '@angular/material/table';
@@ -51,10 +55,12 @@ import {MatIconModule} from '@angular/material';
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
+
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot([]),
-    EffectsModule.forFeature([MovieApiEffects]), 
+    EffectsModule.forFeature([MovieApiEffects, TaskEffects]),
+    StoreModule.forFeature('task', fromTask.taskreducers),
     StoreRouterConnectingModule.forRoot()
     ],
 
