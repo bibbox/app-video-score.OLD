@@ -52,12 +52,18 @@ def  get_tasks():
             taskreport.append (taskLog)
         
     tasksorderedbymmovie = sorted(taskreport, key=lambda k: k['movieID']) 
+
+    i = 0
+    for t in tasksorderedbymmovie:
+        t['id'] = t['taskID']
+        i += 1
+
     return jsonify( tasksorderedbymmovie)
 
 @api.route("/tasks/create_test_task")
 def  createTestTask():
     command = "[MOVIE] TEST"
-    create_test_task.delay (9999, command)
+    create_test_task.delay (1, command)
     return jsonify( 'OK')
 
 @api.route("/tasks/<int:id>")

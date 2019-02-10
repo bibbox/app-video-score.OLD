@@ -44,7 +44,7 @@
     <button mat-button [matMenuTriggerFor]="window">Window</button>
     <mat-menu #window="matMenu">
         <button mat-menu-item>Score</button>
-        <button mat-menu-item>Background Tasks</button>
+        <button mat-menu-item (click)="showTasks()">Background Tasks</button>
         <button mat-menu-item>Help</button>
     </mat-menu>
 

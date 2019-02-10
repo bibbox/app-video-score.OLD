@@ -33,7 +33,9 @@ tag_service   = TagService()
 
 
 # UPDATE PROGRESS in MOVIE STORE
-def syncMovieInClient (movie):
+def syncMovieInClient (movie, taskID):
+
+#    print (taskID, movie.stripeStatus)
     payload =  { 'id': movie.id, 'changes':{'stripeStatus':movie.stripeStatus, 'numberOfStripes':movie.numberOfStripes }}
     sse.publish(  type='greeting',
                   data=
@@ -42,14 +44,18 @@ def syncMovieInClient (movie):
                     'payload' : payload
                   }
                ); 
+    
+    syncTaskInClient (taskID, movie.stripeStatus)
+           
 
 # UPDATE TASK STORE
 def syncTaskListInClient ():
+    print ("*********** syncTaskListInClient *****************")
     payload =  { }
     sse.publish(  type='greeting',
                   data=
                   { 'storeID':'TASK', 
-                    'operation':'RELOAD',
+                    'operation':'LOAD',
                     'payload' : payload
                   }
                );          
@@ -64,13 +70,12 @@ def syncTaskInClient (taskid, progress):
                     'payload' : payload
                   }
                );   
-
-
 #
 # ENTRY POINT FOR COMMANDS
 #
 def analyzeMovieSync(movieId, command):
 #    print ("************  execute ", movieId, command['command'] )
+    syncTaskListInClient ()  
     if (command['command'] == "[MOVIE] MAKE STRIPES"):
        generateStripes.delay(movieId, command['command'] )
     if (command['command'] == "[MOVIE] ANALYZE CUTS"):
@@ -115,11 +120,11 @@ def generateStripes(self, movieID, actionID):
      movie.stripeStatus = 0.0
      movie.numberOfStripes = 0
      movie = movie_service.save(movie)
-     syncMovieInClient (movie)    
+     syncMovieInClient (movie, self.request.id)    
 
      self.update_state (
          state='PROGRESS', 
-         meta={'movieID': movieID, 'actionID' :actionID, 'progress': 0}  )
+         meta={'movieID': movieID, 'actionID' :actionID, 'progress': 0}  ) 
 
      success = 1
      while success:
@@ -147,7 +152,7 @@ def generateStripes(self, movieID, actionID):
                 if (perzi != movie.stripeStatus):
                     movie.stripeStatus = 1.0 * perzi
                     movie = movie_service.save(movie)
-                    syncMovieInClient (movie)    
+                    syncMovieInClient (movie, self.request.id)    
 
             if (countbig == 10*fps):
                 countbig = 0
@@ -161,7 +166,7 @@ def generateStripes(self, movieID, actionID):
                 writelaststripe = 1
                 movie.numberOfStripes = stripenumber + 1
                 movie = movie_service.save(movie)
-                syncMovieInClient (movie)   
+                syncMovieInClient (movie, self.request.id)   
 
      if (writelaststripe):
         fn = stripeFileName(movie, stripenumber)
@@ -170,7 +175,8 @@ def generateStripes(self, movieID, actionID):
      movie.stripeStatus = 100.0
      movie.numberOfStripes = stripenumber + 1
      movie = movie_service.save(movie)
-     syncMovieInClient (movie)   
+
+     syncMovieInClient (movie, self.request.id)   
      self.update_state (
          state='FINISHED', 
          meta={'movieID': movieID, 'actionID' :actionID, 'progress': 100}    )
@@ -207,6 +213,8 @@ def computeCuts(self, movieID, actionID):
                   }
                ); 
 
+            syncTaskInClient (self.request.id, movie.cutStatus)   
+
     tags = db.session.query(Tag) \
         .filter(Tag.movieID == movieID) \
         .delete()
@@ -232,11 +240,14 @@ def computeCuts(self, movieID, actionID):
 
 @app_celerey.task(bind=True, name='tasks.create_test_task')
 def create_test_task(self, id, command):
-    for i in range (1,10):
+    syncTaskListInClient ()  
+    for i in range (1,100):
         time.sleep (1)
         perzi = int (100*float(i)/120)
-        self.update_state ( state='PROGRESS', meta={'movieID': -1, 'actionID' :command, 'progress': perzi} )
-    self.update_state (state='FINISHED',  meta={'movieID': -1, 'actionID' :command, 'progress': 100} )
+        self.update_state ( state='PROGRESS', meta={'movieID':id, 'actionID' :command, 'progress': perzi} )
+        syncTaskInClient (self.request.id, perzi)
+    self.update_state (state='FINISHED',  meta={'movieID': id, 'actionID' :command, 'progress': 100} )
+    syncTaskListInClient ()  
     return 1
 
 def testyoutube():

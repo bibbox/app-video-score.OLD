@@ -6,6 +6,7 @@ import { AppState } from './app-state/app-state';
 import { Store, select } from '@ngrx/store';
 
 import * as MovieAPIActions from './entities/movies-api.actions';
+import * as TasksAPIActions from './task/task-api.actions';
 
 import { SseService } from './sse.service';
 import { ConditionalExpr } from '@angular/compiler';
@@ -45,10 +46,14 @@ export class SyncstoreService {
     }
 
   dispatchSyncOperation (op: SyncOperation) {
- // console.log (op);
+  //  console.log (op);
     switch (op.storeID) {
       case 'MOVIE': {
         this.dispatchMovieOperation(op);
+        break;
+      }
+      case 'TASK': {
+        this.dispatchTaskOperation(op);
         break;
       }
       default: {
@@ -68,5 +73,25 @@ export class SyncstoreService {
       }
     }
   }
+
+  dispatchTaskOperation (op: SyncOperation) {
+    switch (op.operation) {
+      case 'LOAD': {
+        console.log ("****************** RELOAD TASKS")
+        this.store.dispatch(new TasksAPIActions.LoadTasks ());
+        break;
+      }
+      case 'UPDATE': {
+        this.store.dispatch(new TasksAPIActions.SyncTask ({task: op.payload}));
+        break;
+      }
+      default: {
+          break;
+      }
+    }
+  }
+
+  
+
 
 }

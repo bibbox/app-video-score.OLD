@@ -43,6 +43,9 @@
   * `ng config cli.defaultCollection @ngrx/schematics`
   * `ng generate entity Cuts`
   
+## Usefull Tutorials
+  * `https://www.intertech.com/Blog/ngrx-tutorial-add-state-to-feature-module/` -  NGRX Store, Feature
+
 ## Project Components (Directory Structure)
 
 * **client** 

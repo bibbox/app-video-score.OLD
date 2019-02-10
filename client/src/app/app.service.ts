@@ -10,6 +10,8 @@ import { AppState } from './app-state/app-state';
 
 import * as MovieActions from './entities/movie.actions';
 import * as MovieAPIActions from './entities/movies-api.actions';
+import * as TasksAPIActions from './task/task-api.actions';
+
 
 import { Movie, MovieState } from './entities/movie.model';
 
@@ -31,9 +33,9 @@ export class AppService {
   initStore() {
     console.log ('in the APP SERVICE class');
     this.store.dispatch(new MovieAPIActions.LoadMovies ());
+    this.store.dispatch(new TasksAPIActions.LoadTasks ());
+  //  this.store.subscribe (v => console.log(v));
     return this.http.get('/api/ping');
-
-    
   }
 
  

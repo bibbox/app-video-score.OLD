@@ -25,6 +25,9 @@ export class AppComponent implements OnInit {
     this.router.navigateByUrl('/movies');
   }
 
+  showTasks() {
+    this.router.navigateByUrl('/tasks');
+  }
 
 
 }

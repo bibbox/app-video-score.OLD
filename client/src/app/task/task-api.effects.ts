@@ -8,7 +8,7 @@ import { Observable, of } from 'rxjs';
 import { Task } from './task.model';
 
 import * as TaskActions from './task.actions';
-import * as APIActions from './task-api.actions';
+import * as TaskAPIActions from './task-api.actions';
 
 
 import { AppState } from '../app-state/app-state';
@@ -21,13 +21,13 @@ export class TaskApiEffects {
   @Effect()
   loadTasks$ = this.actions$
   .pipe(
-    ofType(APIActions.TasksAPIActionTypes.LoadTasks),
+    ofType(TaskAPIActions.TasksAPIActionTypes.LoadTasks),
     mergeMap(() => this.http.get<Task[]>(this.taskAPI)
       .pipe
       (
         map (tasks => (new TaskActions.LoadTasks ({tasks: tasks})) ),
         catchError(() => of({ type: '[Task] Tasks Loaded Error' })),
-        finalize(() => this.store.dispatch(new APIActions.LoadTasksSucess ()))
+        finalize(() => this.store.dispatch(new TaskAPIActions.LoadTasksSucess ()))
       )
 
     )
@@ -36,7 +36,7 @@ export class TaskApiEffects {
   @Effect()
   syncTask$ = this.actions$
   .pipe(
-    ofType<APIActions.SyncTask>(APIActions.TasksAPIActionTypes.SyncTask),
+    ofType<TaskAPIActions.SyncTask>(TaskAPIActions.TasksAPIActionTypes.SyncTask),
 //    tap (() => console.log('have to sync a task')),
     concatMap( syncaction => [
       new TaskActions.UpdateTask( {task: syncaction.payload.task} )

@@ -35,24 +35,4 @@ export class MoviesComponent implements OnInit {
      // this.store.subscribe ( s  => console.log(s) );
   }
 
-  /*
-  getMovies(): void {
-   this.movieService.getMovies()
-#        .subscribe(movies => this.movies =movies  );
-#  }
-
-  add(name: string): void {
-    name = name.trim();
-    if (!name) { return; }
-    this.movieService.addMovie({ name } as OOMovie)
-      .subscribe(movie => {
-        this.movies.push(movie);
-      });
-  }
-
-  delete(movie: OOMovie): void {
-    this.movies = this.movies.filter(h => h !== movie);
-    this.movieService.deleteMovie(movie).subscribe();
-  }
-*/  
 }

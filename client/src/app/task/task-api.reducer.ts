@@ -21,11 +21,11 @@ export function reducer(
   switch (action.type) {
 
     case TasksAPIActionTypes.LoadTasks: {
-      console.log ('TasksAPIActionTypes.LoadTasks');
+//      console.log ('TasksAPIActionTypes.LoadTasks');
       return Object.assign({}, state, {pending: true, error: null});
     }
     case TasksAPIActionTypes.LoadTasksSucess: {
-      console.log ('TasksAPIActionTypes.LoadTasksSucess');
+//      console.log ('TasksAPIActionTypes.LoadTasksSucess');
       return Object.assign({}, state, {pending: false});
     }
     case TasksAPIActionTypes.LoadTasksError: {

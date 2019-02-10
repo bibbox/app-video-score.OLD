@@ -2,8 +2,7 @@ import { BrowserModule} from '@angular/platform-browser';
 import { NgModule} from '@angular/core';
 import { FormsModule} from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http';
-import { EffectsModule } from '@ngrx/effects';
-import { MovieApiEffects } from './entities/movies-api.effects';
+
 
 import { AppComponent} from './app.component';
 import { AppService} from './app.service';
@@ -20,18 +19,25 @@ import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 // STORE
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 import { reducers } from './reducers';
 
-import * as fromTask from './task/task.state';
-import { TaskEffects } from './task/task.effects';
+import { MovieApiEffects } from './entities/movies-api.effects';
 
 
+
+ 
 // MATERIAL
 import {MatCheckboxModule} from '@angular/material';
 import {MatTableModule} from '@angular/material/table';
 import {MatMenuModule} from '@angular/material';
 import {MatButtonModule} from '@angular/material';
 import {MatIconModule} from '@angular/material';
+
+// TASKS
+
+import {TaskModule} from './task/task.module';
+
 
 @NgModule({
   declarations: [
@@ -55,16 +61,15 @@ import {MatIconModule} from '@angular/material';
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
-
+    TaskModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot([]),
-    EffectsModule.forFeature([MovieApiEffects, TaskEffects]),
-    StoreModule.forFeature('task', fromTask.taskreducers),
+    EffectsModule.forFeature([MovieApiEffects]),
     StoreRouterConnectingModule.forRoot()
     ],
 
-  exports: [ MatCheckboxModule, MatMenuModule,MatIconModule ],
+  exports: [ MatCheckboxModule, MatMenuModule, MatIconModule ],
 
   providers: [AppService],
   bootstrap: [AppComponent]

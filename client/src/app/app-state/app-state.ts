@@ -16,6 +16,7 @@ export class AppStateModule implements OnInit  {
 }
 
 export interface AppState {
+  task: any;
   movies: fMovieReducer.State;
   movieapi: fMovieApiReducer.State;
 }
