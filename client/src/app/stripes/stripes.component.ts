@@ -2,9 +2,10 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { Renderer, ViewChild } from '@angular/core'
 
 import { ActivatedRoute } from '@angular/router';
-import { MovieService }  from '../movie.service';
+import { MovieService } from '../movie.service';
 import { Stripe } from '../stripe';
 import { Cut } from '../cut';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-stripes',

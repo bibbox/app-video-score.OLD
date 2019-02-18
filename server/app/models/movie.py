@@ -40,6 +40,8 @@ class Movie(BaseModel, db.Model):
     uri    = db.Column(db.String(128), nullable=False)
     width     = db.Column(db.Integer, nullable=True)
     height    = db.Column(db.Integer, nullable=True)
+    numberOfFrames  = db.Column(db.Integer, nullable=True)
+    fps   = db.Column(db.Float(), default=0.0, nullable=True)
     stripeStatus   = db.Column(db.Float(), default=0.0, nullable=True)
     cutStatus   = db.Column(db.Float(), default=0.0, nullable=True)
     hasStripeImage = db.Column(db.Boolean(), default=False, nullable=False)
@@ -49,7 +51,8 @@ class Movie(BaseModel, db.Model):
 
     tags = db.relationship('Tag', backref='movies', lazy=True)
 
-    def __init__(self, uuid, name, source, uri, active, width, height, stripeStatus=0.0, cutStatus=0.0, numberOfStripes=0, tags=[]):
+    def __init__(self, uuid, name, source, uri, active, width, height, 
+                 numberOfFrames, fps, stripeStatus=0.0, cutStatus=0.0, numberOfStripes=0, tags=[]):
         super().__init__()
         self.uuid = uuid
         self.name = name
@@ -58,6 +61,8 @@ class Movie(BaseModel, db.Model):
         self.active = active
         self.width = width
         self.height = height
+        self.numberOfFrames = numberOfFrames
+        self.fps = fps
         self.stripeStatus = stripeStatus
         self.cutStatus = cutStatus
         self.numberOfStripes = numberOfStripes

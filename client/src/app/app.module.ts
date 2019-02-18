@@ -14,6 +14,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StripesComponent } from './stripes/stripes.component';
 import { StripesOverlayComponent } from './stripes-overlay/stripes-overlay.component';
+import { OMSubimageComponent } from './omsubimage/omsubimage.component';
+import { OMImageComponent } from './omimage/omimage.component';
+
 import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 
 // STORE
@@ -47,7 +50,9 @@ import {TaskModule} from './task/task.module';
     MessagesComponent,
     DashboardComponent,
     StripesComponent,
-    StripesOverlayComponent
+    StripesOverlayComponent,
+    OMSubimageComponent,
+    OMImageComponent
   ],
 
   imports: [

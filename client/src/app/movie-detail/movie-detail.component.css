@@ -1,3 +1,10 @@
+.omi {
+  display: inline;
+}
+
+.subomi {
+  display: inline;
+}
 
 label {
     display: inline-block;

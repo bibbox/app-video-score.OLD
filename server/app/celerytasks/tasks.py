@@ -25,7 +25,7 @@ from server.app.models.tag import   Tag
 from server.app.services.movie_service import MovieService
 from server.app.services.tag_service import TagService
 
-from server.app.services.movie_utils import stripeBaseDirectory, stripeFileName
+from server.app.services.movie_utils import stripeBaseDirectory, keframeBaseDirectory, keyFrameName, stripeFileName
 from celery.utils.log import get_task_logger
 
 movie_service = MovieService()
@@ -80,6 +80,8 @@ def analyzeMovieSync(movieId, command):
        generateStripes.delay(movieId, command['command'] )
     if (command['command'] == "[MOVIE] ANALYZE CUTS"):
        computeCuts.delay (movieId, command['command'] )
+    if (command['command'] == "[MOVIE] COMPUTE OM IMAGES"):
+       computeOmImages.delay (movieId, command['command'] )
     return 1
 
 #
@@ -94,6 +96,11 @@ def generateStripes(self, movieID, actionID):
         vPafy = pafy.new(movie.uri)
         play = vPafy.getbest(preftype="webm")
         cap = cv2.VideoCapture(play.url)
+
+     if (movie.source  == "FILESYSTEM"):
+        localdirname = os.path.dirname("/data/movies/") 
+        filename = os.path.join(localdirname, movie.uri)   
+        cap = cv2.VideoCapture(filename)
 
      length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
      width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -224,6 +231,11 @@ def computeCuts(self, movieID, actionID):
         play = vPafy.getbest(preftype="webm")
         cap = cv2.VideoCapture(play.url)
 
+    if (movie.source  == "FILESYSTEM"):
+        localdirname = os.path.dirname("/data/movies/") 
+        filename = os.path.join(localdirname, movie.uri)   
+        cap = cv2.VideoCapture(filename)
+
     stats_manager = StatsManager()
     scene_manager = SceneManager(stats_manager)
     scene_manager.add_detector(ContentDetector(threshold=27.0, min_scene_len=15))
@@ -235,6 +247,20 @@ def computeCuts(self, movieID, actionID):
          meta={'movieID': movieID, 'actionID' :actionID, 'progress': 100}    )
     syncTaskListInClient ()
     print (n)
+
+#
+# COMPUTE OM IMAGES
+#
+
+@app_celerey.task(bind=True, name='tasks.computeOmImages')
+def computeOmImages(self, movieID, actionID):
+    syncTaskListInClient ()
+    movie = movie_service.get(movieID)
+    cuts = movie.tags
+    self.update_state (
+         state='FINISHED', 
+         meta={'movieID': movieID, 'actionID' :actionID, 'progress': 100}    )
+    syncTaskListInClient ()
 
 
 

@@ -10,7 +10,7 @@ export interface State extends EntityState<Task> {
 
 function sortByMovieID(e1: Task, e2: Task) {
   if (e1.movieID === e2.movieID) {
-    return e1.progress < e2.progress;
+    return (e1.progress - e2.progress);
   } else {
     return (e1.movieID - e2.movieID);
   }

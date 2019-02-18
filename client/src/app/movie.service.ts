@@ -92,6 +92,16 @@ export class MovieService {
   }
 
 
+  computeOMImages (id: number) {
+    console.log('Compute OM Images Process in MOVIE SERVICES');
+    const url = `/api/movie/${id}/command`;
+    const command = `{ "command": "[MOVIE] COMPUTE OM IMAGES", "parameters": {"silent": "true"} }`;
+
+    this.http.post<Movie>(url, command, httpOptions).pipe(
+      tap(_ => this.log(`compute om images id=${id}`)),
+      catchError(this.handleError<Movie>('computeOMImages'))
+    ).subscribe(() => console.log('Compute OM images command done'));
+  }
 
 
 
