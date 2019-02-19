@@ -3,37 +3,23 @@ import { Update } from '@ngrx/entity';
 import { Document } from './document.model';
 
 export enum DocumentsAPIActionTypes {
-  LoadDocuments       = '[Documents API] Load Documents',
-  LoadDocumentsSucess = '[Documents API] Load Documents Success',
-  LoadDocumentsError  = '[Documents API] Load Documents Error',
-  AddDocument         = '[Documents API] Add Document',
-  AddDocumentSucess   = '[Documents API] Add Success',
-  AddDocumentError    = '[Documents API] Add Error',
-  SyncDocument        = '[Documents API] Sync Document'
+  LoadDocument       = '[Document API] Load Document',
+  LoadDocumentSucess = '[Document API] Load Document Success',
+  LoadDocumentError  = '[Document API] Load Document Error',
+  SyncDocument       = '[Document API] Sync Document'
 }
 
-export class LoadDocuments implements Action {
-  readonly type = DocumentsAPIActionTypes.LoadDocuments;
+export class LoadDocument implements Action {
+  readonly type = DocumentsAPIActionTypes.LoadDocument;
+  constructor(public payload: { id: number }) {}
 }
 
-export class LoadDocumentsSucess implements Action {
-  readonly type = DocumentsAPIActionTypes.LoadDocumentsSucess;
+export class LoadDocumentSucess implements Action {
+  readonly type = DocumentsAPIActionTypes.LoadDocumentSucess;
 }
 
-export class LoadDocumentsError implements Action {
-  readonly type = DocumentsAPIActionTypes.LoadDocumentsError;
-}
-
-export class AddDocument implements Action {
-  readonly type = DocumentsAPIActionTypes.AddDocument;
-}
-
-export class AddDocumentSucess implements Action {
-  readonly type = DocumentsAPIActionTypes.AddDocumentSucess;
-}
-
-export class AddDocumentError implements Action {
-  readonly type = DocumentsAPIActionTypes.AddDocumentError;
+export class LoadDocumentError implements Action {
+  readonly type = DocumentsAPIActionTypes.LoadDocumentError;
 }
 
 export class SyncDocument implements Action {
@@ -42,10 +28,7 @@ export class SyncDocument implements Action {
 }
 
 export type DocumentsAPIActions =
-LoadDocuments
-  | LoadDocumentsSucess
-  | LoadDocumentsError
-  | AddDocument
-  | AddDocumentSucess
-  | AddDocumentError
+LoadDocument
+  | LoadDocumentSucess
+  | LoadDocumentError
   | SyncDocument ;

@@ -28,6 +28,10 @@ from server.app.services.tag_service import TagService
 from server.app.services.movie_utils import stripeBaseDirectory, keframeBaseDirectory, keyFrameName, stripeFileName
 from celery.utils.log import get_task_logger
 
+
+from server.app.celerytasks.document_generator import generateDocumentAndCaches
+
+
 movie_service = MovieService()
 tag_service   = TagService()
 
@@ -80,9 +84,66 @@ def analyzeMovieSync(movieId, command):
        generateStripes.delay(movieId, command['command'] )
     if (command['command'] == "[MOVIE] ANALYZE CUTS"):
        computeCuts.delay (movieId, command['command'] )
-    if (command['command'] == "[MOVIE] COMPUTE OM IMAGES"):
-       computeOmImages.delay (movieId, command['command'] )
+    if (command['command'] == "[MOVIE] MAKE DOC AND IMAGES"):
+       generateDocAndOmImages.delay (movieId, command['command'] )
     return 1
+
+#
+# GENERATE DOC AND OM IMAGES
+#
+@app_celerey.task(bind=True, name='tasks.generateDocAndOmImages')
+def generateDocAndOmImages (self, movieID, actionID):
+
+    movie = movie_service.get(movieID)
+    id = movieID
+
+    def logProgressCutDetection(t, f):      
+        movie = movie_service.get(id)
+        perz =  100.0 * float(f) / float (t)
+        perzi = 1.0 * int (perz+0.5)
+
+        self.update_state (
+                    state='PROGRESS', 
+                    meta={'movieID': movieID, 'actionID' :actionID, 'progress': perzi} )
+
+        if (perzi != movie.docStatus):
+            movie.docStatus =  perzi
+            movie = movie_service.save(movie)
+            payload =  { 'id': movie.id, 'changes':{'docStatus':movie.docStatus }}
+            sse.publish(  type='greeting',
+                  data=
+                  { 'storeID':'MOVIE', 
+                    'operation':'UPDATE',
+                    'payload' : payload
+                  }
+               ); 
+
+            syncTaskInClient (self.request.id, movie.docStatus)   
+    
+    movie.docStatus =  0
+    movie = movie_service.save(movie)
+ 
+    self.update_state (
+         state='PROGRESS', 
+         meta={'movieID': movieID, 'actionID' :actionID, 'progress': 0}    )
+    syncTaskListInClient ()
+
+    d = generateDocumentAndCaches (movieID, progresscallback = logProgressCutDetection) 
+
+    self.update_state (
+         state='FINISHED', 
+         meta={'movieID': movieID, 'actionID' :actionID, 'progress': 100}    )
+    syncTaskListInClient ()
+
+ 
+
+
+
+
+
+
+
+
 
 #
 # GENERATE STRIPE IMAGE DATA STRUCTURE
@@ -261,6 +322,8 @@ def computeOmImages(self, movieID, actionID):
          state='FINISHED', 
          meta={'movieID': movieID, 'actionID' :actionID, 'progress': 100}    )
     syncTaskListInClient ()
+
+
 
 
 

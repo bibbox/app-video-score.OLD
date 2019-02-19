@@ -8,27 +8,6 @@ export interface State extends EntityState<Document> {
   // additional entities state properties
 }
 
-function sortByMovieID(e1: Document, e2: Document) {
-  if (e1.movieID === e2.movieID) {
-    return (e1.progress - e2.progress);
-  } else {
-    return (e1.movieID - e2.movieID);
-  }
-}
-
-
-
-export const adapter: EntityAdapter<Document> = createEntityAdapter<Document>(
-  {
-    sortComparer: sortByMovieID
-  }
-);
-
-export const initialState: State = adapter.getInitialState({
-  api_pending: false,
-  api_sucess: false
-  // additional entity state properties
-});
 
 export function reducer(
   state = initialState,

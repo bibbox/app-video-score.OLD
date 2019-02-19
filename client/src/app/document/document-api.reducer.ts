@@ -20,15 +20,15 @@ export function reducer(
   ): State {
   switch (action.type) {
 
-    case DocumentsAPIActionTypes.LoadDocuments: {
-//      console.log ('DocumentsAPIActionTypes.LoadDocuments');
+    case DocumentsAPIActionTypes.LoadDocument: {
+      console.log ('DocumentsAPIActionTypes.LoadDocument');
       return Object.assign({}, state, {pending: true, error: null});
     }
-    case DocumentsAPIActionTypes.LoadDocumentsSucess: {
-//      console.log ('DocumentsAPIActionTypes.LoadDocumentsSucess');
+    case DocumentsAPIActionTypes.LoadDocumentSucess: {
+      console.log ('DocumentsAPIActionTypes.LoadDocumentSucess');
       return Object.assign({}, state, {pending: false});
     }
-    case DocumentsAPIActionTypes.LoadDocumentsError: {
+    case DocumentsAPIActionTypes.LoadDocumentError: {
       return Object.assign({}, state, {pending: false, error: 'ERROR'});
     }
 

@@ -16,33 +16,22 @@ import { AppState } from '../app-state/app-state';
 @Injectable()
 export class DocumentApiEffects {
 
-  private documentAPI = '/api/documents';  // URL to web api
+  private documentAPI = '/api/document';  // URL to web api
 
   @Effect()
   loadDocuments$ = this.actions$
   .pipe(
-    ofType(DocumentAPIActions.DocumentsAPIActionTypes.LoadDocuments),
+    ofType(DocumentAPIActions.DocumentsAPIActionTypes.LoadDocument),
     mergeMap(() => this.http.get<Document[]>(this.documentAPI)
       .pipe
       (
-        map (documents => (new DocumentActions.LoadDocuments ({documents: documents})) ),
+        map (documents => (new DocumentActions.LoadDocument ({documents: documents})) ),
         catchError(() => of({ type: '[Document] Documents Loaded Error' })),
-        finalize(() => this.store.dispatch(new DocumentAPIActions.LoadDocumentsSucess ()))
+        finalize(() => this.store.dispatch(new DocumentAPIActions.LoadDocumentSucess ()))
       )
 
     )
   );
-
-  @Effect()
-  syncDocument$ = this.actions$
-  .pipe(
-    ofType<DocumentAPIActions.SyncDocument>(DocumentAPIActions.DocumentsAPIActionTypes.SyncDocument),
-//    tap (() => console.log('have to sync a document')),
-    concatMap( syncaction => [
-      new DocumentActions.UpdateDocument( {document: syncaction.payload.document} )
-    ])
-  );
-
 
   constructor(
     private  http: HttpClient,

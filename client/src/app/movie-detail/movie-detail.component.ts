@@ -21,7 +21,7 @@ import { OMImageComponent } from '../omimage/omimage.component';
 
 // <app-stripes></app-stripes>
 // <ng-container *ngFor='let omi of omimages$ | async'><app-omimage [startFN]="omi.startFN" [endFN]="omi.endFN" ></app-omimage></ng-container>
-// import {MatButtonModule, MatCheckboxModule} from '@angular/material';
+
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { CompileShallowModuleMetadata, ConditionalExpr } from '@angular/compiler';
 
@@ -57,7 +57,6 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
- //   this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.id = parseInt( this.route.snapshot.paramMap.get('id'), 10);
   //  this.store.subscribe ( s  => console.log(s) );
 
@@ -114,13 +113,13 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
       ).subscribe(m => this.movieService.computeCuts(m.id));
   }
 
-  computeOMimages(): void {
+  makeDocAndOmImages(): void {
     console.log('Start the Compute OM Images Process');
     this.store.pipe(
       take(1),
       select(selectMovie),
       map( f => f(this.id))
-      ).subscribe(m => this.movieService.computeOMImages(m.id));
+      ).subscribe(m => this.movieService.makeDocAndOmImages(m.id));
   }
 
 

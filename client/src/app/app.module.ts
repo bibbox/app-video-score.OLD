@@ -8,6 +8,9 @@ import { AppComponent} from './app.component';
 import { AppService} from './app.service';
 import { MoviesComponent } from './movies/movies.component';
 import { MovieDetailComponent } from './movie-detail/movie-detail.component';
+
+import { DocumentListComponent } from './documentlist/documentlist.component';
+
 import { MessagesComponent } from './messages/messages.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -28,8 +31,6 @@ import { reducers } from './reducers';
 import { MovieApiEffects } from './entities/movies-api.effects';
 
 
-
- 
 // MATERIAL
 import {MatCheckboxModule} from '@angular/material';
 import {MatTableModule} from '@angular/material/table';
@@ -47,6 +48,7 @@ import {TaskModule} from './task/task.module';
     AppComponent,
     MoviesComponent,
     MovieDetailComponent,
+    DocumentListComponent,
     MessagesComponent,
     DashboardComponent,
     StripesComponent,

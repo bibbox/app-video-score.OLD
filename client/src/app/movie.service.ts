@@ -92,15 +92,15 @@ export class MovieService {
   }
 
 
-  computeOMImages (id: number) {
-    console.log('Compute OM Images Process in MOVIE SERVICES');
+  makeDocAndOmImages (id: number) {
+    console.log('Make Document and OM Images Cache in MOVIE SERVICES');
     const url = `/api/movie/${id}/command`;
-    const command = `{ "command": "[MOVIE] COMPUTE OM IMAGES", "parameters": {"silent": "true"} }`;
+    const command = `{ "command": "[MOVIE] MAKE DOC AND IMAGES", "parameters": {"silent": "true"} }`;
 
     this.http.post<Movie>(url, command, httpOptions).pipe(
-      tap(_ => this.log(`compute om images id=${id}`)),
-      catchError(this.handleError<Movie>('computeOMImages'))
-    ).subscribe(() => console.log('Compute OM images command done'));
+      tap(_ => this.log(`Make Document and OM Images id=${id}`)),
+      catchError(this.handleError<Movie>('makeDocAndOmImages'))
+    ).subscribe(() => console.log('Make Document and OM Images Cache  command done'));
   }
 
 

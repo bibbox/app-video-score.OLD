@@ -27,7 +27,7 @@ export class MoviesComponent implements OnInit {
   movies$: any         = this.store.pipe(select(selectAllMovies));
   movientitiedes$: any = this.store.pipe(select(selectMoviesEntities));
 
-  displayedColumns: string[] = ['id', 'name', 'stripe', 'cut', 'uri'];
+  displayedColumns: string[] = ['id', 'name', 'stripe', 'cut', 'doc', 'uri'];
 
   constructor( private  store: Store<AppState> ) { }
 

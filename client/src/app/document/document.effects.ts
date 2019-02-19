@@ -6,7 +6,7 @@ import { DocumentActionTypes } from './document.actions';
 export class DocumentEffects {
 
   @Effect()
-  loadDocument$ = this.actions$.pipe(ofType(DocumentActionTypes.LoadDocuments));
+  loadDocument$ = this.actions$.pipe(ofType(DocumentActionTypes.LoadDocument));
 
   constructor(private actions$: Actions) {}
 }
