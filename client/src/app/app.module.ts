@@ -30,7 +30,6 @@ import { reducers } from './reducers';
 
 import { MovieApiEffects } from './entities/movies-api.effects';
 
-
 // MATERIAL
 import {MatCheckboxModule} from '@angular/material';
 import {MatTableModule} from '@angular/material/table';
@@ -42,6 +41,9 @@ import {MatIconModule} from '@angular/material';
 
 import {TaskModule} from './task/task.module';
 
+// Documents
+
+import {DocumentModule} from './document/document.module';
 
 @NgModule({
   declarations: [
@@ -69,6 +71,7 @@ import {TaskModule} from './task/task.module';
     MatButtonModule,
     MatIconModule,
     TaskModule,
+    DocumentModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot([]),

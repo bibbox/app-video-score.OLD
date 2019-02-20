@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { MessageService } from './message.service';
 
+import { Document } from './document/document.model';
 
 export class DocListEntry {
   id: number;
@@ -39,10 +40,10 @@ export class DocumentService {
     );
   }
 
-  getDocument(): Observable<DocListEntry[]> {
-    const url = `/api/documents`;
-    return this.http.get<DocListEntry[]>(url).pipe(
-      catchError(this.handleError<DocListEntry[]>(`getDocuments`))
+  getDocument(id: number): Observable<Document> {
+    const url = `/api/document/` + id;
+    return this.http.get<Document>(url).pipe(
+      catchError(this.handleError<Document>(`getDocument`))
     );
   }
 

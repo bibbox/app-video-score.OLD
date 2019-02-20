@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+
 import { DocListEntry, DocumentService } from '../document.service';
 
 import { Observable, of } from 'rxjs';
@@ -20,6 +23,7 @@ export class DocumentListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'uuid'];
 
   constructor( private  ds: DocumentService,
+               private  router: Router,
                public   store: Store<AppState> ) { }
 
   ngOnInit() {
@@ -28,8 +32,9 @@ export class DocumentListComponent implements OnInit {
 
   openDocument (row: DocListEntry): void {
     console.log('Load Document', row.name);
-    this.store.dispatch({ type: '[Document API] Load Document',
-                          payload: {id: row.id} }) ;
+    this.store.dispatch({ type: '[Document] Clear' } );
+    this.store.dispatch({ type: '[Document API] Load Document', payload: {id: row.id} } );
+    this.router.navigateByUrl('/document');
   }
 
 }

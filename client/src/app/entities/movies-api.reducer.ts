@@ -18,6 +18,7 @@ export function reducer(
   state = initialState,
   action: MoviesAPIActions
   ): State {
+
   switch (action.type) {
 
     case MoviesAPIActionTypes.LoadMovies: {

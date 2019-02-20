@@ -1,0 +1,8 @@
+<h3>{{(content|async)?.name}}</h3>
+
+<div *ngIf="co | async">
+    <ng-container *ngFor="let c of co | async">
+        <app-contentelement [id]="c.id" [payload]="c.payload"> </app-contentelement>
+        _
+    </ng-container>
+</div>

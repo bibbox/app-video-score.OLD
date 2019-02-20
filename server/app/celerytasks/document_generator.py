@@ -22,6 +22,10 @@ from server.app.models.content_element import  ContentElement
 from server.app.services.movie_service import MovieService
 from server.app.services.document_service import DocumentService
 
+SECONDS_PER_OMI = 4
+SMALLIMAGES     = 4
+SMALLIMAGEWITH = 100
+
 
 movie_service = MovieService()
 document_service = DocumentService()
@@ -45,10 +49,14 @@ def generateDocumentAndCaches (movieID, progresscallback):
           ces = []
           ce_list = []
 
+
+          maxframesPerOmi = round (movie.fps * SECONDS_PER_OMI)
+
           todolistCache = []     
           for c in cuts:   
                endfn = c['fn']-1
-               content = {'movieuuid':movie.uuid, 's':startfn, 'e':endfn}
+               n = math.ceil ( (endfn-startfn+1) / maxframesPerOmi )
+               content = {'movieuuid':movie.uuid, 's':startfn, 'e':endfn, 'n': n}
                uuidstr = str(uuid.uuid4())
                ce = ContentElement(uuid = uuidstr, 
                                    documentID=d.id,
@@ -63,9 +71,8 @@ def generateDocumentAndCaches (movieID, progresscallback):
 
           uuidstr = str(uuid.uuid4())
           endfn = movie.numberOfFrames - 1
-          content = {'movieuuid':movie.uuid, 's':startfn, 'e':endfn}
+          content = {'movieuuid':movie.uuid, 's':startfn, 'e':endfn, 'n': n}
           todolistCache.append(content)
-          print ("MAKE OMIMAGE CACHE", movie.id, startfn, endfn)
 
           ce = ContentElement(uuid = uuidstr, 
                               documentID=d.id,
@@ -93,8 +100,6 @@ def generateSUBOMIcaches (movie, todolistCache, progresscallback):
 
      aspectratio = movie.height / movie.width
 
-     SMALLIMAGES = 4
-     SMALLIMAGEWITH = 100
      BIGIMAGEWITH = SMALLIMAGEWITH * SMALLIMAGES
      SMALLIMAGEHEIGHT = round(SMALLIMAGEWITH * aspectratio)
      BIGIMAGEHEIGTH = round(BIGIMAGEWITH * aspectratio)
@@ -103,8 +108,7 @@ def generateSUBOMIcaches (movie, todolistCache, progresscallback):
      WIDTH  = BIGIMAGEWITH
   
      staticFN  = 0
-     SECONDS_PER_OMI = 4
-     SMALLIMAGES     = 4
+
      
      if (movie.source  == "YOUTUBE"):
         vPafy = pafy.new(movie.uri)
@@ -121,16 +125,14 @@ def generateSUBOMIcaches (movie, todolistCache, progresscallback):
      if  not os.path.exists(basdir):
         os.makedirs(basdir)
 
-     maxframesPerOmi = round (movie.fps * SECONDS_PER_OMI)
-
      # make a even longer TODO list from OMIs tu SUBOMIs
      subomis = []
      for omidesc in todolistCache:
           s = omidesc["s"]
           e = omidesc["e"]
-          n = math.ceil ( (e-s+1) / maxframesPerOmi )
+          n = omidesc["n"]
+        
           dirnameomi = os.path.join(basdir,   "%08d_%08d" % (s,e) )
-
           if  not os.path.exists(dirnameomi):
                   os.makedirs(dirnameomi)
 
@@ -207,5 +209,5 @@ def generateSUBOMIcaches (movie, todolistCache, progresscallback):
                     insideOMImage = False
                     
           framenumber = framenumber + 1
-          
+
      progresscallback (movie.numberOfFrames , framenumber )

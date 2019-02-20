@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { DocumentsAPIActions, DocumentsAPIActionTypes } from './document-api.actions';
+import { DocumentAPIActions, DocumentAPIActionTypes } from './document-api.actions';
 import { ConditionalExpr } from '@angular/compiler';
 import { AppState} from '../app-state/app-state';
 
@@ -16,19 +16,19 @@ export const initialState: State = {
 
 export function reducer(
   state = initialState,
-  action: DocumentsAPIActions
+  action: DocumentAPIActions
   ): State {
   switch (action.type) {
 
-    case DocumentsAPIActionTypes.LoadDocument: {
-      console.log ('DocumentsAPIActionTypes.LoadDocument');
+    case DocumentAPIActionTypes.LoadDocument: {
+      console.log ('DocumentAPIActionTypes.LoadDocument');
       return Object.assign({}, state, {pending: true, error: null});
     }
-    case DocumentsAPIActionTypes.LoadDocumentSucess: {
-      console.log ('DocumentsAPIActionTypes.LoadDocumentSucess');
+    case DocumentAPIActionTypes.LoadDocumentSucess: {
+      console.log ('DocumentAPIActionTypes.LoadDocumentSucess');
       return Object.assign({}, state, {pending: false});
     }
-    case DocumentsAPIActionTypes.LoadDocumentError: {
+    case DocumentAPIActionTypes.LoadDocumentError: {
       return Object.assign({}, state, {pending: false, error: 'ERROR'});
     }
 

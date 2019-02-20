@@ -10,6 +10,6 @@ export interface AppState extends AppState  {
   }
 
 export const documentreducers: ActionReducerMap<any> = {
-    document:    DocumentReducers.reducer,
+    document:     DocumentReducers.reducer,
     documentapi: DocumentAPIReducers.reducer
 };
