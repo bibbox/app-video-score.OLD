@@ -17,10 +17,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StripesComponent } from './stripes/stripes.component';
 import { StripesOverlayComponent } from './stripes-overlay/stripes-overlay.component';
-import { OMSubimageComponent } from './omsubimage/omsubimage.component';
-import { OMImageComponent } from './omimage/omimage.component';
 
 import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
+
+import { AngularSplitModule } from 'angular-split';
 
 // STORE
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -54,9 +54,7 @@ import {DocumentModule} from './document/document.module';
     MessagesComponent,
     DashboardComponent,
     StripesComponent,
-    StripesOverlayComponent,
-    OMSubimageComponent,
-    OMImageComponent
+    StripesOverlayComponent
   ],
 
   imports: [
@@ -72,6 +70,7 @@ import {DocumentModule} from './document/document.module';
     MatIconModule,
     TaskModule,
     DocumentModule,
+    AngularSplitModule.forRoot(),
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot([]),

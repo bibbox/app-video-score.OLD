@@ -5,11 +5,13 @@ import { DocumentActions, DocumentActionTypes } from './document.actions';
 
 export interface State  {
     content: any;
+    simplecontent: any;
  }
 
 
  export const initialState: State = {
-  content: null
+  content: null,
+  simplecontent: null
 };
 
 
@@ -21,13 +23,16 @@ export function reducer(
 
     case DocumentActionTypes.LoadDocument: {
       return {
-        content: action.payload.document
+        content: action.payload.document,
+        simplecontent : null
             };
       return state;
     }
     case DocumentActionTypes.ClearDocument: {
+      console.log ('CLEAR CLEAR CLEAR CLEAR');
       return {
-        content: null
+        content: null,
+        simplecontent: null
             };
       return state;
     }

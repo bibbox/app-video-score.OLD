@@ -12,9 +12,13 @@ function sortByMovieID(e1: Movie, e2: Movie) {
   return e1.id - e2.id;
 }
 
+export function selectMovieId(m: Movie): string {
+  return m.uuid;
+}
 
 export const adapter: EntityAdapter<Movie> = createEntityAdapter<Movie>(
   {
+    selectId: selectMovieId,
     sortComparer: sortByMovieID
   }
 );

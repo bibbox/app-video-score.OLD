@@ -17,7 +17,6 @@ import { Cut } from '../cut';
 import { selectAllMovies, selectMovie, selectMoviesEntities } from '../entities/movie.selectors';
 import { MovieService } from '../movie.service';
 import { StripesComponent } from '../stripes/stripes.component';
-import { OMImageComponent } from '../omimage/omimage.component';
 
 // <app-stripes></app-stripes>
 // <ng-container *ngFor='let omi of omimages$ | async'><app-omimage [startFN]="omi.startFN" [endFN]="omi.endFN" ></app-omimage></ng-container>
@@ -40,12 +39,11 @@ interface OMimage {
 
 export class MovieDetailComponent implements OnInit, OnDestroy {
 
-  @Input() movie: Movie;
-
   movies$ = this.store.pipe(select(selectMovie));
   omimages$: Observable<OMimage[]>;
+  movie: Movie;
 
-  private  id: number;
+  private  id: string;
 
   constructor(
     private  route: ActivatedRoute,
@@ -57,13 +55,8 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.id = parseInt( this.route.snapshot.paramMap.get('id'), 10);
-  //  this.store.subscribe ( s  => console.log(s) );
-
-
-  this.omimages$ = this.movieService.getCuts(this.id).pipe (
-    map ( cuts => this.makeOMImageDataStructure(cuts))
-      );
+    this.id = this.route.snapshot.paramMap.get('id');
+    this.store.subscribe ( s  => console.log(s) );
   }
 
   makeOMImageDataStructure (cuts: Cut[]): OMimage[] {
@@ -77,16 +70,7 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
       start = c.fn;
       i += 1;
     }
-
-    return omsl;
-  
-  }
-
-  assignMovie (movie: Movie) {
-    this.movie = movie;
-    console.log('Movie Data Structures, received from the Movie Service');
-    console.log (movie);
-    console.log (movie.stripeStatus);
+     return omsl;
   }
 
 

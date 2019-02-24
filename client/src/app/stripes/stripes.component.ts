@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Input } from '@angular/core';
 import { Renderer, ViewChild } from '@angular/core'
 
 import { ActivatedRoute } from '@angular/router';
@@ -15,6 +15,8 @@ import { CommonModule } from '@angular/common';
 
 
 export class StripesComponent implements OnInit {
+
+  @Input() id: number;
 
   stripes: Stripe[];
   cuts:    Cut[];
@@ -49,11 +51,11 @@ export class StripesComponent implements OnInit {
     let i = 0;
     for (let c of this.cuts) {
       if (i > 0) {
-        let y = Math.floor(c.fn / 1500.0);
-        let x = 800 * (c.fn - y * 1500) / 1500
+        const y = Math.floor(c.fn / 1500.0);
+        const x = 800 * (c.fn - y * 1500) / 1500;
         ctx.beginPath();
-        ctx.moveTo(x, y * 80-1);
-        ctx.lineTo(x, y * 80 + 75+1);
+        ctx.moveTo(x, y * 80 - 1);
+        ctx.lineTo(x, y * 80 + 75 + 1);
         ctx.stroke();
         //console.log(c.fn, x,y)
       }
@@ -62,30 +64,27 @@ export class StripesComponent implements OnInit {
   }
 
   assignStripesAndDrawImages (stripes): void {
-      this.stripes = stripes
-      let h = this.stripes.length * 80
-      this.renderer.setElementProperty(this.imageCanvas.nativeElement, "height", h.toString());
-      this.drawImages()
+      this.stripes = stripes;
+      const h = this.stripes.length * 80;
+      this.renderer.setElementProperty(this.imageCanvas.nativeElement, 'height', h.toString());
+      this.drawImages();
   }
 
   assignCutsAndDrawOverlay (cuts): void {
-      this.cuts = cuts
-      //console.log (cuts)
-      let lastfn =  cuts[cuts.length-1].fn
-      let h = 80 * Math.ceil(lastfn / 1500.0)
-      this.renderer.setElementProperty(this.overlayCanvas.nativeElement, "height", h.toString());
-      this.drawOverlay()
+      this.cuts = cuts;
+      const lastfn =  cuts[cuts.length - 1].fn;
+      const h = 80 * Math.ceil(lastfn / 1500.0);
+      this.renderer.setElementProperty(this.overlayCanvas.nativeElement, 'height', h.toString());
+      this.drawOverlay();
   }
 
   getStripes(): void {
-    const id = parseInt(this.route.snapshot.paramMap.get('id'));
-    this.movieService.getStripes(id)
+    this.movieService.getStripes(this.id)
         .subscribe(stripes => this.assignStripesAndDrawImages(stripes)  );
   }
 
   getCuts(): void {
-    const id = parseInt(this.route.snapshot.paramMap.get('id'));
-    this.movieService.getCuts(id)
+    this.movieService.getCuts(this.id)
         .subscribe ( cuts => this.assignCutsAndDrawOverlay(cuts) );
   }
 

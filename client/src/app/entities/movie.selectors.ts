@@ -18,7 +18,7 @@ export const selectAllMovies  = createSelector(
 
 export const selectMovie = createSelector(
   selectMoviesEntities,
-  movie => (id: number) => movie[id]
+  movie => (id: string) => movie[id]
 );
 
 

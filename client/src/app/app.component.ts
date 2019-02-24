@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 
-
 export class AppComponent implements OnInit {
   title = 'Video Score';
   msg: string;
@@ -27,6 +26,10 @@ export class AppComponent implements OnInit {
 
   showTasks() {
     this.router.navigateByUrl('/tasks');
+  }
+
+  openDocumentList() {
+    this.router.navigateByUrl('/documents');
   }
 
 

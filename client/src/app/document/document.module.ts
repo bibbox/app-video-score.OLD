@@ -10,7 +10,13 @@ import { DocumentDisplayComponent } from './document-display/document-display.co
 import { ContentElementComponent } from './document-display/contentelement/contentelement.component';
 import { OmImageComponent } from './document-display/omimage/omimage.component';
 
+import { AngularSplitModule } from 'angular-split';
 
+// VIDEO PLAYER
+import {VgCoreModule} from 'videogular2/core';
+import {VgCoreModule} from 'videogular2/controls';
+import {VgOverlayPlayModule} from 'videogular2/overlay-play';
+import {VgBufferingModule} from 'videogular2/buffering';
 
 
 // MATERIAL
@@ -28,6 +34,11 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     MatTableModule,
     RouterModule,
+    VgCoreModule,
+    VgCoreModule,
+    VgOverlayPlayModule,
+    VgBufferingModule,
+    AngularSplitModule.forRoot(),
     StoreModule.forFeature('document', fromDocument.documentreducers),
     EffectsModule.forFeature([DocumentApiEffects])
     ],

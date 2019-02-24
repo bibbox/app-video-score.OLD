@@ -1,6 +1,9 @@
 import { Component, ElementRef, OnInit, Input } from '@angular/core';
 import { Renderer, ViewChild } from '@angular/core';
 
+import { AppState } from '../../../app-state/app-state';
+import { selectAllMovies, selectMovie, selectMoviesEntities } from '../../../entities/movie.selectors';
+
 import { Observable, of } from 'rxjs';
 import { map, tap, take, mergeMap, catchError, finalize } from 'rxjs/operators';
 
@@ -21,13 +24,25 @@ export class OmImageComponent implements OnInit {
   @Input() n: number;
   @Input() movieuuid: string;
 
+  showSummary: boolean;
+  compressOmImages: boolean;
+
+  delta: number;
   ceurl: string;
+  fceurl: string;
+  lceurl: string;
   ceurls: string[];
+  movies$ = this.store.pipe(select(selectMovie));
 
   constructor(private renderer: Renderer,
+              public   store: Store<AppState>,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
+
+    this.delta = this.e - this.s;
+
+    this.showSummary = false;
 
     function pad(num: number, size: number): string {
       let s = num + '';
@@ -48,7 +63,41 @@ export class OmImageComponent implements OnInit {
                  + pad (this.s, 8) + '_' +  pad (this.e, 8) + '/'
                  + pad (0, 8) + '.jpg';
 
+    this.compressOmImages = false;
+    if ( this.showSummary && (this.n > 2) ) {
+      this.compressOmImages = true;
+      this.fceurl = this.ceurls[0];
+      this.lceurl = this.ceurls[this.n - 1];
+    }
+
     // console.log (this.ceurl);
     // console.log (this.subomis);
   }
+
+
+  mouseEnter(div: string) {
+    console.log('mouse enter : ' + div);
+  }
+
+  mouseLeave(div: string) {
+   console.log('mouse leave :' + div);
+  }
+  mouseMove(i: number, e: MouseEvent) {
+    const framenr = this.s + this.delta *  (i * 200 + e.offsetX) / this.n / 100.0;
+
+    this.store.pipe(
+      take(1),
+      select(selectMovie),
+      map( f => f (this.movieuuid))
+      ).subscribe(m => console.log (m.name, Math.round(framenr) ));
+
+    //console.log(this.movieuuid, 'frame ' + Math.round(framenr));
+   }
+
+  click(i: number, e: MouseEvent) {
+    const f = this.s + this.delta *  (i * 200 + e.offsetX) / this.n / 100.0;
+    console.log('click :' + f);
+   }
+
+
 }

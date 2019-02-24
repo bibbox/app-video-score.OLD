@@ -6,7 +6,7 @@
     <button mat-button [matMenuTriggerFor]="menu">File</button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item>New</button>
-        <button mat-menu-item (click)="openMovieList()">Open</button>
+        <button mat-menu-item (click)="openDocumentList()">Open</button>
         <button mat-menu-item>Recent</button>
         <button mat-menu-item>Upload</button>
         <button mat-menu-item>Link to Nextcloud</button>
@@ -44,6 +44,7 @@
     <button mat-button [matMenuTriggerFor]="window">Window</button>
     <mat-menu #window="matMenu">
         <button mat-menu-item>Score</button>
+        <button mat-menu-item (click)="openMovieList()">Movies</button>
         <button mat-menu-item (click)="showTasks()">Background Tasks</button>
         <button mat-menu-item>Help</button>
     </mat-menu>

@@ -11,7 +11,7 @@ import {TaskListComponent} from './task/task-list/task-list.component';
 const routes: Routes = [
   { path: 'movies', component: MoviesComponent },
   { path: 'documents', component: DocumentListComponent },
-  { path: 'document', component: DocumentDisplayComponent },
+  { path: 'document/:id', component: DocumentDisplayComponent },
   { path: 'tasks', component: TaskListComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
