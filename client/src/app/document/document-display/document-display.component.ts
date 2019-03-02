@@ -7,7 +7,7 @@ import { filter, map, tap, take, mergeMap, catchError, finalize } from 'rxjs/ope
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../app-state/app-state';
 
-import { selectDocumentContent } from '../document.selectors';
+import { selectDocumentContent, selectDocumentSlectedMovie, selectDocumentSlectedFrame } from '../document.selectors';
 import { selectAllMovies, selectMovie, selectMoviesEntities } from '../../entities/movie.selectors';
 
 
@@ -30,8 +30,15 @@ export interface ContentElement {
 })
 export class DocumentDisplayComponent implements OnInit {
 
+  movies$ = this.store.pipe(select(selectMovie));
+  slectedMovie = this.store.pipe (select(selectDocumentSlectedMovie));
+  slectedFrame = this.store.pipe (select(selectDocumentSlectedFrame));
+//         
+
+
   id: number;
   content: any  = this.store.pipe(select(selectDocumentContent));
+
   co:      Observable<Array<any>>;
   pa:      Observable<Array<any>>;
   index:   Observable<Array<any>>;

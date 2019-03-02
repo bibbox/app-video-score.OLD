@@ -12,6 +12,13 @@
                 </div>
             </as-split-area>
             <as-split-area size="30">
+               <p>Selected Movie and Frame</p>
+                 
+
+               <div *ngIf="slectedMovie | async">
+                   {{(movies$|async)(slectedMovie|async).name}}  -- {{slectedFrame|async}}
+               </div>
+
                 <vg-player style="height: 300px;" >
                     <video [vgMedia]="media" #media id="singleVideo" preload="false" controls>
                         <source src="/static/test-previe.mp4"  type="video/mp4">

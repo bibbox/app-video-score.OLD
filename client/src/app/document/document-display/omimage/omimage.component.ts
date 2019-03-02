@@ -10,7 +10,8 @@ import { map, tap, take, mergeMap, catchError, finalize } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 
 import { Store, select } from '@ngrx/store';
-
+import * as d_actions from '../../document.actions';
+import { Movie } from '../../../entities/movie.model';
 
 @Component({
   selector: 'app-omimage',
@@ -83,7 +84,7 @@ export class OmImageComponent implements OnInit {
    console.log('mouse leave :' + div);
   }
   mouseMove(i: number, e: MouseEvent) {
-    const framenr = this.s + this.delta *  (i * 200 + e.offsetX) / this.n / 100.0;
+    const framenr = Math.round (this.s + this.delta *  (i * 200 + e.offsetX) / this.n / 100.0);
 
     this.store.pipe(
       take(1),
@@ -91,12 +92,14 @@ export class OmImageComponent implements OnInit {
       map( f => f (this.movieuuid))
       ).subscribe(m => console.log (m.name, Math.round(framenr) ));
 
-    //console.log(this.movieuuid, 'frame ' + Math.round(framenr));
+      this.store.dispatch({ type: '[Document] Set Movie and Frame', payload: {movieuuid: this.movieuuid, fnr: framenr}} );
    }
 
+
   click(i: number, e: MouseEvent) {
-    const f = this.s + this.delta *  (i * 200 + e.offsetX) / this.n / 100.0;
-    console.log('click :' + f);
+    const framenr = Math.round (this.s + this.delta *  (i * 200 + e.offsetX) / this.n / 100.0);
+    this.store.dispatch({ type: '[Document] Set Movie and Frame', payload: {movieuuid: this.movieuuid, fnr: framenr}} );
+    console.log('click :' + framenr);
    }
 
 
