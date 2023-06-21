@@ -1,5 +1,5 @@
 # Video Score BIBBOX application
-
+## IMPORTANT: This repository is deprecated and should not be used.
 ## Prerequisites
 * `docker` 
     * MAC/WINDOWS => //www.docker.com/get-started
